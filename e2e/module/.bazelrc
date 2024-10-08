@@ -1,0 +1,2 @@
+build --action_env=CC=gcc
+

@@ -1,0 +1,31 @@
+load("@rules_nim//nim:defs.bzl", "nim_test")
+
+[
+    nim_test(
+      name = name,
+      main = "{}.nim".format(name),
+      deps = [
+          "//:numericalnim",
+          "@measuremancer",
+          "@nimble//:arraymancer",
+          "@nimble//:nimblas",
+          "@nimble//:nimlapack",
+          "@nimble//:zip",
+          "@nimble//:untar",
+          "@nimble//:stb_image",
+          "@nimble//:cdt",
+      ]
+    )
+    for name in [
+        "test_vector",
+        "test_utils",
+        "test_optimize",
+        "test_ode",
+        "test_interpolate",
+        "test_integrate",
+        "test_differentiate",
+    ]
+]
+
+
+

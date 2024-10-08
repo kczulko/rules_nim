@@ -1,0 +1,23 @@
+bazel_dep(name = "rules_nim", version = "0.0.0", dev_dependency = True)
+bazel_dep(name = "bazel_skylib", version = "1.7.1", dev_dependency = True)
+
+local_path_override(
+    module_name = "rules_nim",
+    path = "../..",
+)
+
+http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+http_archive(
+    name = "measuremancer",
+    url = "https://github.com/SciNim/Measuremancer/archive/refs/tags/v0.2.8.tar.gz",
+    integrity = "sha256-9/PDao5uR2IwFKmUL5oDYz/Gt4wRDMwp4aAv24HGtKg=",
+    strip_prefix = "Measuremancer-0.2.8",
+    build_file_content =
+"""load("@rules_nim//nim:defs.bzl", "nim_module")
+nim_module(
+    name = "measuremancer",
+    srcs = glob(["**/*.nim"]),
+    visibility = ["//visibility:public"],
+)""",
+)
+

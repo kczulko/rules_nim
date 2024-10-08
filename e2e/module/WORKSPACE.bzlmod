@@ -1,0 +1,6 @@
+load("@rules_nim//nim:nimble.bzl", "nimble_install")
+
+nimble_install(
+    name = "nimble",
+    nimble_file = "//:test.nimble",
+)

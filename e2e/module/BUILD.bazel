@@ -1,0 +1,9 @@
+load("@rules_nim//nim:defs.bzl", "nim_binary")
+
+nim_binary(
+    name = "bin",
+    main = "main.nim",
+    deps = [
+        "@nimble//:zip"
+    ],
+)
