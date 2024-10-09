@@ -31,15 +31,24 @@ def _nim_binary_impl(ctx):
     bin_name = main.basename[0:-(1 + len(main_extension))]
 
     binary_file = ctx.actions.declare_file(bin_name)
+    nimcache = ctx.actions.declare_directory("rules_nim_{}_compilation_cache".format(bin_name))
 
     args = ctx.actions.args()
     args.add_all([
         "c",
         "--out:{}".format(binary_file.path),
-        "--nimcache:{}".format(ctx.genfiles_dir.path),
-        # "--usenimcache",
-        "--verbosity:0",
+        # "--cc=/usr/bin/gcc",
+        # "--nimcache:{}/cache".format(ctx.genfiles_dir.path),
+        "--nimcache:{}".format(nimcache.path),
+        "--usenimcache",
+        # "--incremental:on",
+        # "--skipCfg:on",
+        # "--skipUserCfg:on",
+        # "--skipParentCfg:on",
+        # "--skipProjCfg:on",
+        # "--verbosity:0",
     ])
+    args.add_all(ctx.attr.defines)
     args.add_all([ dep[NimModule].path for dep in ctx.attr.deps], before_each = "--path:")
     args.add(ctx.files.main[0].path)
 
@@ -54,13 +63,13 @@ def _nim_binary_impl(ctx):
         arguments = [args],
         mnemonic = "NimBin",
         inputs = [ctx.files.main[0]] + deps_inputs,
-        outputs = [ binary_file ],
+        outputs = [ binary_file, nimcache ],
     )
 
     return [
         DefaultInfo(
             executable = binary_file,
-            files = depset([binary_file]),
+            files = depset([binary_file, nimcache]),
             runfiles = ctx.runfiles([binary_file]),
         )
     ]
@@ -75,7 +84,14 @@ nim_binary = rule(
         ),
         "deps": attr.label_list(
             providers = [NimModule],
-        )
+        ),
+        "nim_cfg": attr.label(
+            allow_files = True,
+        ),
+        "config_nims": attr.label(
+            allow_files = True,
+        ),
+        "defines": attr.string_list(),
     },
     toolchains = [
         Label(_NIM_TOOLCHAIN),
@@ -115,9 +131,6 @@ nim_module = rule(
     provides = [ NimModule ],
 )
 
-def _nim_test_impl(ctx):
-    pass
-
 nim_test = rule(
     attrs = {
         "main": attr.label(
@@ -126,7 +139,8 @@ nim_test = rule(
         ),
         "deps": attr.label_list(
             providers = [ NimModule ],
-        )
+        ),
+        "defines": attr.string_list(),
     },
     implementation = _nim_binary_impl,
     test = True,

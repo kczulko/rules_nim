@@ -40,12 +40,13 @@ load("@rules_nim//nim:defs.bzl", "nim_module")"""
 
         lib_target = """
 nim_module(
-  name = "{pkg_name}",
-  srcs = glob(["pkgs2/{pkg_fullname}/**/*"]),
-  strip_import_prefix = "pkgs2/{pkg_fullname}",
-  visibility = ["//visibility:public"],
+    name = "{pkg_name}",
+    srcs = glob(["{pkgs_dir_prefix}/{pkg_fullname}/**/*"]),
+    strip_import_prefix = "{pkgs_dir_prefix}/{pkg_fullname}",
+    visibility = ["//visibility:public"],
 )
 """.format(
+       pkgs_dir_prefix = rctx.attr.pkgs_dir_prefix,
        pkg_name = pkg_name,
        pkg_fullname = pkg_fullname,
     )
@@ -58,6 +59,7 @@ nimble_install = repository_rule(
         "nimble_file": attr.label(),
         "nimble_attrs": attr.string_list(),
         "quiet": attr.bool(default = False),
+        "pkgs_dir_prefix": attr.string(default = "pkgs2")
     },
     implementation = _nimble_install_impl,
 )
