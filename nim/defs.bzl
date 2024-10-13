@@ -1,6 +1,7 @@
 "Public API re-exports"
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
+load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain")
 
 _NIM_TOOLCHAIN = "@rules_nim//nim:toolchain_type"
 _CC_TOOLCHAIN = "@bazel_tools//tools/cpp:toolchain_type"
@@ -152,6 +153,91 @@ nim_test = rule(
     ]
 )
 
+_CPP_SRC = ["cc", "cpp", "cxx", "c++", "c"]
+
+_COPY_TREE_SH = """
+OUT=$1; shift && mkdir -p "$OUT" && cp $* "$OUT"
+"""
+
+def _only_c(f):
+    """Filter for just C++ source/headers"""
+    if f.extension in _CPP_SRC:
+        return f.path
+    return None
+
+def _copy_tree(ctx, idir, odir, map_each = None, progress_message = None):
+    """Copy files from a TreeArtifact to a new directory"""
+    args = ctx.actions.args()
+    args.add(odir.path)
+    args.add_all([idir], map_each = map_each)
+    ctx.actions.run_shell(
+        arguments = [args],
+        command = _COPY_TREE_SH,
+        inputs = [idir],
+        outputs = [odir],
+        progress_message = progress_message,
+    )
+
+    return odir
+
+def cc_compile_and_link_static_library(ctx, srcs, hdrs, deps, includes = [], defines = [],
+    user_compile_flags = [], user_link_flags = [], quote_includes = []):
+    """Compile and link C++ source into a static library"""
+    cc_toolchain = find_cpp_toolchain(ctx)
+    feature_configuration = cc_common.configure_features(
+        ctx = ctx,
+        cc_toolchain = cc_toolchain,
+        requested_features = ctx.features,
+        unsupported_features = ctx.disabled_features,
+    )
+
+    # compilation_contexts = [dep[CcInfo].compilation_context for dep in deps]
+    compilation_contexts = []
+    compilation_context, compilation_outputs = cc_common.compile(
+        name = ctx.label.name,
+        actions = ctx.actions,
+        feature_configuration = feature_configuration,
+        cc_toolchain = cc_toolchain,
+        quote_includes = quote_includes,
+        srcs = srcs,
+        includes = includes,
+        defines = defines,
+        public_hdrs = hdrs,
+        compilation_contexts = compilation_contexts,
+        user_compile_flags = user_compile_flags,
+        additional_inputs = [ctx.toolchains[_NIM_TOOLCHAIN].niminfo.nimbase[0]],
+    )
+
+    linking_contexts = []
+    linking_output = cc_common.link(
+        actions = ctx.actions,
+        name = "cc_binary",
+        feature_configuration = feature_configuration,
+        cc_toolchain = cc_toolchain,
+        link_deps_statically = False,
+        compilation_outputs = compilation_outputs,
+        linking_contexts = linking_contexts,
+        user_link_flags = user_link_flags,
+    )
+
+    output_files = []
+    output_files.append(linking_output.executable)
+    # if linking_output.library_to_link.static_library != None:
+        # output_files.append(linking_output.library_to_link.static_library)
+    # if linking_output.library_to_link.dynamic_library != None:
+        # output_files.append(linking_output.library_to_link.dynamic_library)
+
+    return [
+        DefaultInfo(
+            files = depset(output_files),
+            executable = linking_output.executable,
+        ),
+        CcInfo(
+            compilation_context = compilation_context,
+            # linking_context = linking_context,
+        ),
+    ]
+
 def _nim_cc_test_impl(ctx):
     cc_toolchain = ctx.toolchains[_CC_TOOLCHAIN]
     toolchain = ctx.toolchains[_NIM_TOOLCHAIN]
@@ -164,7 +250,7 @@ def _nim_cc_test_impl(ctx):
 
     args = ctx.actions.args()
     args.add_all([
-        "compileToC",
+        "compileToCpp",
         "--compileOnly",
         "--nimcache:{}".format(nimcache.path),
         "--usenimcache",
@@ -186,18 +272,30 @@ def _nim_cc_test_impl(ctx):
         outputs = [ nimcache ],
     )
 
-    out = ctx.actions.declare_file("test")
-    ctx.actions.write(
-        output = out,
-        content = """#!/usr/bin/env bash
-        exit 0
-        """,
-        is_executable = True,
+    # print(nimcache.path.readdir())
+    c_outputs = ctx.actions.declare_directory("rules_nim_{}_gen_c_files_only".format(bin_name))
+    _copy_tree(
+        ctx,
+        nimcache,
+        c_outputs,
+        map_each = _only_c,
+        progress_message = "[nim] Extracting C source files",
     )
-    
-    return DefaultInfo(
-        files = depset([nimcache, out]),
-        executable = out,
+
+    return cc_compile_and_link_static_library(
+        ctx,
+        srcs = [c_outputs],
+        hdrs = [],
+        deps = [],
+        includes = [
+
+        ],
+        quote_includes = [
+            toolchain.niminfo.nimbase[0].dirname
+        ],
+        defines = [],
+        user_compile_flags = [],
+        user_link_flags = []
     )
 
 nim_cc_test = rule(
@@ -215,5 +313,6 @@ nim_cc_test = rule(
     toolchains = [
         Label(_NIM_TOOLCHAIN),
         Label(_CC_TOOLCHAIN),
-    ]
+    ],
+    fragments = ["cpp"],
 )
