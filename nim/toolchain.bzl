@@ -11,6 +11,8 @@ May be empty if the target_tool_path points to a locally installed tool binary."
     },
 )
 
+_CC_TOOLCHAIN = "@bazel_tools//tools/cpp:toolchain_type"
+
 # Avoid using non-normalized paths (workspace/../other_workspace/path)
 def _to_manifest_path(ctx, file):
     if file.short_path.startswith("../"):
@@ -19,16 +21,18 @@ def _to_manifest_path(ctx, file):
         return ctx.workspace_name + "/" + file.short_path
 
 def _nim_toolchain_impl(ctx):
+    cc_files = ctx.toolchains[_CC_TOOLCHAIN].cc.all_files.to_list()
+
     if ctx.attr.target_tool and ctx.attr.target_tool_path:
         fail("Can only set one of target_tool or target_tool_path but both were set.")
     if not ctx.attr.target_tool and not ctx.attr.target_tool_path:
         fail("Must set one of target_tool or target_tool_path.")
 
-    tool_files = []
+    tool_files = cc_files
     target_tool_path = ctx.attr.target_tool_path
 
     if ctx.attr.target_tool:
-        tool_files = ctx.attr.target_tool.files.to_list()
+        tool_files = ctx.attr.target_tool.files.to_list() + tool_files
         target_tool_path = _to_manifest_path(ctx, tool_files[0])
 
     # Make the $(tool_BIN) variable available in places like genrules.
@@ -71,6 +75,9 @@ nim_toolchain = rule(
             mandatory = False,
         ),
     },
+    toolchains = [
+        _CC_TOOLCHAIN
+    ],
     doc = """Defines a nim compiler/runtime toolchain.
 
 For usage see https://docs.bazel.build/versions/main/toolchains.html#defining-toolchains.

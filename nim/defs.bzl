@@ -25,7 +25,6 @@ def _nim_binary_impl(ctx):
     toolchain = ctx.toolchains[_NIM_TOOLCHAIN]
     cc_toolchain = ctx.toolchains[_CC_TOOLCHAIN]
 
-    # TODO: rename main
     main = ctx.files.main[0]
     main_extension = main.extension
     bin_name = main.basename[0:-(1 + len(main_extension))]
@@ -33,12 +32,24 @@ def _nim_binary_impl(ctx):
     binary_file = ctx.actions.declare_file(bin_name)
     nimcache = ctx.actions.declare_directory("rules_nim_{}_compilation_cache".format(bin_name))
 
+    main_copy = ctx.actions.declare_file(main.basename)
+    ctx.actions.run_shell(
+        command = "cp {} {}".format(main.path, main_copy.path),
+        inputs = [main],
+        outputs = [main_copy],
+    )
+
+    cfg_file = ctx.actions.declare_file(main.basename + ".cfg", sibling = main_copy)
+    ctx.actions.run_shell(
+        command = "cp {} {}".format(ctx.files.nim_cfg[0].path, cfg_file.path),
+        inputs = [ctx.files.nim_cfg[0]],
+        outputs = [cfg_file],
+    )
+
     args = ctx.actions.args()
     args.add_all([
         "c",
         "--out:{}".format(binary_file.path),
-        # "--cc=/usr/bin/gcc",
-        # "--nimcache:{}/cache".format(ctx.genfiles_dir.path),
         "--nimcache:{}".format(nimcache.path),
         "--usenimcache",
         # "--incremental:on",
@@ -50,7 +61,7 @@ def _nim_binary_impl(ctx):
     ])
     args.add_all(ctx.attr.defines)
     args.add_all([ dep[NimModule].path for dep in ctx.attr.deps], before_each = "--path:")
-    args.add(ctx.files.main[0].path)
+    args.add(main_copy.path)
 
     deps_inputs = [
         src
@@ -62,8 +73,11 @@ def _nim_binary_impl(ctx):
         executable = toolchain.niminfo.tool_files[0],
         arguments = [args],
         mnemonic = "NimBin",
-        inputs = [ctx.files.main[0]] + deps_inputs,
+        inputs = toolchain.niminfo.tool_files + [
+            main_copy,
+        ] + deps_inputs + [cfg_file],
         outputs = [ binary_file, nimcache ],
+        toolchain = _NIM_TOOLCHAIN,
     )
 
     return [
@@ -139,6 +153,9 @@ nim_test = rule(
         ),
         "deps": attr.label_list(
             providers = [ NimModule ],
+        ),
+        "nim_cfg": attr.label(
+            allow_files = True,
         ),
         "defines": attr.string_list(),
     },

@@ -35,7 +35,7 @@
         };
 
         shells = {
-          default = fhsEnv.env // { CC="/usr/bin/gcc"; };
+          default = fhsEnv.env;
         };
       in
       {

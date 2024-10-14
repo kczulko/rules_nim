@@ -1,20 +1,30 @@
 load("@rules_nim//nim:defs.bzl", "nim_test")
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
+
+write_file(
+    name = "gcc_config",
+    out = "default.nim.cfg",
+    content = [
+        # "gcc.path = \"{}\"".format("/nix/store/l8wiwjr9dkcmm7lbcbxlvcvm832yy1az-gccgo-wrapper-13.2.0/bin"),
+    ],
+)
 
 [
     nim_test(
-      name = name,
-      main = "{}.nim".format(name),
-      deps = [
-          "//:numericalnim",
-          "@measuremancer",
-          "@nimble//:arraymancer",
-          "@nimble//:nimblas",
-          "@nimble//:nimlapack",
-          "@nimble//:zip",
-          "@nimble//:untar",
-          "@nimble//:stb_image",
-          "@nimble//:cdt",
-      ]
+        name = name,
+        main = "{}.nim".format(name),
+        nim_cfg = ":gcc_config",
+        deps = [
+            "//:numericalnim",
+            "@measuremancer",
+            "@nimble//:arraymancer",
+            "@nimble//:nimblas",
+            "@nimble//:nimlapack",
+            "@nimble//:zip",
+            "@nimble//:untar",
+            "@nimble//:stb_image",
+            "@nimble//:cdt",
+        ]
     )
     for name in [
         "test_vector",
@@ -26,6 +36,4 @@ load("@rules_nim//nim:defs.bzl", "nim_test")
         "test_differentiate",
     ]
 ]
-
-
 
