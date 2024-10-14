@@ -46,7 +46,7 @@ def _nim_toolchain_impl(ctx):
     niminfo = NimInfo(
         target_tool_path = target_tool_path,
         tool_files = tool_files,
-        nimbase = ctx.files.nimbase,
+        nimbase = ctx.file.nimbase,
     )
 
     # Export all the providers inside our ToolchainInfo

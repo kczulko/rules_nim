@@ -1,1 +1,6 @@
-common --cxxopt='-std=c++14'
+common --copt="-Wno-unused-label"
+common --copt="-Wno-unused-but-set-variable"
+common --copt="-Wno-discarded-qualifiers"
+common --copt="-Wno-parentheses"
+common --copt="-Wno-discarded-array-qualifiers"
+common --copt="-Wno-unknown-pragmas"

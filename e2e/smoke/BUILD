@@ -1,23 +1,23 @@
 """Provides a simple way to test your rules as an external workspace.
 Add a basic smoke-test target below.
 """
-load("@rules_nim//nim:defs.bzl", "nim_binary")
-load("@bazel_skylib//rules:build_test.bzl", "build_test")
-# load("@com_myorg_rules_ mylang//mylang:defs.bzl", "...")
+load("@rules_nim//nim:defs.bzl", "nim_cc_binary", "nim_cc_test")
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
 
-# Replace with a usage of your rule/macro
-# filegroup(name = "empty")
-nim_binary(
-    name = "first",
-    main = "main.nim",
+write_file(
+    name = "release",
+    out = "nim_cfg.out",
+    content = ["-d:release"],
 )
 
+nim_cc_binary(
+    name = "bin",
+    main = "main.nim",
+    nim_cfg = ":release",
+)
 
-# build_test(
-#     name = "smoke_test",
-#     targets = [
-#         # targets you add above
-#         # ":empty",
-#         ":first",
-#     ],
-# )
+nim_cc_test(
+    name = "spec",
+    main = "spec.nim",
+    nim_cfg = ":release",
+)

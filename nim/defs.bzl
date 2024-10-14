@@ -22,86 +22,6 @@ def create_nim_module_provider(deps, srcs, strip_import_prefix, path):
         path = path,
     )
 
-def _nim_binary_impl(ctx):
-    toolchain = ctx.toolchains[_NIM_TOOLCHAIN]
-    cc_toolchain = ctx.toolchains[_CC_TOOLCHAIN]
-
-    # print(cc_common)
-
-    # TODO: rename main
-    main = ctx.files.main[0]
-    main_extension = main.extension
-    bin_name = main.basename[0:-(1 + len(main_extension))]
-
-    binary_file = ctx.actions.declare_file(bin_name)
-    nimcache = ctx.actions.declare_directory("rules_nim_{}_compilation_cache".format(bin_name))
-
-    args = ctx.actions.args()
-    args.add_all([
-        "c",
-        "--out:{}".format(binary_file.path),
-        # "--cc=/usr/bin/gcc",
-        # "--nimcache:{}/cache".format(ctx.genfiles_dir.path),
-        "--nimcache:{}".format(nimcache.path),
-        "--usenimcache",
-        # "--incremental:on",
-        # "--skipCfg:on",
-        # "--skipUserCfg:on",
-        # "--skipParentCfg:on",
-        # "--skipProjCfg:on",
-        # "--verbosity:0",
-    ])
-    args.add_all(ctx.attr.defines)
-    args.add_all([ dep[NimModule].path for dep in ctx.attr.deps], before_each = "--path:")
-    args.add(ctx.files.main[0].path)
-
-    deps_inputs = [
-        src
-        for dep in ctx.attr.deps
-        for src in dep[NimModule].srcs
-    ]
-
-    ctx.actions.run(
-        executable = toolchain.niminfo.tool_files[0],
-        arguments = [args],
-        mnemonic = "NimBin",
-        inputs = [ctx.files.main[0]] + deps_inputs,
-        outputs = [ binary_file, nimcache ],
-    )
-
-    return [
-        DefaultInfo(
-            executable = binary_file,
-            files = depset([binary_file, nimcache]),
-            runfiles = ctx.runfiles([binary_file]),
-        )
-    ]
-
-nim_binary = rule(
-    implementation = _nim_binary_impl,
-    executable = True,
-    attrs = {
-        "main": attr.label(
-            allow_files = True,
-            mandatory = True,
-        ),
-        "deps": attr.label_list(
-            providers = [NimModule],
-        ),
-        "nim_cfg": attr.label(
-            allow_files = True,
-        ),
-        "config_nims": attr.label(
-            allow_files = True,
-        ),
-        "defines": attr.string_list(),
-    },
-    toolchains = [
-        Label(_NIM_TOOLCHAIN),
-        Label(_CC_TOOLCHAIN),
-    ],
-)
-
 def _nim_module_impl(ctx):
     path = paths.join(
         ctx.label.workspace_root,
@@ -134,34 +54,15 @@ nim_module = rule(
     provides = [ NimModule ],
 )
 
-nim_test = rule(
-    attrs = {
-        "main": attr.label(
-            allow_files = True,
-            mandatory = True,
-        ),
-        "deps": attr.label_list(
-            providers = [ NimModule ],
-        ),
-        "defines": attr.string_list(),
-    },
-    implementation = _nim_binary_impl,
-    test = True,
-    toolchains = [
-        Label(_NIM_TOOLCHAIN),
-        Label(_CC_TOOLCHAIN),
-    ]
-)
-
-_CPP_SRC = ["cc", "cpp", "cxx", "c++", "c"]
+_CC_SRC = ["cc", "cpp", "cxx", "c++", "c"]
 
 _COPY_TREE_SH = """
 OUT=$1; shift && mkdir -p "$OUT" && cp $* "$OUT"
 """
 
 def _only_c(f):
-    """Filter for just C++ source/headers"""
-    if f.extension in _CPP_SRC:
+    """Filter for just C/C++ source/headers"""
+    if f.extension in _CC_SRC:
         return f.path
     return None
 
@@ -180,8 +81,8 @@ def _copy_tree(ctx, idir, odir, map_each = None, progress_message = None):
 
     return odir
 
-def cc_compile_executable(ctx, name, srcs, hdrs, deps, includes = [], defines = [],
-    user_compile_flags = [], user_link_flags = [], quote_includes = []):
+def cc_compile_and_link_static_library(ctx, name, srcs, hdrs, deps, includes = [], defines = [],
+    user_compile_flags = [], user_link_flags = [], quote_includes = [], additional_inputs = [], link_deps_statically = False):
     """Compile and link C++ source into a static library"""
     cc_toolchain = find_cpp_toolchain(ctx)
     feature_configuration = cc_common.configure_features(
@@ -205,7 +106,7 @@ def cc_compile_executable(ctx, name, srcs, hdrs, deps, includes = [], defines = 
         public_hdrs = hdrs,
         compilation_contexts = compilation_contexts,
         user_compile_flags = user_compile_flags,
-        additional_inputs = [ctx.toolchains[_NIM_TOOLCHAIN].niminfo.nimbase[0]],
+        additional_inputs = additional_inputs,
     )
 
     linking_contexts = []
@@ -214,7 +115,7 @@ def cc_compile_executable(ctx, name, srcs, hdrs, deps, includes = [], defines = 
         name = name,
         feature_configuration = feature_configuration,
         cc_toolchain = cc_toolchain,
-        link_deps_statically = False,
+        link_deps_statically = link_deps_statically,
         compilation_outputs = compilation_outputs,
         linking_contexts = linking_contexts,
         user_link_flags = user_link_flags,
@@ -238,7 +139,7 @@ def cc_compile_executable(ctx, name, srcs, hdrs, deps, includes = [], defines = 
         ),
     ]
 
-def _nim_cc_test_impl(ctx):
+def _nim_cc_binary_impl(ctx):
     cc_toolchain = ctx.toolchains[_CC_TOOLCHAIN]
     toolchain = ctx.toolchains[_NIM_TOOLCHAIN]
 
@@ -248,6 +149,23 @@ def _nim_cc_test_impl(ctx):
 
     nimcache = ctx.actions.declare_directory("rules_nim_{}_compilation_cache".format(bin_name))
 
+    main_copy = ctx.actions.declare_file(main.basename)
+    ctx.actions.run_shell(
+        command = "cp {} {}".format(main.path, main_copy.path),
+        inputs = [main],
+        outputs = [main_copy],
+    )
+
+    cfg_files = []
+    if ctx.file.nim_cfg:
+        cfg_file = ctx.actions.declare_file(main.basename + ".cfg", sibling = main_copy)
+        ctx.actions.run_shell(
+            command = "cp {} {}".format(ctx.file.nim_cfg.path, cfg_file.path),
+            inputs = [ctx.file.nim_cfg],
+            outputs = [cfg_file],
+        )
+        cfg_files.append(cfg_file)
+
     args = ctx.actions.args()
     args.add_all([
         "compileToC",
@@ -256,7 +174,8 @@ def _nim_cc_test_impl(ctx):
         "--usenimcache",
     ])
     args.add_all([ dep[NimModule].path for dep in ctx.attr.deps], before_each = "--path:")
-    args.add(ctx.files.main[0].path)
+    args.add(main_copy.path)
+    # args.add(ctx.files.main[0].path)
 
     deps_inputs = [
         src
@@ -268,50 +187,67 @@ def _nim_cc_test_impl(ctx):
         executable = toolchain.niminfo.tool_files[0],
         arguments = [args],
         mnemonic = "NimBin",
-        inputs = ctx.files.main + deps_inputs,
+        inputs = [ main_copy ] + cfg_files + deps_inputs,
         outputs = [ nimcache ],
     )
 
-    # print(nimcache.path.readdir())
-    c_outputs = ctx.actions.declare_directory("rules_nim_{}_gen_c_files_only".format(bin_name))
+    c_outputs = ctx.actions.declare_directory("rules_nim_{}_gen_cc_files_only".format(bin_name))
     _copy_tree(
         ctx,
         nimcache,
         c_outputs,
         map_each = _only_c,
-        progress_message = "[nim] Extracting C source files",
+        progress_message = "[nim] Extracting C/Cpp source files",
     )
 
-    return cc_compile_executable(
+    nimbase = toolchain.niminfo.nimbase
+
+    return cc_compile_and_link_static_library(
         ctx,
         name = bin_name,
         srcs = [c_outputs],
         hdrs = [],
         deps = [],
         includes = [],
-        quote_includes = [
-            toolchain.niminfo.nimbase[0].dirname
-        ],
+        quote_includes = [ nimbase.dirname ],
         defines = [],
         user_compile_flags = [],
-        user_link_flags = []
+        user_link_flags = [],
+        additional_inputs = [ nimbase ],
     )
 
+CC_BIN_ATTRS = {
+    "main": attr.label(
+        allow_single_file = True,
+        mandatory = True,
+    ),
+    "deps": attr.label_list(
+        providers = [NimModule],
+    ),
+    "nim_cfg": attr.label(
+        allow_single_file = True,
+    ),
+}
+
 nim_cc_test = rule(
-    attrs = {
-        "main": attr.label(
-            allow_files = True,
-            mandatory = True,
-        ),
-        "deps": attr.label_list(
-            providers = [ NimModule ],
-        ),
-    },
-    implementation = _nim_cc_test_impl,
+    attrs = CC_BIN_ATTRS,
+    implementation = _nim_cc_binary_impl,
     test = True,
+    fragments = ["cpp"],
     toolchains = [
         Label(_NIM_TOOLCHAIN),
         Label(_CC_TOOLCHAIN),
     ],
+
+)
+
+nim_cc_binary = rule(
+    implementation = _nim_cc_binary_impl,
+    executable = True,
+    attrs = CC_BIN_ATTRS,
     fragments = ["cpp"],
+    toolchains = [
+        Label(_NIM_TOOLCHAIN),
+        Label(_CC_TOOLCHAIN),
+    ],
 )
