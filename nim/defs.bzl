@@ -180,7 +180,7 @@ def _copy_tree(ctx, idir, odir, map_each = None, progress_message = None):
 
     return odir
 
-def cc_compile_and_link_static_library(ctx, srcs, hdrs, deps, includes = [], defines = [],
+def cc_compile_executable(ctx, name, srcs, hdrs, deps, includes = [], defines = [],
     user_compile_flags = [], user_link_flags = [], quote_includes = []):
     """Compile and link C++ source into a static library"""
     cc_toolchain = find_cpp_toolchain(ctx)
@@ -211,7 +211,7 @@ def cc_compile_and_link_static_library(ctx, srcs, hdrs, deps, includes = [], def
     linking_contexts = []
     linking_output = cc_common.link(
         actions = ctx.actions,
-        name = "cc_binary",
+        name = name,
         feature_configuration = feature_configuration,
         cc_toolchain = cc_toolchain,
         link_deps_statically = False,
@@ -250,7 +250,7 @@ def _nim_cc_test_impl(ctx):
 
     args = ctx.actions.args()
     args.add_all([
-        "compileToCpp",
+        "compileToC",
         "--compileOnly",
         "--nimcache:{}".format(nimcache.path),
         "--usenimcache",
@@ -282,14 +282,13 @@ def _nim_cc_test_impl(ctx):
         progress_message = "[nim] Extracting C source files",
     )
 
-    return cc_compile_and_link_static_library(
+    return cc_compile_executable(
         ctx,
+        name = bin_name,
         srcs = [c_outputs],
         hdrs = [],
         deps = [],
-        includes = [
-
-        ],
+        includes = [],
         quote_includes = [
             toolchain.niminfo.nimbase[0].dirname
         ],
