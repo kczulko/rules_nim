@@ -92,8 +92,7 @@ def cc_compile_and_link_static_library(ctx, name, srcs, hdrs, deps, includes = [
         unsupported_features = ctx.disabled_features,
     )
 
-    # compilation_contexts = [dep[CcInfo].compilation_context for dep in deps]
-    compilation_contexts = []
+    compilation_contexts = [dep[CcInfo].compilation_context for dep in deps]
     compilation_context, compilation_outputs = cc_common.compile(
         name = ctx.label.name,
         actions = ctx.actions,
@@ -109,7 +108,7 @@ def cc_compile_and_link_static_library(ctx, name, srcs, hdrs, deps, includes = [
         additional_inputs = additional_inputs,
     )
 
-    linking_contexts = []
+    linking_contexts = [dep[CcInfo].linking_context for dep in deps]
     linking_output = cc_common.link(
         actions = ctx.actions,
         name = name,
@@ -173,9 +172,9 @@ def _nim_cc_binary_impl(ctx):
         "--nimcache:{}".format(nimcache.path),
         "--usenimcache",
     ])
-    args.add_all([ dep[NimModule].path for dep in ctx.attr.deps], before_each = "--path:")
+
+    args.add_all([dep[NimModule].path for dep in ctx.attr.deps], before_each = "--path:")
     args.add(main_copy.path)
-    # args.add(ctx.files.main[0].path)
 
     deps_inputs = [
         src
@@ -207,7 +206,7 @@ def _nim_cc_binary_impl(ctx):
         name = bin_name,
         srcs = [c_outputs],
         hdrs = [],
-        deps = [],
+        deps = ctx.attr.cc_deps,
         includes = [],
         quote_includes = [ nimbase.dirname ],
         defines = [],
@@ -223,6 +222,9 @@ CC_BIN_ATTRS = {
     ),
     "deps": attr.label_list(
         providers = [NimModule],
+    ),
+    "cc_deps": attr.label_list(
+        providers = [CcInfo],
     ),
     "nim_cfg": attr.label(
         allow_single_file = True,

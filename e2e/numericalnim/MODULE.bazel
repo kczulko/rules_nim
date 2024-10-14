@@ -1,5 +1,6 @@
 bazel_dep(name = "rules_nim", version = "0.0.0", dev_dependency = True)
 bazel_dep(name = "bazel_skylib", version = "1.7.1", dev_dependency = True)
+bazel_dep(name = "rules_nixpkgs_core", version = "0.12.0", dev_dependency = True)
 
 local_path_override(
     module_name = "rules_nim",
@@ -21,3 +22,25 @@ nim_module(
 )""",
 )
 
+nix_repo = use_extension("@rules_nixpkgs_core//extensions:repository.bzl", "nix_repo")
+nix_pkg = use_extension("@rules_nixpkgs_core//extensions:package.bzl", "nix_pkg")
+
+nix_repo.file(
+    name = "nixpkgs",
+    file = "//:nixpkgs.nix",
+    file_deps = ["//:flake.lock"],
+)
+use_repo(nix_repo, "nixpkgs")
+
+nix_pkg.attr(
+    name = "lapack",
+    repo = "@nixpkgs",
+    attr = "lapack",
+    build_file_content = """
+cc_library(
+    name = "lapack",
+    srcs = glob(["lib/*.so*"]),
+    visibility = ["//visibility:public"]
+)""",
+)
+use_repo(nix_pkg, "lapack")

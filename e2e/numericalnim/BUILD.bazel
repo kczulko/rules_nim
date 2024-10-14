@@ -1,4 +1,4 @@
-load("@rules_nim//nim:defs.bzl", "nim_module", "nim_test")
+load("@rules_nim//nim:defs.bzl", "nim_module")
 
 nim_module(
     name = "numericalnim",

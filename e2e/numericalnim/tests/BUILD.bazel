@@ -1,21 +1,4 @@
-load("@rules_nim//nim:defs.bzl", "nim_test", "nim_cc_test")
-
-# nim_cc_test(
-#     name = "cc",
-#     main = "test_vector.nim",
-#     deps = [
-#         # "//:numericalnim",
-#         "@measuremancer",
-#         "@nimble//:arraymancer",
-#         "@nimble//:nimblas",
-#         "@nimble//:nimlapack",
-#         "@nimble//:zip",
-#         "@nimble//:untar",
-#         "@nimble//:stb_image",
-#         "@nimble//:cdt",
-#     ]
-# )
-
+load("@rules_nim//nim:defs.bzl", "nim_cc_test")
 
 [
     nim_cc_test(
@@ -31,6 +14,9 @@ load("@rules_nim//nim:defs.bzl", "nim_test", "nim_cc_test")
           "@nimble//:untar",
           "@nimble//:stb_image",
           "@nimble//:cdt",
+      ],
+      cc_deps = [
+          "@lapack",
       ]
     )
     for name in [
@@ -43,6 +29,4 @@ load("@rules_nim//nim:defs.bzl", "nim_test", "nim_cc_test")
         "test_differentiate",
     ]
 ]
-
-
 
