@@ -101,9 +101,6 @@ def cc_compile_and_link(ctx, name, srcs, hdrs, deps, includes = [], defines = []
             alwayslink = True,
         )
 
-    print(linking_output.library_to_link)
-        
-
     if linking_output.executable != None:
         executable = linking_output.executable
         output_files.append(linking_output.executable)
@@ -235,5 +232,4 @@ CC_BIN_ATTRS = {
         allow_single_file = True,
     ),
 }
-
 

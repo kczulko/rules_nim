@@ -1,0 +1,19 @@
+# Override http_archive for local testing
+local_repository(
+    name = "rules_nim",
+    path = "../..",
+)
+
+#---SNIP--- Below here is re-used in the workspace snippet published on releases
+
+######################
+# rules_nim setup #
+######################
+# Fetches the rules_nim dependencies.
+# If you want to have a different version of some dependency,
+# you should fetch it *before* calling this.
+# Alternatively, you can skip calling this function, so long as you've
+# already fetched all the dependencies.
+load("@rules_nim//nim:repositories.bzl", "rules_nim_dependencies")
+
+rules_nim_dependencies()

@@ -1,7 +1,7 @@
 """Provides a simple way to test your rules as an external workspace.
 Add a basic smoke-test target below.
 """
-load("@rules_nim//nim:defs.bzl", "nim_cc_binary", "nim_cc_test")
+load("@rules_nim//nim:nim_cc_binary.bzl", "nim_cc_binary")
 load("@bazel_skylib//rules:write_file.bzl", "write_file")
 
 write_file(
@@ -13,11 +13,5 @@ write_file(
 nim_cc_binary(
     name = "bin",
     main = "main.nim",
-    nim_cfg = ":release",
-)
-
-nim_cc_test(
-    name = "spec",
-    main = "spec.nim",
     nim_cfg = ":release",
 )
