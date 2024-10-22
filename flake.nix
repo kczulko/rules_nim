@@ -29,6 +29,7 @@
             openblas
             openblas.dev
             gcc
+            # clang_18
             nim
             nimble
           ]);
