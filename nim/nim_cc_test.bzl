@@ -14,24 +14,25 @@ def _nim_cc_test_impl(ctx):
         nim_toolchain = toolchain,
         main_file = ctx.file.main,
         actions = ctx.actions,
-        deps = ctx.attr.deps,
+        deps = [dep for dep in ctx.attr.deps if NimModule in dep],
+        # deps = ctx.attr.deps,
         cfg_file = ctx.file.nim_cfg,
     )
 
     quote_includes = []
     srcs = [ cc_srcs ]
     hdrs = [ hdr_srcs, nimbase ]
-    deps = ctx.attr.cc_deps
+    deps = [dep for dep in ctx.attr.deps if CcInfo in dep]
     includes = [ nimbase.dirname, hdr_srcs.path ]
     user_compile_flags = [
-        "-fno-strict-aliasing",
-        "-fno-ident",
-        "-fno-math-errno"
+        # "-fno-strict-aliasing",
+        # "-fno-ident",
+        # "-fno-math-errno"
     ]
     user_link_flags = [
-        "-pthread",
-        "-lrt",
-        "-ldl"   
+        # "-pthread",
+        # "-lrt",
+        # "-ldl"   
     ]
     additional_inputs = [
         nimbase
@@ -64,7 +65,8 @@ def _nim_cc_test_impl(ctx):
         additional_inputs = additional_inputs,
     )
 
-    linking_contexts = [dep[CcInfo].linking_context for dep in deps]
+    linking_contexts = [dep[CcInfo].linking_context for dep in deps if CcInfo in dep]
+    # linking_contexts = [dep[CcInfo].linking_context for dep in deps]
 
     output_files = []
     linking_output = cc_common.link(
@@ -102,10 +104,7 @@ nim_cc_test = rule(
             mandatory = True,
         ),
         "deps": attr.label_list(
-            providers = [NimModule],
-        ),
-        "cc_deps": attr.label_list(
-            providers = [CcInfo],
+            providers = [[CcInfo], [NimModule]],
         ),
         "nim_cfg": attr.label(
             allow_single_file = True,

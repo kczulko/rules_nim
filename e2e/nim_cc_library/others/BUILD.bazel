@@ -14,7 +14,7 @@ write_file(
         "-d:useNimRtl",
         "-d:release",
         "-d:nimDebugDlOpen",
-        "cc:clang",
+        "cc:gcc",
     ],
     is_executable = False,
 )
@@ -40,9 +40,9 @@ nim_cc_library(
 
 nim_cc_library(
     name = "lib",
-    main = "main.nim",
+    main = "lib.nim",
     deps = [
-        ":nimrtl"
+        "//:nimrtl"
     ],
     nim_cfg = ":clang_config",
     visibility = ["//visibility:public"]

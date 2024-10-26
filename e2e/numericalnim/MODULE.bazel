@@ -43,4 +43,17 @@ cc_library(
     visibility = ["//visibility:public"]
 )""",
 )
-use_repo(nix_pkg, "lapack")
+
+nix_pkg.attr(
+    name = "openblas",
+    repo = "@nixpkgs",
+    attr = "openblas",
+    build_file_content = """
+cc_library(
+    name = "openblas",
+    srcs = glob(["lib/*.so*"]),
+    visibility = ["//visibility:public"]
+)
+"""
+)
+use_repo(nix_pkg, "lapack", "openblas")

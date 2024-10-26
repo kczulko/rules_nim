@@ -1,5 +1,7 @@
 #include <stdio.h>
-#include <main.h>
+#include <lib.h>
+
+
 
 int main() {
     library_init();

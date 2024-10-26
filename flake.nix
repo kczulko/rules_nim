@@ -24,19 +24,14 @@
             bash
             (pkgs.callPackage wrap_bazelisk {})
             libz.dev
-            libzip
-            libzip.dev
-            openblas
-            openblas.dev
             gcc
-            # clang_18
             nim
             nimble
           ]);
         };
 
         shells = {
-          default = fhsEnv.env // { CC="/usr/bin/gcc"; };
+          default = fhsEnv.env;
         };
       in
       {

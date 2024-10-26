@@ -2,11 +2,44 @@
 Add a basic smoke-test target below.
 """
 
+# cc_binary(
+#     name = "bin",
+#     deps = [
+#         "//others:lib",
+#         # ":nimrtl"
+#     ],
+#     linkstatic = False,
+#     srcs = ["main.c"],
+# )
+
 cc_binary(
-    name = "bin",
+    name = "libnimrtl.so",
     deps = [
-        "//others:lib",
+        "//others:nimrtl"
     ],
-    linkstatic = False,
-    srcs = ["main_file.c"],
+    linkshared = True,
+)
+
+cc_import(
+    name = "nimrtl",
+    deps = [
+        "//others:nimrtl"
+    ],
+    shared_library = "libnimrtl.so",
+    visibility = ["//visibility:public"]
+)
+
+cc_test(
+    name = "lib_test",
+    size = "small",
+    srcs = [
+        "lib_test.cpp",
+    ],
+    linkstatic = 1,
+    deps = [
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
+        "//others:lib",
+        ":nimrtl",
+    ],
 )

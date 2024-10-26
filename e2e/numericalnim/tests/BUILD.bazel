@@ -1,4 +1,5 @@
-load("@rules_nim//nim:defs.bzl", "nim_cc_test")
+# load("@rules_nim//nim:defs.bzl", "nim_cc_test")
+load("@rules_nim//nim:nim_cc_test.bzl", "nim_cc_test")
 
 [
     nim_cc_test(
@@ -14,10 +15,8 @@ load("@rules_nim//nim:defs.bzl", "nim_cc_test")
           "@nimble//:untar",
           "@nimble//:stb_image",
           "@nimble//:cdt",
+          "@openblas",
       ],
-      cc_deps = [
-          "@lapack",
-      ]
     )
     for name in [
         "test_vector",

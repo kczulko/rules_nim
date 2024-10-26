@@ -1,0 +1,43 @@
+load(
+    "@rules_bazel_integration_test//bazel_integration_test:defs.bzl",
+    "default_test_runner",
+    "integration_test_utils",
+)
+load(":defs.bzl", "bazel_integration_spec")
+
+default_test_runner(
+    name = "execute_tests",
+)
+
+default_test_runner(
+    name = "execute_binary",
+    bazel_cmds = [
+        "build //...",
+        "run :bin",
+    ],
+)
+
+TESTS = {
+    "nim_cc_binary": ":execute_binary",
+    "nim_cc_test": ":execute_tests",
+    "nim_cc_library": ":execute_tests",
+    "numericalnim": ":execute_tests",
+}
+
+[
+    bazel_integration_spec(
+        workspace_path = workspace_path,
+        test_runner = test_runner,
+    )
+    for workspace_path, test_runner in TESTS.items()
+]
+
+test_suite(
+    name = "all_integration_tests",
+    tags = integration_test_utils.DEFAULT_INTEGRATION_TEST_TAGS,
+    tests = [
+        "{}_spec".format(test_name)
+        for test_name in TESTS.keys()
+    ],
+    visibility = ["//:__subpackages__"],
+)

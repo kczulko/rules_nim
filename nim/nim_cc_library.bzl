@@ -18,20 +18,18 @@ def _nim_cc_library_impl(ctx):
         cfg_file = ctx.file.nim_cfg,
     )
 
-    quote_includes = []
+    quote_includes = [ nimbase.dirname ]
     srcs = [ cc_srcs ]
-    hdrs = [ hdr_srcs, nimbase ]
+    public_hdrs = [ hdr_srcs, nimbase ]
     deps = [dep for dep in ctx.attr.deps if CcInfo in dep]
-    includes = [ nimbase.dirname, hdr_srcs.path ]
+    includes = [ hdr_srcs.path ]
+    # includes = []
     user_compile_flags = [
         "-fno-strict-aliasing",
         "-fno-ident",
         "-fno-math-errno"
     ]
     user_link_flags = [
-        "-pthread",
-        "-lrt",
-        "-ldl"   
     ]
     additional_inputs = [
         nimbase
@@ -58,13 +56,13 @@ def _nim_cc_library_impl(ctx):
         includes = includes,
         system_includes = system_includes,
         defines = defines,
-        public_hdrs = hdrs,
+        public_hdrs = public_hdrs,
         compilation_contexts = compilation_contexts,
         user_compile_flags = user_compile_flags,
         additional_inputs = additional_inputs,
     )
     
-    linking_contexts = [dep[CcInfo].linking_context for dep in deps]
+    linking_contexts = [dep[CcInfo].linking_context for dep in deps if CcInfo in dep]
     linking_context, linking_output = cc_common.create_linking_context_from_compilation_outputs(
         actions = ctx.actions,
         feature_configuration = feature_configuration,
@@ -75,6 +73,7 @@ def _nim_cc_library_impl(ctx):
         user_link_flags = user_link_flags,
         disallow_static_libraries = True,
         disallow_dynamic_library = False,
+        alwayslink = True,
     )
 
     if not linking_output.library_to_link:
