@@ -33,18 +33,6 @@ nix_repo.file(
 use_repo(nix_repo, "nixpkgs")
 
 nix_pkg.attr(
-    name = "lapack",
-    repo = "@nixpkgs",
-    attr = "lapack",
-    build_file_content = """
-cc_library(
-    name = "lapack",
-    srcs = glob(["lib/*.so*"]),
-    visibility = ["//visibility:public"]
-)""",
-)
-
-nix_pkg.attr(
     name = "openblas",
     repo = "@nixpkgs",
     attr = "openblas",
@@ -53,7 +41,7 @@ cc_library(
     name = "openblas",
     srcs = glob(["lib/*.so*"]),
     visibility = ["//visibility:public"]
-)
 """
 )
-use_repo(nix_pkg, "lapack", "openblas")
+
+use_repo(nix_pkg, "openblas")
