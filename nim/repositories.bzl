@@ -62,7 +62,8 @@ load("@rules_nim//nim:toolchain.bzl", "nim_toolchain")
 
 nim_toolchain(
     name = "nim_toolchain",
-    target_tool = ":bin/nim"
+    target_tool = ":bin/nim",
+    nimbase = ":lib/nimbase.h",
     # select({
         # "@bazel_tools//src/conditions:host_windows": "nim_tool.exe",
         # "//conditions:default": "nim_tool",

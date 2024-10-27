@@ -1,117 +1,9 @@
 "Public API re-exports"
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
-
-_NIM_TOOLCHAIN = "@rules_nim//nim:toolchain_type"
-_CC_TOOLCHAIN = "@bazel_tools//tools/cpp:toolchain_type"
-
-NimModule = provider()
-
-def create_nim_module_provider(deps, srcs, strip_import_prefix, path):
-    return NimModule(
-        dependencies = depset(
-            deps,
-            transitive = [
-                dep[NimModule].dependencies
-                for dep in deps
-            ],
-        ),
-        srcs = srcs,
-        strip_import_prefix = strip_import_prefix,
-        path = path,
-    )
-
-def _nim_binary_impl(ctx):
-    toolchain = ctx.toolchains[_NIM_TOOLCHAIN]
-    cc_toolchain = ctx.toolchains[_CC_TOOLCHAIN]
-
-    main = ctx.files.main[0]
-    main_extension = main.extension
-    bin_name = main.basename[0:-(1 + len(main_extension))]
-
-    binary_file = ctx.actions.declare_file(bin_name)
-    nimcache = ctx.actions.declare_directory("rules_nim_{}_compilation_cache".format(bin_name))
-
-    main_copy = ctx.actions.declare_file(main.basename)
-    ctx.actions.run_shell(
-        command = "cp {} {}".format(main.path, main_copy.path),
-        inputs = [main],
-        outputs = [main_copy],
-    )
-
-    cfg_file = ctx.actions.declare_file(main.basename + ".cfg", sibling = main_copy)
-    ctx.actions.run_shell(
-        command = "cp {} {}".format(ctx.files.nim_cfg[0].path, cfg_file.path),
-        inputs = [ctx.files.nim_cfg[0]],
-        outputs = [cfg_file],
-    )
-
-    args = ctx.actions.args()
-    args.add_all([
-        "c",
-        "--out:{}".format(binary_file.path),
-        "--nimcache:{}".format(nimcache.path),
-        "--usenimcache",
-        # "--incremental:on",
-        # "--skipCfg:on",
-        # "--skipUserCfg:on",
-        # "--skipParentCfg:on",
-        # "--skipProjCfg:on",
-        # "--verbosity:0",
-    ])
-    args.add_all(ctx.attr.defines)
-    args.add_all([ dep[NimModule].path for dep in ctx.attr.deps], before_each = "--path:")
-    args.add(main_copy.path)
-
-    deps_inputs = [
-        src
-        for dep in ctx.attr.deps
-        for src in dep[NimModule].srcs
-    ]
-
-    ctx.actions.run(
-        executable = toolchain.niminfo.tool_files[0],
-        arguments = [args],
-        mnemonic = "NimBin",
-        inputs = toolchain.niminfo.tool_files + [
-            main_copy,
-        ] + deps_inputs + [cfg_file],
-        outputs = [ binary_file, nimcache ],
-        toolchain = _NIM_TOOLCHAIN,
-    )
-
-    return [
-        DefaultInfo(
-            executable = binary_file,
-            files = depset([binary_file, nimcache]),
-            runfiles = ctx.runfiles([binary_file]),
-        )
-    ]
-
-nim_binary = rule(
-    implementation = _nim_binary_impl,
-    executable = True,
-    attrs = {
-        "main": attr.label(
-            allow_files = True,
-            mandatory = True,
-        ),
-        "deps": attr.label_list(
-            providers = [NimModule],
-        ),
-        "nim_cfg": attr.label(
-            allow_files = True,
-        ),
-        "config_nims": attr.label(
-            allow_files = True,
-        ),
-        "defines": attr.string_list(),
-    },
-    toolchains = [
-        Label(_NIM_TOOLCHAIN),
-        Label(_CC_TOOLCHAIN),
-    ],
-)
+load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain")
+load("@rules_nim//nim/private:cc_compile_and_link.bzl", "CC_BIN_ATTRS", "NIM_TOOLCHAIN", "CC_TOOLCHAIN", "nim_cc_binary_impl")
+load("@rules_nim//nim/private:providers.bzl", "NimModule", "create_nim_module_provider")
 
 def _nim_module_impl(ctx):
     path = paths.join(
@@ -145,24 +37,47 @@ nim_module = rule(
     provides = [ NimModule ],
 )
 
-nim_test = rule(
-    attrs = {
-        "main": attr.label(
-            allow_files = True,
-            mandatory = True,
-        ),
-        "deps": attr.label_list(
-            providers = [ NimModule ],
-        ),
-        "nim_cfg": attr.label(
-            allow_files = True,
-        ),
-        "defines": attr.string_list(),
+nim_cc_test = rule(
+    attrs = CC_BIN_ATTRS  | {
+        "_output_type": attr.string(
+            default = "executable",
+        )
     },
-    implementation = _nim_binary_impl,
+    implementation = nim_cc_binary_impl,
     test = True,
+    fragments = ["cpp"],
     toolchains = [
-        Label(_NIM_TOOLCHAIN),
-        Label(_CC_TOOLCHAIN),
-    ]
+        Label(NIM_TOOLCHAIN),
+        Label(CC_TOOLCHAIN),
+    ],
+
+)
+
+nim_cc_binary = rule(
+    implementation = nim_cc_binary_impl,
+    executable = True,
+    attrs = CC_BIN_ATTRS  | {
+        "_output_type": attr.string(
+            default = "executable",
+        )
+    },
+    fragments = ["cpp"],
+    toolchains = [
+        Label(NIM_TOOLCHAIN),
+        Label(CC_TOOLCHAIN),
+    ],
+)
+
+nim_cc_library = rule(
+    implementation = nim_cc_binary_impl,
+    attrs = CC_BIN_ATTRS | {
+        "_output_type": attr.string(
+            default = "dynamic_library",
+        )
+    },
+    fragments = ["cpp"],
+    toolchains = [
+        Label(NIM_TOOLCHAIN),
+        Label(CC_TOOLCHAIN),
+    ],
 )

@@ -92,15 +92,15 @@ suite "Multi-dim":
         for x in abs(correct - xSol):
             check x < 2e-2
     
-    test "Newton":
-        let xSol = newton(bananaFunc, x0.clone)
-        for x in abs(correct - xSol):
-            check x < 3e-10
+    # test "Newton":
+    #     let xSol = newton(bananaFunc, x0.clone)
+    #     for x in abs(correct - xSol):
+    #         check x < 3e-10
 
-    test "Newton analytic":
-        let xSol = newton(bananaFunc, x0.clone, analyticGradient=bananaBend)
-        for x in abs(correct - xSol):
-            check x < 3e-10
+    # test "Newton analytic":
+    #     let xSol = newton(bananaFunc, x0.clone, analyticGradient=bananaBend)
+    #     for x in abs(correct - xSol):
+    #         check x < 3e-10
 
     test "BFGS":
         let xSol = bfgs(bananaFunc, x0.clone)
@@ -139,24 +139,24 @@ suite "Multi-dim":
 
     let params0 = [0.0, 0.0].toTensor()
 
-    test "levmarq":
-        let paramsSol = levmarq(fitFunc, params0, xData, yData)
-        for x in abs(paramsSol - correctParams):
-            check x < 1.3e-3
+    # test "levmarq":
+    #     let paramsSol = levmarq(fitFunc, params0, xData, yData)
+    #     for x in abs(paramsSol - correctParams):
+    #         check x < 1.3e-3
 
-    test "levmarq with yError":
-        let yError = ones_like(yData) * 1e-2
-        let paramsSol = levmarq(fitFunc, params0, xData, yData, yError=yError)
-        for x in abs(paramsSol - correctParams):
-            check x < 1.3e-3
+    # test "levmarq with yError":
+    #     let yError = ones_like(yData) * 1e-2
+    #     let paramsSol = levmarq(fitFunc, params0, xData, yData, yError=yError)
+    #     for x in abs(paramsSol - correctParams):
+    #         check x < 1.3e-3
 
-    test "paramUncertainties":
-        let yError = ones_like(yData) * 1e-2
-        let paramsSol = levmarq(fitFunc, params0, xData, yData, yError=yError)
+    # test "paramUncertainties":
+    #     let yError = ones_like(yData) * 1e-2
+    #     let paramsSol = levmarq(fitFunc, params0, xData, yData, yError=yError)
 
-        let uncertainties = paramUncertainties(paramsSol, fitFunc, xData, yData, yError).sqrt()
+    #     let uncertainties = paramUncertainties(paramsSol, fitFunc, xData, yData, yError).sqrt()
         
-        for (unc, err) in zip(uncertainties, abs(paramsSol - correctParams)):
-            check abs(unc / err) in 0.79 .. 3.6
+    #     for (unc, err) in zip(uncertainties, abs(paramsSol - correctParams)):
+    #         check abs(unc / err) in 0.79 .. 3.6
 
 

@@ -1,5 +1,20 @@
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
 
+filegroup(
+    name = "local_repository_files",
+    # Include every package that is required by the child workspaces.
+    srcs = [
+        # ".bazelignore",
+        # ".bazelrc",
+        "BUILD.bazel",
+        "WORKSPACE.bazel",
+        "MODULE.bazel",
+        "//nim:all_files",
+        "//nim/private:all_files",
+    ],
+    visibility = ["//visibility:public"],
+)
+
 gazelle_binary(
     name = "gazelle_bin",
     languages = ["@bazel_skylib_gazelle_plugin//bzl"],

@@ -1,0 +1,13 @@
+common --enable_platform_specific_config
+# build --action_env BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=1
+build:linux --sandbox_add_mount_pair=/tmp
+
+common --copt="-Wno-unused-label"
+common --copt="-Wno-error"
+common --copt="-Wno-unused-but-set-variable"
+common --copt="-Wno-discarded-qualifiers"
+common --copt="-Wno-parentheses"
+common --copt="-Wno-discarded-array-qualifiers"
+common --copt="-Wno-unknown-pragmas"
+
+

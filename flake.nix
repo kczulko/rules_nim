@@ -24,10 +24,6 @@
             bash
             (pkgs.callPackage wrap_bazelisk {})
             libz.dev
-            libzip
-            libzip.dev
-            openblas
-            openblas.dev
             gcc
             nim
             nimble

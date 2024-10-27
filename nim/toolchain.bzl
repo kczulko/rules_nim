@@ -8,6 +8,7 @@ NimInfo = provider(
         "tool_files": """Files required in runfiles to make the tool executable available.
 
 May be empty if the target_tool_path points to a locally installed tool binary.""",
+        "nimbase": "Location of nimbase.h file."
     },
 )
 
@@ -40,13 +41,16 @@ def _nim_toolchain_impl(ctx):
     template_variables = platform_common.TemplateVariableInfo({
         "NIM_BIN": target_tool_path,
     })
+    tool_files += ctx.files.nimbase
+
     default = DefaultInfo(
-        files = depset(tool_files),
+        files = depset(direct = tool_files),
         runfiles = ctx.runfiles(files = tool_files),
     )
     niminfo = NimInfo(
         target_tool_path = target_tool_path,
         tool_files = tool_files,
+        nimbase = ctx.file.nimbase,
     )
 
     # Export all the providers inside our ToolchainInfo
@@ -73,6 +77,11 @@ nim_toolchain = rule(
         "target_tool_path": attr.string(
             doc = "Path to an existing executable for the target platform.",
             mandatory = False,
+        ),
+        "nimbase": attr.label(
+            doc = "Path to an existing nimbase.h for the target platform.",
+            mandatory = True,
+            allow_single_file = True,
         ),
     },
     toolchains = [

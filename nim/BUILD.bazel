@@ -4,6 +4,12 @@ load("//nim/private:resolved_toolchain.bzl", "resolved_toolchain")
 # For stardoc to reference the files
 exports_files(["defs.bzl"])
 
+filegroup(
+    name = "all_files",
+    srcs = glob(["*"]),
+    visibility = ["//visibility:public"],
+)
+
 # This is the target rule authors should put in their "toolchains"
 # attribute in order to get a runtime for the correct platform.
 # See https://docs.bazel.build/versions/main/toolchains.html#writing-rules-that-use-toolchains

@@ -1,0 +1,49 @@
+# load("@rules_nim//nim:defs.bzl", "nim_cc_library")
+load("@rules_nim//nim:nim_cc_library.bzl", "nim_cc_library")
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
+
+write_file(
+    name = "clang_config",
+    out = "clang_config.cfg",
+    content = [
+        "app:lib",
+        "noMain",
+        "header",
+        "deadCodeElim:on",
+        "app:lib",
+        "-d:useNimRtl",
+        "-d:release",
+        "-d:nimDebugDlOpen",
+        "cc:gcc",
+    ],
+    is_executable = False,
+)
+
+write_file(
+    name = "nimrtl_cfg",
+    out = "nimrtl.cfg",
+    content = [
+        "threads:on",
+        "app:lib",
+        "-d:createNimRtl",
+        "-d:release",
+    ],
+    is_executable = False,
+)
+
+nim_cc_library(
+    name = "nimrtl",
+    main = "nimrtl.nim",
+    nim_cfg = "nimrtl_cfg",
+    visibility = ["//visibility:public"]
+)
+
+nim_cc_library(
+    name = "lib",
+    main = "lib.nim",
+    deps = [
+        "//:nimrtl"
+    ],
+    nim_cfg = ":clang_config",
+    visibility = ["//visibility:public"]
+)

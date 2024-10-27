@@ -41,7 +41,7 @@ cc_library(
     name = "openblas",
     srcs = glob(["lib/*.so*"]),
     visibility = ["//visibility:public"]
-)""",
+"""
 )
-use_repo(nix_pkg, "openblas")
 
+use_repo(nix_pkg, "openblas")
