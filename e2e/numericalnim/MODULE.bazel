@@ -40,8 +40,8 @@ nix_pkg.attr(
 cc_library(
     name = "openblas",
     srcs = glob(["lib/*.so*"]),
-    visibility = ["//visibility:public"]
-"""
+    visibility = ["//visibility:public"],
+)""",
 )
 
 use_repo(nix_pkg, "openblas")
