@@ -1,5 +1,4 @@
-# load("@rules_nim//nim:defs.bzl", "nim_cc_library")
-load("@rules_nim//nim:nim_cc_library.bzl", "nim_cc_library")
+load("@rules_nim//nim:defs.bzl", "nim_cc_library")
 load("@bazel_skylib//rules:write_file.bzl", "write_file")
 
 write_file(

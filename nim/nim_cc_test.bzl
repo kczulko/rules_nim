@@ -83,7 +83,7 @@ def _nim_cc_test_impl(ctx):
     )
 
     if linking_output.executable == None:
-        fail("nim_cc_binary must produce executable!!!")
+        fail("nim_cc_test must produce executable!!!")
 
     executable = linking_output.executable
     output_files = [ linking_output.executable ]

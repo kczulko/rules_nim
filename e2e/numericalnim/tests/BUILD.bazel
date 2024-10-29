@@ -1,4 +1,4 @@
-load("@rules_nim//nim:nim_cc_test.bzl", "nim_cc_test")
+load("@rules_nim//nim:defs.bzl", "nim_cc_test")
 
 [
     nim_cc_test(
