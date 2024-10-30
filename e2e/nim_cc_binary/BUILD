@@ -6,12 +6,12 @@ load("@bazel_skylib//rules:write_file.bzl", "write_file")
 
 write_file(
     name = "release",
-    out = "nim_cfg.out",
+    out = "release.cfg",
     content = ["-d:release"],
 )
 
 nim_cc_binary(
     name = "bin",
     main = "main.nim",
-    nim_cfg = ":release",
+    proj_cfg = ":release",
 )

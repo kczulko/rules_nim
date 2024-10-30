@@ -33,7 +33,7 @@ write_file(
 nim_cc_library(
     name = "nimrtl",
     main = "nimrtl.nim",
-    nim_cfg = "nimrtl_cfg",
+    proj_cfg = "nimrtl_cfg",
     visibility = ["//visibility:public"]
 )
 
@@ -43,6 +43,6 @@ nim_cc_library(
     deps = [
         "//:nimrtl"
     ],
-    nim_cfg = ":clang_config",
+    proj_cfg = ":clang_config",
     visibility = ["//visibility:public"]
 )

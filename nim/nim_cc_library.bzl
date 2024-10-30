@@ -15,7 +15,7 @@ def _nim_cc_library_impl(ctx):
         main_file = ctx.file.main,
         actions = ctx.actions,
         deps = [dep for dep in ctx.attr.deps if NimModule in dep],
-        cfg_file = ctx.file.nim_cfg,
+        cfg_file = ctx.file.proj_cfg,
     )
 
     quote_includes = [ nimbase.dirname ]
@@ -105,7 +105,7 @@ nim_cc_library = rule(
         "deps": attr.label_list(
             providers = [[CcInfo], [NimModule]],
         ),
-        "nim_cfg": attr.label(
+        "proj_cfg": attr.label(
             allow_single_file = True,
         ),
     },

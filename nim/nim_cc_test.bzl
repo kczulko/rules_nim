@@ -1,6 +1,7 @@
 load("@rules_nim//nim/private:nim_compile.bzl", "nim_compile")
 load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain")
 load("@rules_nim//nim/private:providers.bzl", "NimModule")
+load("@rules_nim//nim:attrs.bzl", "nim_cc_rule_attrs")
 
 NIM_TOOLCHAIN = "@rules_nim//nim:toolchain_type"
 CC_TOOLCHAIN = "@bazel_tools//tools/cpp:toolchain_type"
@@ -16,7 +17,7 @@ def _nim_cc_test_impl(ctx):
         actions = ctx.actions,
         deps = [dep for dep in ctx.attr.deps if NimModule in dep],
         # deps = ctx.attr.deps,
-        cfg_file = ctx.file.nim_cfg,
+        cfg_file = ctx.file.proj_cfg,
     )
 
     quote_includes = []
@@ -98,18 +99,7 @@ def _nim_cc_test_impl(ctx):
 nim_cc_test = rule(
     implementation = _nim_cc_test_impl,
     test = True,
-    attrs = {
-        "main": attr.label(
-            allow_single_file = True,
-            mandatory = True,
-        ),
-        "deps": attr.label_list(
-            providers = [[CcInfo], [NimModule]],
-        ),
-        "nim_cfg": attr.label(
-            allow_single_file = True,
-        ),
-    },
+    attrs = nim_cc_rule_attrs(),
     fragments = ["cpp"],
     toolchains = [
         Label(NIM_TOOLCHAIN),

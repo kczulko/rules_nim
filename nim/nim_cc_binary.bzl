@@ -1,6 +1,7 @@
 load("@rules_nim//nim/private:nim_compile.bzl", "nim_compile")
 load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain")
 load("@rules_nim//nim/private:providers.bzl", "NimModule")
+load("@rules_nim//nim:attrs.bzl", "nim_cc_rule_attrs")
 
 NIM_TOOLCHAIN = "@rules_nim//nim:toolchain_type"
 CC_TOOLCHAIN = "@bazel_tools//tools/cpp:toolchain_type"
@@ -15,13 +16,13 @@ def _nim_cc_binary_impl(ctx):
         main_file = ctx.file.main,
         actions = ctx.actions,
         deps = ctx.attr.deps,
-        cfg_file = ctx.file.nim_cfg,
+        cfg_file = ctx.file.proj_cfg,
     )
 
     quote_includes = []
     srcs = [ cc_srcs ]
     hdrs = [ hdr_srcs, nimbase ]
-    deps = ctx.attr.cc_deps
+    deps = ctx.attr.deps
     includes = [ nimbase.dirname, hdr_srcs.path ]
     user_compile_flags = [
         "-fno-strict-aliasing",
@@ -47,7 +48,7 @@ def _nim_cc_binary_impl(ctx):
         unsupported_features = ctx.disabled_features,
     )
 
-    compilation_contexts = [dep[CcInfo].compilation_context for dep in deps]
+    compilation_contexts = [dep[CcInfo].compilation_context for dep in deps if dep[CcInfo]]
     compilation_context, compilation_outputs = cc_common.compile(
         name = ctx.label.name,
         actions = ctx.actions,
@@ -96,20 +97,7 @@ def _nim_cc_binary_impl(ctx):
 nim_cc_binary = rule(
     implementation = _nim_cc_binary_impl,
     executable = True,
-    attrs = {
-        "main": attr.label(
-        allow_single_file = True,
-        mandatory = True,
-    ),
-    "deps": attr.label_list(
-        providers = [NimModule],
-    ),
-    "cc_deps": attr.label_list(
-        providers = [CcInfo],
-    ),
-    "nim_cfg": attr.label(
-        allow_single_file = True,
-    ),},
+    attrs = nim_cc_rule_attrs(),
     fragments = ["cpp"],
     toolchains = [
         Label(NIM_TOOLCHAIN),
