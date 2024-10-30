@@ -1,5 +1,6 @@
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@rules_nim//nim/private:providers.bzl", "NimModule", "create_nim_module_provider")
+load("@rules_nim//nim:attrs.bzl", "nim_module_attrs")
 
 def _nim_module_impl(ctx):
     path = paths.join(
@@ -20,15 +21,6 @@ def _nim_module_impl(ctx):
 
 nim_module = rule(
     implementation = _nim_module_impl,
-    attrs = {
-        "srcs": attr.label_list(
-            allow_files = True,
-            mandatory = True,
-        ),
-        "deps": attr.label_list(
-            providers = [ NimModule ],
-        ),
-        "strip_import_prefix": attr.string()
-    },
+    attrs = nim_module_attrs(),
     provides = [ NimModule ],
 )

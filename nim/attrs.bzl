@@ -56,7 +56,6 @@ _NIM_CC_RULE_ATTRS = {
         doc = "The nim file containg executable logic.",
     ),
     "proj_cfg": attr.label(
-        # allow_single_file = True,
         allow_single_file = [
             ".cfg"
         ],
