@@ -23,23 +23,18 @@ def _nim_cc_binary_impl(ctx):
     srcs = [ cc_srcs ]
     hdrs = [ hdr_srcs, nimbase ]
     deps = ctx.attr.deps
-    includes = [ nimbase.dirname, hdr_srcs.path ]
-    user_compile_flags = [
-        "-fno-strict-aliasing",
-        "-fno-ident",
-        "-fno-math-errno"
-    ]
-    user_link_flags = [
-        "-pthread",
-        "-lrt",
-        "-ldl"   
-    ]
+    includes = [ nimbase.dirname, hdr_srcs.path ] + ctx.attr.includes
+    user_compile_flags = ctx.attr.copts
+    user_link_flags = ctx.attr.linkopts
+    defines = ctx.attr.defines
+    local_defines = ctx.attr.local_defines
+
     additional_inputs = [
         nimbase
-    ]
+    ] + ctx.attr.additional_compiler_inputs
     system_includes = []
     defines = []
-    link_deps_statically = False
+    link_deps_statically = ctx.attr.linkstatic
 
     feature_configuration = cc_common.configure_features(
         ctx = ctx,
@@ -58,11 +53,14 @@ def _nim_cc_binary_impl(ctx):
         srcs = srcs,
         includes = includes,
         system_includes = system_includes,
-        defines = defines,
         public_hdrs = hdrs,
         compilation_contexts = compilation_contexts,
         user_compile_flags = user_compile_flags,
         additional_inputs = additional_inputs,
+        defines = defines,
+        local_defines = local_defines,
+        cxx_flags = ctx.attr.cxxopts,
+        conly_flags = ctx.attr.conlyopts,
     )
 
     linking_contexts = [dep[CcInfo].linking_context for dep in deps]
@@ -74,9 +72,9 @@ def _nim_cc_binary_impl(ctx):
         feature_configuration = feature_configuration,
         cc_toolchain = cc_toolchain,
         link_deps_statically = link_deps_statically,
-        # link_deps_statically = True,
         compilation_outputs = compilation_outputs,
         linking_contexts = linking_contexts,
+        additional_inputs = ctx.attr.additional_linker_inputs,
         user_link_flags = user_link_flags,
         output_type = "executable",
     )

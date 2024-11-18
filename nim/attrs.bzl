@@ -70,6 +70,12 @@ _NIM_CC_RULE_ATTRS = {
         doc = "The list of nim or cc dependencies of the current target.",
         providers = [[NimModule], [CcInfo]],
     ),
+    "additional_compiler_inputs": attr.label_list(
+        default = [],
+        doc = """
+        List of additional files needed for compilation of srcs
+        """,
+    ),
     "additional_linker_inputs": attr.label_list(
         default = [],
         doc = """
