@@ -1,22 +1,23 @@
 load(":providers.bzl", "NimModule")
 
-_CC_SRC = ["cc", "cpp", "cxx", "c++", "c"]
-
 _COPY_TREE_SH = """
 OUT=$1; shift && mkdir -p "$OUT" && if [[ "$*" ]]; then cp $* "$OUT"; fi
 """
 
-def _only_c(f):
-    """Filter for just C/C++ source/headers"""
-    if f.extension in _CC_SRC:
+def _filter_by_extension(ext_array, f):
+    if f.extension in ext_array:
         return f.path
     return None
 
+def _only_c(f):
+    """Filter for just C/C++ source/headers"""
+    cc_src = ["cc", "cpp", "cxx", "c++", "c"]
+    return _filter_by_extension(cc_src, f)
+
 def _only_h(f):
     """Filter for just C/C++ source/headers"""
-    if f.extension in ["h", "hpp", "hh"]:
-        return f.path
-    return None
+    hdr_src = ["h", "hpp", "hh"]
+    return _filter_by_extension(hdr_src, f)
 
 def _copy_tree(actions, idir, odir, map_each = None, progress_message = None):
     """Copy files from a TreeArtifact to a new directory"""
@@ -34,7 +35,6 @@ def _copy_tree(actions, idir, odir, map_each = None, progress_message = None):
     return odir
 
 def nim_compile(nim_toolchain, main_file, actions, deps = [], cfg_file = None):
-    # main = ctx.files.main[0]
     main_extension = main_file.extension
     bin_name = main_file.basename[0:-(1 + len(main_extension))]
 
@@ -59,6 +59,7 @@ def nim_compile(nim_toolchain, main_file, actions, deps = [], cfg_file = None):
 
     args = actions.args()
     args.add_all([
+        # extract type of generated file to the toolchain definition
         "compileToC",
         "--compileOnly",
         "--nimcache:{}".format(nimcache.path),
