@@ -21,7 +21,7 @@ def _nim_cc_binary_impl(ctx):
         main_file = main_file,
         actions = actions,
         deps = deps,
-        cfg_file = ctx.file.proj_cfg,
+        proj_cfg = ctx.file.proj_cfg,
     )
 
     srcs = [ cc_srcs ]

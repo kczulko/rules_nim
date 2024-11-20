@@ -34,38 +34,34 @@ def _copy_tree(actions, idir, odir, map_each = None, progress_message = None):
 
     return odir
 
-def nim_compile(nim_toolchain, main_file, actions, deps = [], cfg_file = None):
-    main_extension = main_file.extension
-    bin_name = main_file.basename[0:-(1 + len(main_extension))]
-
-    nimcache = actions.declare_directory("rules_nim_{}_compilation_cache".format(bin_name))
-
-    main_copy = actions.declare_file(main_file.basename)
+def _copy_file(actions, in_file, out_file, progress_message = None):
     actions.run_shell(
-        command = "cp {} {}".format(main_file.path, main_copy.path),
-        inputs = [main_file],
-        outputs = [main_copy],
+        command = "cp {} {}".format(in_file.path, out_file.path),
+        inputs = [in_file],
+        outputs = [out_file],
     )
 
-    cfg_files = []
-    if cfg_file:
-        cfg_file_copy = actions.declare_file(main_file.basename + ".cfg", sibling = main_copy)
-        actions.run_shell(
-            command = "cp {} {}".format(cfg_file.path, cfg_file_copy.path),
-            inputs = [cfg_file],
-            outputs = [cfg_file_copy],
-        )
-        cfg_files.append(cfg_file_copy)
+def nim_compile(nim_toolchain, main_file, actions, deps = [], proj_cfg = None):
+    main_extension = main_file.extension
+    bin_name = main_file.basename[0:-(1 + len(main_extension))]
+    nimcache = actions.declare_directory("rules_nim_{}_compilation_cache".format(bin_name))
+    main_copy = actions.declare_file(main_file.basename)
+    _copy_file(actions, main_file, main_copy, "[nim] Copying main file")
+
+    proj_cfgs = []
+    if proj_cfg:
+        proj_cfg_copy = actions.declare_file(main_file.basename + ".cfg", sibling = main_copy)
+        _copy_file(actions, proj_cfg, proj_cfg_copy, "[nim] Copying proj_cfg file")
+        proj_cfgs.append(proj_cfg_copy)
 
     args = actions.args()
     args.add_all([
-        # extract type of generated file to the toolchain definition
+        # extract type of generated files to the toolchain definition
         "compileToC",
         "--compileOnly",
         "--nimcache:{}".format(nimcache.path),
         "--usenimcache",
     ])
-
     args.add_all([dep[NimModule].path for dep in deps if dep[NimModule]], before_each = "--path:")
     args.add(main_copy.path)
 
@@ -79,7 +75,7 @@ def nim_compile(nim_toolchain, main_file, actions, deps = [], cfg_file = None):
         executable = nim_toolchain.niminfo.tool_files[0],
         arguments = [args],
         mnemonic = "NimBin",
-        inputs = [ main_copy ] + cfg_files + deps_inputs,
+        inputs = [ main_copy ] + proj_cfgs + deps_inputs,
         outputs = [ nimcache ],
     )
 

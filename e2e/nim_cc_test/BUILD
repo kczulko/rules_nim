@@ -14,4 +14,10 @@ nim_cc_test(
     name = "spec",
     main = "spec.nim",
     proj_cfg = ":release",
+    copts =[
+        "-Wno-unused-label",
+        "-Wno-unused-but-set-variable",
+        "-Wno-discarded-qualifiers",
+        "-Wno-parentheses",
+    ]
 )
