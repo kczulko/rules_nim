@@ -20,7 +20,7 @@ def executable_impl(ctx):
         main_file = main_file,
         actions = actions,
         deps = deps,
-        proj_cfg = ctx.file.proj_cfg,
+        proj_cfg = proj_cfg,
     )
 
     srcs = [ cc_srcs ]

@@ -1,5 +1,42 @@
 load("@rules_nim//nim/private:providers.bzl", "NimModule")
 
+def _mk_linkstatic(default):
+    return {
+        "linkstatic": attr.bool(
+            default = default,
+            doc = """"Link the artifact in static mode.
+
+            For cc_binary and cc_test: link the binary in static mode. For cc_library.link_static: see below.
+
+            By default this option is on for cc_binary and off for the rest.
+
+            If enabled and this is a binary or test, this option tells the build tool to link in .a's instead of .so's for user libraries whenever possible. System libraries such as libc (but not the C/C++ runtime libraries, see below) are still linked dynamically, as are libraries for which there is no static library. So the resulting executable will still be dynamically linked, hence only mostly static.
+
+            There are really three different ways to link an executable:
+
+            - STATIC with fully_static_link feature, in which everything is linked statically; e.g. "gcc -static foo.o libbar.a libbaz.a -lm".
+              This mode is enabled by specifying fully_static_link in the features attribute.
+            - STATIC, in which all user libraries are linked statically (if a static version is available), but where system libraries (excluding C/C++ runtime libraries) are linked dynamically, e.g. "gcc foo.o libfoo.a libbaz.a -lm".
+              This mode is enabled by specifying linkstatic=True.
+            - DYNAMIC, in which all libraries are linked dynamically (if a dynamic version is available), e.g. "gcc foo.o libfoo.so libbaz.so -lm".
+              This mode is enabled by specifying linkstatic=False.
+
+            If the linkstatic attribute or fully_static_link in features is used outside of //third_party please include a comment near the rule to explain why.
+
+            The linkstatic attribute has a different meaning if used on a cc_library() rule. For a C++ library, linkstatic=True indicates that only static linking is allowed, so no .so will be produced. linkstatic=False does not prevent static libraries from being created. The attribute is meant to control the creation of dynamic libraries.
+
+            There should be very little code built with linkstatic=False in production. If linkstatic=False, then the build tool will create symlinks to depended-upon shared libraries in the *.runfiles area. 
+
+            For a C++ library, linkstatic=True indicates that only static linking is allowed, so no .so will be produced. linkstatic=False does not prevent static libraries from being created. The attribute is meant to control the creation of dynamic libraries.
+
+            There should be very little code built with linkstatic=False in production. If linkstatic=False, then the build tool will create symlinks to depended-upon shared libraries in the *.runfiles area. 
+        """,
+        )
+    }
+
+_NIM_EXECUTABLE_LINKSTATIC = _mk_linkstatic(True)
+_NIM_LIBRARY_LINKSTATIC = _mk_linkstatic(False)
+
 _NIM_MODULE_ATTRS = {
     "srcs": attr.label_list(
         allow_files = True,
@@ -129,7 +166,12 @@ _NIM_CC_RULE_ATTRS = {
     ),
     "linkstatic": attr.bool(
         default = True,
-        doc = "Link the binary in static mode.",
+        doc = """"Link the artifact in static mode.
+
+        For a C++ library, linkstatic=True indicates that only static linking is allowed, so no .so will be produced. linkstatic=False does not prevent static libraries from being created. The attribute is meant to control the creation of dynamic libraries.
+
+        There should be very little code built with linkstatic=False in production. If linkstatic=False, then the build tool will create symlinks to depended-upon shared libraries in the *.runfiles area. 
+        """,
     ),
     "local_defines": attr.string_list(
         default = [],
@@ -137,6 +179,15 @@ _NIM_CC_RULE_ATTRS = {
         List of defines to add to the compile line. Subject to "Make" variable substitution and Bourne shell tokenization. Each string, which must consist of a single Bourne shell token, is prepended with -D and added to the compile command line for this target, but not to its dependents.
         """,
     ),
+}
+
+_NIM_CC_LIBRARY_ATTRS = {
+    "alwayslink": attr.bool(
+        default = False,
+        doc = """
+        If 1, any binary that depends (directly or indirectly) on this C++ library will link in all the object files for the files listed in srcs, even if some contain no symbols referenced by the binary. This is useful if your code isn't explicitly called by code in the binary, e.g., if your code registers to receive some callback provided by some service. 
+        """,
+    )
 }
 
 _CC_LIB_ATTRS = {
@@ -163,4 +214,6 @@ _CC_LIB_ATTRS = {
 def nim_module_attrs():
     return _NIM_MODULE_ATTRS
 def nim_cc_rule_attrs():
-    return _NIM_CC_RULE_ATTRS
+    return _NIM_CC_RULE_ATTRS | _NIM_EXECUTABLE_LINKSTATIC
+def nim_cc_library_rule_attrs():
+    return _NIM_CC_RULE_ATTRS | _NIM_CC_LIBRARY_ATTRS | _NIM_LIBRARY_LINKSTATIC

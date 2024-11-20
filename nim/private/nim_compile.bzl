@@ -62,12 +62,12 @@ def nim_compile(nim_toolchain, main_file, actions, deps = [], proj_cfg = None):
         "--nimcache:{}".format(nimcache.path),
         "--usenimcache",
     ])
-    args.add_all([dep[NimModule].path for dep in deps if dep[NimModule]], before_each = "--path:")
+    args.add_all([dep[NimModule].path for dep in deps if NimModule in dep], before_each = "--path:")
     args.add(main_copy.path)
 
     deps_inputs = [
         src
-        for dep in deps if dep[NimModule]
+        for dep in deps if NimModule in dep
         for src in dep[NimModule].srcs
     ]
 
