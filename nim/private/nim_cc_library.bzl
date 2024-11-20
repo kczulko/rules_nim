@@ -1,7 +1,7 @@
-load("@rules_nim//nim/private:nim_compile.bzl", "nim_compile")
 load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain")
+load("@rules_nim//nim/private:attrs.bzl", "nim_cc_library_rule_attrs")
+load("@rules_nim//nim/private:nim_compile.bzl", "nim_compile")
 load("@rules_nim//nim/private:providers.bzl", "NimModule")
-load("@rules_nim//nim:attrs.bzl", "nim_cc_library_rule_attrs")
 
 NIM_TOOLCHAIN = "@rules_nim//nim:toolchain_type"
 CC_TOOLCHAIN = "@bazel_tools//tools/cpp:toolchain_type"
@@ -28,10 +28,6 @@ def _nim_cc_library_impl(ctx):
     quote_includes = [ nimbase.dirname ]
     public_hdrs = [ hdr_srcs, nimbase ]
     includes = [ hdr_srcs.path ]
-    # includes = []
-    # "-fno-strict-aliasing",
-    # "-fno-ident",
-    # "-fno-math-errno"
     user_compile_flags = ctx.attr.copts
     user_link_flags = ctx.attr.linkopts
     additional_linker_inputs = ctx.attr.additional_linker_inputs
@@ -41,7 +37,6 @@ def _nim_cc_library_impl(ctx):
     local_defines = ctx.attr.local_defines
     cxx_flags = ctx.attr.cxxopts
     conly_flags = ctx.attr.conlyopts
-    # TODO: this one may differ
     features = ctx.features
     disabled_features = ctx.disabled_features
     compilation_contexts = [dep[CcInfo].compilation_context for dep in deps if CcInfo in dep]

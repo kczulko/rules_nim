@@ -39,8 +39,8 @@ def executable_impl(ctx):
     link_deps_statically = ctx.attr.linkstatic
     features = ctx.features
     disabled_features = ctx.disabled_features
-    compilation_contexts = [dep[CcInfo].compilation_context for dep in deps if dep[CcInfo]]
-    linking_contexts = [dep[CcInfo].linking_context for dep in deps]
+    compilation_contexts = [dep[CcInfo].compilation_context for dep in deps if CcInfo in dep]
+    linking_contexts = [dep[CcInfo].linking_context for dep in deps if CcInfo in dep]
     output_files = []
 
     feature_configuration = cc_common.configure_features(

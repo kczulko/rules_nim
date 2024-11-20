@@ -1,5 +1,5 @@
-load("@rules_nim//nim:executable_impl.bzl", "executable_impl", "NIM_TOOLCHAIN", "CC_TOOLCHAIN")
-load("@rules_nim//nim:attrs.bzl", "nim_cc_rule_attrs")
+load("@rules_nim//nim/private:attrs.bzl", "nim_cc_rule_attrs")
+load("@rules_nim//nim/private:executable_impl.bzl", "executable_impl", "NIM_TOOLCHAIN", "CC_TOOLCHAIN")
 
 nim_cc_test = rule(
     implementation = executable_impl,

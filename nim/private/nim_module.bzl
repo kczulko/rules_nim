@@ -1,6 +1,6 @@
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@rules_nim//nim/private:providers.bzl", "NimModule", "create_nim_module_provider")
-load("@rules_nim//nim:attrs.bzl", "nim_module_attrs")
+load("@rules_nim//nim/private:attrs.bzl", "nim_module_attrs")
 
 def _nim_module_impl(ctx):
     path = paths.join(

@@ -1,4 +1,4 @@
-load(":providers.bzl", "NimModule")
+load("@rules_nim//nim/private:providers.bzl", "NimModule")
 
 _COPY_TREE_SH = """
 OUT=$1; shift && mkdir -p "$OUT" && if [[ "$*" ]]; then cp $* "$OUT"; fi

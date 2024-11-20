@@ -1,4 +1,5 @@
 load("@rules_nim//nim:defs.bzl", "nim_cc_test")
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
 
 [
     nim_cc_test(
@@ -27,4 +28,3 @@ load("@rules_nim//nim:defs.bzl", "nim_cc_test")
         "test_differentiate",
     ]
 ]
-
