@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <lib.h>
 
-
-
 int main() {
     library_init();
     library_do_something(0);

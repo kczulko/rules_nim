@@ -64,6 +64,7 @@ nim_toolchain(
     name = "nim_toolchain",
     target_tool = ":bin/nim",
     nimbase = ":lib/nimbase.h",
+    nimrtl = ":lib/nimrtl.nim",
     # select({
         # "@bazel_tools//src/conditions:host_windows": "nim_tool.exe",
         # "//conditions:default": "nim_tool",

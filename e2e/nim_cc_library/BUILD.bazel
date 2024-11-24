@@ -1,33 +1,3 @@
-"""Provides a simple way to test your rules as an external workspace.
-Add a basic smoke-test target below.
-"""
-
-# cc_binary(
-#     name = "bin",
-#     deps = [
-#         "//others:lib",
-#         # ":nimrtl"
-#     ],
-#     linkstatic = False,
-#     srcs = ["main.c"],
-# )
-
-cc_binary(
-    name = "libnimrtl.so",
-    deps = [
-        "//others:nimrtl"
-    ],
-    linkshared = True,
-)
-
-cc_import(
-    name = "nimrtl",
-    deps = [
-        "//others:nimrtl"
-    ],
-    shared_library = "libnimrtl.so",
-    visibility = ["//visibility:public"]
-)
 
 cc_test(
     name = "lib_test",
@@ -35,11 +5,17 @@ cc_test(
     srcs = [
         "lib_test.cpp",
     ],
-    linkstatic = 1,
     deps = [
         "@googletest//:gtest",
         "@googletest//:gtest_main",
         "//others:lib",
-        ":nimrtl",
     ],
+)
+
+cc_binary(
+    name = "bin",
+    deps = [
+        "//others:lib"
+    ],
+    srcs = ["main.c"],
 )

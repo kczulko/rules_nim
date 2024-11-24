@@ -16,7 +16,7 @@ bazel_dep(name = "aspect_bazel_lib", version = "1.32.1", dev_dependency = True)
 bazel_dep(name = "buildifier_prebuilt", version = "6.1.2", dev_dependency = True)
 bazel_dep(name = "rules_bazel_integration_test", version = "0.24.1", dev_dependency = True)
 
-nim = use_extension("//nim:extensions.bzl", "nim")
+nim = use_extension("@rules_nim//nim:extensions.bzl", "nim")
 nim.toolchain(nim_version = "2.2.0")
 use_repo(nim, "nim_toolchains")
 
