@@ -18,7 +18,7 @@
               --unset TMPDIR'';
           });
 
-        fhsEnv = pkgs.buildFHSEnv {
+        fhsDefaultAttrs = {
           name = "simple-bazelisk-env";
           targetPkgs = pkgs: (with pkgs; [
             bash
@@ -29,9 +29,11 @@
             nimble
           ]);
         };
+        fhsCiAttrs = fhsDefaultAttrs // { runScript = "bazelisk test //e2e:all_integration_tests"; };
 
         shells = {
-          default = fhsEnv.env;
+          default = (pkgs.buildFHSEnv fhsDefaultAttrs).env;
+          ci = (pkgs.buildFHSEnv fhsCiAttrs).env;
         };
       in
       {
