@@ -11,4 +11,3 @@ nim_cc_test = rule(
         Label(CC_TOOLCHAIN),
     ],
 )
-

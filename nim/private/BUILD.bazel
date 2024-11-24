@@ -25,6 +25,15 @@ bzl_library(
 )
 
 bzl_library(
+    name = "nim_cc_test",
+    visibility = ["//nim:__subpackages__"],
+    deps = [
+        "@rules_nim//nim/private:attrs",
+        "@rules_nim//nim/private:executable_impl",
+    ],
+)
+
+bzl_library(
     name = "nim_cc_binary",
     srcs = ["nim_cc_binary.bzl"],
     visibility = ["//nim:__subpackages__"],
