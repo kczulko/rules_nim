@@ -32,4 +32,4 @@ jobs:
           key: ${{ matrix.os }}-bazel-ci-cache-${{ env.cache-id }}
       - name: Integration tests
         run: |
-          nix develop .#ci
+          nix develop .#ci -i --command bazelisk test //e2e:all_integration_tests

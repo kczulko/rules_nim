@@ -29,11 +29,15 @@
             nimble
           ]);
         };
-        fhsCiAttrs = fhsDefaultAttrs // { runScript = "bazelisk test //e2e:all_integration_tests"; };
+#        fhsCiAttrs = fhsDefaultAttrs // { runScript = "bazelisk test //e2e:all_integration_tests"; };
 
         shells = {
           default = (pkgs.buildFHSEnv fhsDefaultAttrs).env;
-          ci = (pkgs.buildFHSEnv fhsCiAttrs).env;
+          ci = pkgs.mkShell {
+            packages = with pkgs; [
+              bazelisk
+            ];
+          };
         };
       in
       {
