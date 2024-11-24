@@ -36,6 +36,7 @@
           ci = pkgs.mkShell {
             packages = with pkgs; [
               bazelisk
+              nimble
             ];
           };
         };
