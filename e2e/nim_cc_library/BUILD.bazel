@@ -1,4 +1,3 @@
-
 cc_test(
     name = "lib_test",
     size = "small",
@@ -6,16 +5,16 @@ cc_test(
         "lib_test.cpp",
     ],
     deps = [
+        "//others:lib",
         "@googletest//:gtest",
         "@googletest//:gtest_main",
-        "//others:lib",
     ],
 )
 
 cc_binary(
     name = "bin",
-    deps = [
-        "//others:lib"
-    ],
     srcs = ["main.c"],
+    deps = [
+        "//others:lib",
+    ],
 )

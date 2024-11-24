@@ -20,9 +20,9 @@ write_file(
 nim_cc_library(
     name = "lib",
     main = "lib.nim",
-    deps = [
-        "@rules_nim//:nimrtl"
-    ],
     proj_cfg = ":libnim_proj_cfg",
-    visibility = ["//visibility:public"]
+    visibility = ["//visibility:public"],
+    deps = [
+        "@rules_nim//nimrtl",
+    ],
 )

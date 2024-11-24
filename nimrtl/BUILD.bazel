@@ -1,0 +1,46 @@
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
+load("@rules_nim//nim/private:nimrtl_file.bzl", "nimrtl_file")
+load("@rules_nim//nim:defs.bzl", "nim_cc_library")
+
+filegroup(
+    name = "all_files",
+    srcs = glob(["*"]),
+    visibility = ["//visibility:public"],
+)
+
+write_file(
+    name = "nimrtl_cfg",
+    out = "nimrtl.cfg",
+    content = [
+        "threads:on",
+        "app:lib",
+        "warning:UnusedImport:off",
+        "verbosity:0",
+        "-d:createNimRtl",
+        "-d:release",
+    ],
+)
+
+nimrtl_file(
+    name = "current_nimrtl",
+)
+
+nim_cc_library(
+    name = "nimrtl_shared_lib",
+    main = ":current_nimrtl",
+    proj_cfg = "nimrtl_cfg",
+)
+
+cc_binary(
+    name = "libnimrtl.so",
+    linkshared = True,
+    deps = [":nimrtl_shared_lib"],
+)
+
+cc_import(
+    name = "nimrtl",
+    shared_library = ":libnimrtl.so",
+    visibility = ["//visibility:public"],
+    deps = [":nimrtl_shared_lib"],
+    alwayslink = True,
+)

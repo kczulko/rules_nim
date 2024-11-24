@@ -2,20 +2,20 @@ load("@rules_nim//nim:defs.bzl", "nim_cc_test")
 
 [
     nim_cc_test(
-      name = name,
-      main = "{}.nim".format(name),
-      deps = [
-          "//:numericalnim",
-          "@measuremancer",
-          "@nimble//:arraymancer",
-          "@nimble//:nimblas",
-          "@nimble//:nimlapack",
-          "@nimble//:zip",
-          "@nimble//:untar",
-          "@nimble//:stb_image",
-          "@nimble//:cdt",
-          "@openblas",
-      ],
+        name = name,
+        main = "{}.nim".format(name),
+        deps = [
+            "//:numericalnim",
+            "@measuremancer",
+            "@nimble//:arraymancer",
+            "@nimble//:cdt",
+            "@nimble//:nimblas",
+            "@nimble//:nimlapack",
+            "@nimble//:stb_image",
+            "@nimble//:untar",
+            "@nimble//:zip",
+            "@openblas",
+        ],
     )
     for name in [
         "test_vector",

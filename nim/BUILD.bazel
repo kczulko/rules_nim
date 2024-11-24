@@ -39,16 +39,28 @@ bzl_library(
 )
 
 bzl_library(
-    name = "defs",
-    srcs = ["defs.bzl"],
-    visibility = ["//visibility:public"],
-)
-
-bzl_library(
     name = "extensions",
     srcs = ["extensions.bzl"],
     visibility = ["//visibility:public"],
     deps = [":repositories"],
+)
+
+bzl_library(
+    name = "defs",
+    srcs = ["defs.bzl"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "@rules_nim//nim/private:nim_cc_binary",
+        "@rules_nim//nim/private:nim_cc_library",
+        "@rules_nim//nim/private:nim_cc_test",
+        "@rules_nim//nim/private:nim_module",
+    ],
+)
+
+bzl_library(
+    name = "nimble",
+    srcs = ["nimble.bzl"],
+    visibility = ["//visibility:public"],
 )
 
 bzl_library(

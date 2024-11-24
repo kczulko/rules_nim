@@ -1,6 +1,7 @@
 """Provides a simple way to test your rules as an external workspace.
 Add a basic smoke-test target below.
 """
+
 load("@rules_nim//nim:defs.bzl", "nim_cc_binary")
 load("@bazel_skylib//rules:write_file.bzl", "write_file")
 

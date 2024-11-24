@@ -1,3 +1,4 @@
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load(
     "@rules_bazel_integration_test//bazel_integration_test:defs.bzl",
     "default_test_runner",
@@ -26,8 +27,8 @@ TESTS = {
 
 [
     bazel_integration_spec(
-        workspace_path = workspace_path,
         test_runner = test_runner,
+        workspace_path = workspace_path,
     )
     for workspace_path, test_runner in TESTS.items()
 ]
@@ -40,4 +41,14 @@ test_suite(
         for test_name in TESTS.keys()
     ],
     visibility = ["//:__subpackages__"],
+)
+
+bzl_library(
+    name = "defs",
+    srcs = ["defs.bzl"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "@bazel_binaries//:defs",
+        "@rules_bazel_integration_test//bazel_integration_test:defs",
+    ],
 )

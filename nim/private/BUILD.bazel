@@ -7,6 +7,83 @@ filegroup(
 )
 
 bzl_library(
+    name = "attrs",
+    srcs = ["attrs.bzl"],
+    visibility = ["//nim:__subpackages__"],
+    deps = ["@rules_nim//nim/private:providers"],
+)
+
+bzl_library(
+    name = "executable_impl",
+    srcs = ["executable_impl.bzl"],
+    visibility = ["//nim:__subpackages__"],
+    deps = [
+        "@bazel_tools//tools/cpp:toolchain_utils.bzl",
+        "@rules_nim//nim/private:nim_compile",
+        "@rules_nim//nim/private:providers",
+    ],
+)
+
+bzl_library(
+    name = "nim_cc_binary",
+    srcs = ["nim_cc_binary.bzl"],
+    visibility = ["//nim:__subpackages__"],
+    deps = [
+        "@rules_nim//nim/private:attrs",
+        "@rules_nim//nim/private:executable_impl",
+    ],
+)
+
+bzl_library(
+    name = "nim_cc_library",
+    srcs = ["nim_cc_library.bzl"],
+    visibility = ["//nim:__subpackages__"],
+    deps = [
+        "@bazel_tools//tools/cpp:toolchain_utils.bzl",
+        "@rules_nim//nim/private:attrs",
+        "@rules_nim//nim/private:nim_compile",
+        "@rules_nim//nim/private:providers",
+    ],
+)
+
+bzl_library(
+    name = "nim_compile",
+    srcs = ["nim_compile.bzl"],
+    visibility = ["//nim:__subpackages__"],
+    deps = ["@rules_nim//nim/private:providers"],
+)
+
+bzl_library(
+    name = "nim_module",
+    srcs = ["nim_module.bzl"],
+    visibility = ["//nim:__subpackages__"],
+    deps = [
+        "@bazel_skylib//lib:paths",
+        "@rules_nim//nim/private:attrs",
+        "@rules_nim//nim/private:providers",
+    ],
+)
+
+bzl_library(
+    name = "nimrtl_file",
+    srcs = ["nimrtl_file.bzl"],
+    visibility = ["//nim:__subpackages__"],
+    deps = ["@rules_nim//nim/private:executable_impl"],
+)
+
+bzl_library(
+    name = "providers",
+    srcs = ["providers.bzl"],
+    visibility = ["//nim:__subpackages__"],
+)
+
+bzl_library(
+    name = "resolved_toolchain",
+    srcs = ["resolved_toolchain.bzl"],
+    visibility = ["//nim:__subpackages__"],
+)
+
+bzl_library(
     name = "toolchains_repo",
     srcs = ["toolchains_repo.bzl"],
     visibility = ["//nim:__subpackages__"],
@@ -15,11 +92,5 @@ bzl_library(
 bzl_library(
     name = "versions",
     srcs = ["versions.bzl"],
-    visibility = ["//nim:__subpackages__"],
-)
-
-bzl_library(
-    name = "resolved_toolchain",
-    srcs = ["resolved_toolchain.bzl"],
     visibility = ["//nim:__subpackages__"],
 )

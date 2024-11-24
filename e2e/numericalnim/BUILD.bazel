@@ -4,5 +4,5 @@ nim_module(
     name = "numericalnim",
     srcs = glob(["src/**/*.nim"]),
     strip_import_prefix = "src",
-    visibility = ["//visibility:public"]
+    visibility = ["//visibility:public"],
 )
