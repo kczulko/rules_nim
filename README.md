@@ -1,5 +1,8 @@
 # Bazel rules for Nim
 
+![CI](https://github.com/kczulko/rules_nim/actions/workflows/workflow.yaml/badge.svg)
+![osx_amd64](https://img.shields.io/badge/platform-linux__amd64-orange)
+
 ## Installation
 
 From the release you wish to use:
