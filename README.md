@@ -1,4 +1,4 @@
-# Bazel rules for Nim
+# Nim rules for Bazel
 
 ![CI](https://github.com/kczulko/rules_nim/actions/workflows/workflow.yaml/badge.svg)
 ![osx_amd64](https://img.shields.io/badge/platform-linux__amd64-orange)
