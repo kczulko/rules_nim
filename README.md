@@ -20,6 +20,15 @@ For example to use commit `abc123`:
    guarantee on the sha256 stability, see
    <https://github.blog/2023-02-21-update-on-the-future-stability-of-source-code-archives-and-hashes/>
 
+## Usage
+
+Check the [e2e examples](./e2d) directory:
+- [nim_cc_binary](./e2e/nim_cc_binary) Simple example of [nim_cc_binary][nim_cc_binary] usage.
+- [nim_cc_library](./e2e/nim_cc_library) Simple example of [nim_cc_library][nim_cc_library] usage.
+- [nim_cc_test](./e2e/nim_cc_test) Simple example of [nim_cc_test][nim_cc_test] usage.
+- [numericalnim](./e2e/numericalnim) Shows the usage of `rules_nim` for a [numericalnim][numericalnim] project.
+- [c_invocation](./e2e/c_invocation) Shows the [backend C invocation in Nim][backend_c_invocation_example].
+
 ## Public api
 
 ### Rules
@@ -32,3 +41,11 @@ For example to use commit `abc123`:
 ### Repository rules
 
 - [nimble_install](https://github.com/kczulko/rules_nim/blob/master/docs/repo_rules.md#nimble_install) - Obtains dependencies throught running `nimble` executable.
+
+[nim_module]: https://github.com/kczulko/rules_nim/blob/master/docs/rules.md#nim_module
+[nimble_install]: https://github.com/kczulko/rules_nim/blob/master/docs/repo_rules.md#nimble_install
+[nim_cc_test]: https://github.com/kczulko/rules_nim/blob/master/docs/rules.md#nim_cc_test
+[nim_cc_library]: https://github.com/kczulko/rules_nim/blob/master/docs/rules.md#nim_cc_library
+[nim_cc_binary]: https://github.com/kczulko/rules_nim/blob/master/docs/rules.md#nim_cc_binary
+[numericalnim]: https://github.com/SciNim/numericalnim
+[backend_c_invocation_example]: https://nim-lang.org/docs/backends.html#nim-code-calling-the-backend-c-invocation-example
