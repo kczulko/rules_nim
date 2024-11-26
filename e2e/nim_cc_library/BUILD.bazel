@@ -1,11 +1,11 @@
 cc_test(
-    name = "lib_test",
+    name = "test",
     size = "small",
     srcs = [
-        "lib_test.cpp",
+        "test.cpp",
     ],
     deps = [
-        "//others:lib",
+        "//lib",
         "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
@@ -13,8 +13,8 @@ cc_test(
 
 cc_binary(
     name = "bin",
-    srcs = ["main.c"],
+    srcs = ["main.cpp"],
     deps = [
-        "//others:lib",
+        "//lib",
     ],
 )

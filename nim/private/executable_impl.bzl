@@ -49,7 +49,7 @@ def executable_impl(ctx):
         requested_features = features,
         unsupported_features = disabled_features,
     )
-    
+
     compilation_context, compilation_outputs = cc_common.compile(
         name = name,
         actions = actions,
