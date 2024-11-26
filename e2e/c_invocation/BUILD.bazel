@@ -1,0 +1,23 @@
+load("@rules_nim//nim:defs.bzl", "nim_cc_binary", "nim_cc_test")
+
+cc_library(
+    name = "logic",
+    linkstatic = True,
+    srcs = [ "logic.c" ],
+)
+
+nim_cc_test(
+    name = "spec",
+    main = "spec.nim",
+    deps = [
+        ":logic"
+    ]
+)
+
+nim_cc_binary(
+    name = "bin",
+    main = "main.nim",
+    deps = [
+        ":logic"
+    ]
+)
