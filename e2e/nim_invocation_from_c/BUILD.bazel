@@ -1,0 +1,58 @@
+load("@rules_nim//nim:defs.bzl", "nim_cc_binary", "nim_cc_test", "nim_cc_library")
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
+load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
+
+write_file(
+    name = "fib_proj_conf",
+    out = "fib_proj_confg.nim.cfg",
+    content = [
+        "noMain",
+    ],
+)
+
+nim_cc_library(
+    name = "fib",
+    main = "fib.nim",
+    proj_cfg = ":fib_proj_conf",
+    linkstatic = True,
+)
+
+cc_binary(
+    name = "bin",
+    srcs = ["main.c"],
+    deps = [
+        ":fib"
+    ],
+)
+
+write_file(
+    name = "expected_output",
+    out = "expected_output.txt",
+    content = [
+        "Fib of 0 is 1",
+        "Fib of 1 is 1",
+        "Fib of 2 is 1",
+        "Fib of 3 is 2",
+        "Fib of 4 is 3",
+        "Fib of 5 is 5",
+        "Fib of 6 is 8",
+        "Fib of 7 is 13",
+        "Fib of 8 is 21",
+        "Fib of 9 is 34",
+        "",
+    ]
+)
+
+genrule(
+    name = "current_output",
+    srcs = [],
+    outs = ["current_output.txt"],
+    cmd = "$(location :bin) > $@",
+    tools = [":bin"],
+)
+
+diff_test(
+    name = "spec",
+    file1 = ":expected_output",
+    file2 = ":current_output",
+)

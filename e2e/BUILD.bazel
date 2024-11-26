@@ -24,6 +24,7 @@ TESTS = {
     "nim_cc_library": ":execute_tests",
     "numericalnim": ":execute_tests",
     "c_invocation": ":execute_tests",
+    "nim_invocation_from_c": ":execute_tests",
 }
 
 [
