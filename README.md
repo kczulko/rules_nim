@@ -26,7 +26,7 @@ git_override(
 
 ### Repository rules
 
-- [nimble_install][nimble_install] - Obtains dependencies throught running `nimble` executable.
+- [nimble_install][nimble_install] - Obtains dependencies through running `nimble` executable.
 
 ## Usage examples
 
