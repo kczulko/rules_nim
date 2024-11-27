@@ -44,14 +44,14 @@ def _nim_repo_impl(repository_ctx):
     platform = repository_ctx.attr.platform
 
     integrity = TOOL_VERSIONS[nim_version][platform]
-    url = TOOL_VERSIONS[nim_version]["download_url_template"]
+    url_template = TOOL_VERSIONS[nim_version]["download_url_template"]
 
-    url = "https://nim-lang.org/download/nim-{0}-{1}.tar.xz".format(
-        nim_version,
-        platform,
+    url = url_template.format(
+        version = nim_version,
+        platform = platform,
     )
     repository_ctx.download_and_extract(
-        url = url.format(versoin = nim_version, platform = platform),
+        url = url,
         integrity = TOOL_VERSIONS[nim_version][platform],
         stripPrefix = "nim-{}".format(nim_version),
     )
