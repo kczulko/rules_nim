@@ -19,24 +19,24 @@ git_override(
 
 ### Rules
 
-- [nim_module](https://github.com/kczulko/rules_nim/blob/master/docs/rules.md#nim_module) Creates a module from a set of `*.nim` files.
-- [nim_cc_binary](https://github.com/kczulko/rules_nim/blob/master/docs/rules.md#nim_cc_binary) Creates executable binary from a Nim code.
-- [nim_cc_library](https://github.com/kczulko/rules_nim/blob/master/docs/rules.md#nim_cc_library) Creates a `cc_library` target from a Nim code.
-- [nim_cc_test](https://github.com/kczulko/rules_nim/blob/master/docs/rules.md#nim_cc_test) Creates test executable from a Nim code.
+- [nim_module][nim_module] - Creates a module from a set of `*.nim` files.
+- [nim_cc_binary][nim_cc_binary] - Creates executable binary from a Nim code.
+- [nim_cc_library][nim_cc_library] - Creates a `cc_library` target from a Nim code.
+- [nim_cc_test][nim_cc_test] - Creates test executable from a Nim code.
 
 ### Repository rules
 
-- [nimble_install](https://github.com/kczulko/rules_nim/blob/master/docs/repo_rules.md#nimble_install) - Obtains dependencies throught running `nimble` executable.
+- [nimble_install][nimble_install] - Obtains dependencies throught running `nimble` executable.
 
 ## Usage examples
 
 Check the [e2e examples](./e2e) directory:
-- [nim_cc_binary](./e2e/nim_cc_binary) Simple example of [nim_cc_binary][nim_cc_binary] usage.
-- [nim_cc_library](./e2e/nim_cc_library) Simple example of [nim_cc_library][nim_cc_library] usage.
-- [nim_cc_test](./e2e/nim_cc_test) Simple example of [nim_cc_test][nim_cc_test] usage.
-- [numericalnim](./e2e/numericalnim) Shows the usage of `rules_nim` for a [numericalnim][numericalnim] project.
-- [c_invocation](./e2e/c_invocation) Shows the [backend C invocation in Nim][backend_c_invocation_example].
-- [nim_invocation_from_c](./e2e/nim_invocation_from_c) Shows the [Nim invocation from C][nim_invocation_from_c].
+- [nim_cc_binary](./e2e/nim_cc_binary) - Simple example of [nim_cc_binary][nim_cc_binary] usage.
+- [nim_cc_library](./e2e/nim_cc_library) - Simple example of [nim_cc_library][nim_cc_library] usage.
+- [nim_cc_test](./e2e/nim_cc_test) - Simple example of [nim_cc_test][nim_cc_test] usage.
+- [numericalnim](./e2e/numericalnim) - Shows the usage of `rules_nim` for a [numericalnim][numericalnim] project.
+- [c_invocation](./e2e/c_invocation) - Shows the [backend C invocation in Nim][backend_c_invocation_example].
+- [nim_invocation_from_c](./e2e/nim_invocation_from_c) - Shows the [Nim invocation from C][nim_invocation_from_c].
 
 [nim_module]: https://github.com/kczulko/rules_nim/blob/master/docs/rules.md#nim_module
 [nimble_install]: https://github.com/kczulko/rules_nim/blob/master/docs/repo_rules.md#nimble_install
