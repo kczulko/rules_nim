@@ -8,7 +8,7 @@ TOOL_VERSIONS = {
     "2.2.0": {
         "download_url_template": "https://github.com/nim-lang/nightlies/releases/download/2024-10-02-version-2-2-78983f1876726a49c69d65629ab433ea1310ece1/nim-{version}-{platform}.tar.xz",
         "linux_x64": "sha384-fDcfk62ocoJH4jcfQ3YOmcxsMhTzy7wHtWrI/M5I3VbXLbvM6V618QSiOClSttq8",
-        "macosx_x64": "sha384-dDcfk62ocoJH4jcfQ3YOmcxsMhTzy7wHtWrI/M5I3VbXLbvM6V618QSiOClSttq8",
+        "macosx_x64": "sha384-OAriVharwiQqSrdB+3pthlS4V/JFkmXWMi+O3QNsaBM4T2p/0AV76HV+Pf/R/BpG",
         "linux_arm64": "sha384-eDcfk62ocoJH4jcfQ3YOmcxsMhTzy7wHtWrI/M5I3VbXLbvM6V618QSiOClSttq8",
     },
     "2.0.12": {
