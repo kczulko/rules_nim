@@ -1,9 +1,6 @@
-"""Provides a simple way to test your rules as an external workspace.
-Add a basic smoke-test target below.
-"""
-
 load("@rules_nim//nim:defs.bzl", "nim_cc_binary")
 load("@bazel_skylib//rules:write_file.bzl", "write_file")
+load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
 
 write_file(
     name = "release",
@@ -15,4 +12,27 @@ nim_cc_binary(
     name = "bin",
     main = "main.nim",
     proj_cfg = ":release",
+)
+
+write_file(
+    name = "expected_output",
+    out = "expected_output.txt",
+    content = [
+        "Hello World",
+        "",
+    ]
+)
+
+genrule(
+    name = "current_output",
+    srcs = [],
+    outs = ["current_output.txt"],
+    cmd = "$(location :bin) > $@",
+    tools = [":bin"],
+)
+
+diff_test(
+    name = "spec",
+    file1 = ":expected_output",
+    file2 = ":current_output",
 )

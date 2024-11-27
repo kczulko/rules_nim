@@ -1,3 +1,6 @@
+load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
+
 cc_test(
     name = "test",
     size = "small",
@@ -17,4 +20,29 @@ cc_binary(
     deps = [
         "//lib",
     ],
+)
+
+write_file(
+    name = "expected_output",
+    out = "expected_output.txt",
+    content = [
+        "Hello from our dynamic library!",
+        "add5(5) = 10",
+        "Nothing to do here since we don't have any global memory",
+        "",
+    ]
+)
+
+genrule(
+    name = "current_output",
+    srcs = [],
+    outs = ["current_output.txt"],
+    cmd = "$(location :bin) > $@",
+    tools = [":bin"],
+)
+
+diff_test(
+    name = "spec",
+    file1 = ":expected_output",
+    file2 = ":current_output",
 )
