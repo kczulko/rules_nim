@@ -40,20 +40,18 @@ _ATTRS = {
 }
 
 def _nim_repo_impl(repository_ctx):
-    nim_version = "2.2.0"
-    platform = "linux_x64"
+    nim_version = repository_ctx.attr.nim_version
+    platform = repository_ctx.attr.platform
 
-    # url = "https://github.com/someorg/someproject/releases/download/v{0}/nim-{1}.zip".format(
-    #     repository_ctx.attr.nim_version,
-    #     repository_ctx.attr.platform,
-    # )
+    integrity = TOOL_VERSIONS[nim_version][platform]
+    url = TOOL_VERSIONS[nim_version]["download_url_template"]
+
     url = "https://nim-lang.org/download/nim-{0}-{1}.tar.xz".format(
         nim_version,
         platform,
     )
     repository_ctx.download_and_extract(
-        url = url,
-        # integrity = TOOL_VERSIONS[repository_ctx.attr.nim_version][repository_ctx.attr.platform],
+        url = url.format(versoin = nim_version, platform = platform),
         integrity = TOOL_VERSIONS[nim_version][platform],
         stripPrefix = "nim-{}".format(nim_version),
     )
@@ -65,10 +63,6 @@ nim_toolchain(
     target_tool = ":bin/nim",
     nimbase = ":lib/nimbase.h",
     nimrtl = ":lib/nimrtl.nim",
-    # select({
-        # "@bazel_tools//src/conditions:host_windows": "nim_tool.exe",
-        # "//conditions:default": "nim_tool",
-    # }),
 )
 """
 
