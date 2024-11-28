@@ -32,5 +32,5 @@ jobs:
           key: ${{ matrix.os }}-bazel-ci-cache-${{ env.cache-id }}
       - name: Integration tests
         run: |
-          ls -la $(dirname $(readlink -f $(which clang)))
-          #nix develop .#ci --command bazelisk test //e2e:all_integration_tests --config=ci
+          # ls -la $(dirname $(readlink -f $(which clang)))
+          nix develop .#ci --command bazelisk test //e2e:all_integration_tests --config=ci
