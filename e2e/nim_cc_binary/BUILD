@@ -12,6 +12,9 @@ nim_cc_binary(
     name = "bin",
     main = "main.nim",
     proj_cfg = ":release",
+    linkopts = [
+        "-Wl,-fuse-ld=gold"
+    ]
 )
 
 write_file(
