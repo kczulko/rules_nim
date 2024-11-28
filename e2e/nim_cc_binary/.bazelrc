@@ -3,3 +3,4 @@ common --copt="-Wno-unused-but-set-variable"
 common --copt="-Wno-discarded-qualifiers"
 common --copt="-Wno-parentheses"
 common --linkopt="-Wl,-fuse-ld=gold"
+common --nostart_end_lib
