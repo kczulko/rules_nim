@@ -28,22 +28,21 @@
             '';
           });
 
-        nimble_wrapped = (pkgs.callPackage wrap_nimble {});
-
-        fhsDefaultAttrs = {
-          name = "simple-bazelisk-env";
-          targetPkgs = pkgs: (with pkgs; [
-            bash
-            (pkgs.callPackage wrap_bazelisk {})
-            nimble_wrapped
-            libz.dev
-            gcc
-            nim
-          ]);
-        };
+        nimble_wrapped = pkgs.callPackage wrap_nimble {};
 
         shells = {
-          default = (pkgs.buildFHSEnv fhsDefaultAttrs).env;
+          default = (pkgs.buildFHSEnv {
+            name = "simple-bazelisk-env";
+            targetPkgs = pkgs: (with pkgs; [
+              bash
+              (pkgs.callPackage wrap_bazelisk {})
+              nimble_wrapped
+              libz.dev
+              gcc
+              nim
+            ]);
+          }).env;
+
           ci = pkgs.mkShell {
             packages = with pkgs; [
               bazelisk
