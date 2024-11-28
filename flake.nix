@@ -8,7 +8,7 @@
   outputs = { ... } @ args: with args;
     flake-utils.lib.eachDefaultSystem (system:
       let
-        pkgs = import nixpkgs { inherit system; };
+        pkgs = import nixpkgs { inherit system; config = { allowUnfree = true; }; };
 
         wrap_bazelisk = { bazelisk, makeWrapper }:
           bazelisk.overrideAttrs (final: prev: {
