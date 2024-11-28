@@ -48,9 +48,7 @@
             packages = with pkgs; [
               bazelisk
               nimble_wrapped
-            ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin (with pkgs;[
-              # darwin.xcode
-            ]);
+            ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin (with pkgs;[ darwin.xcode ]);
           };
         };
       in
