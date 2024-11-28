@@ -2,3 +2,6 @@ common --copt="-Wno-unused-label"
 common --copt="-Wno-unused-but-set-variable"
 common --copt="-Wno-discarded-qualifiers"
 common --copt="-Wno-parentheses"
+
+common --crosstool_top=@clang_18//:toolchain
+common --host_platform=@rules_nixpkgs_core//platforms:host
