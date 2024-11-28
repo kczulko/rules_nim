@@ -44,7 +44,7 @@
 
         shells = {
           default = (pkgs.buildFHSEnv fhsDefaultAttrs).env;
-          ci = pkgs.mkShell {
+          ci = pkgs.mkShellNoCC {
             packages = with pkgs; [
               bazelisk
               nimble_wrapped

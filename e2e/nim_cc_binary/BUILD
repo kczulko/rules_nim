@@ -13,7 +13,7 @@ nim_cc_binary(
     main = "main.nim",
     proj_cfg = ":release",
     linkopts = [
-        "-Wl,-fuse-ld=gold"
+        "-Wl,-fuse-ld=lld"
     ]
 )
 
