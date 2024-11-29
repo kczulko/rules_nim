@@ -5,3 +5,8 @@ local_path_override(
     module_name = "rules_nim",
     path = "../..",
 )
+
+nim = use_extension("@rules_nim//nim:extensions.bzl", "nim")
+nim.toolchain(nim_version = "2.2.0")
+use_repo(nim, "nim_toolchains")
+register_toolchains("@nim_toolchains//:all")

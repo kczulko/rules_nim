@@ -13,6 +13,13 @@ git_override(
     remote = "https://github.com/kczulko/rules_nim",
     commit = PUT_SPECIFIC_COMMIT_HERE,
 )
+
+# Nim toolchain registration - choose one of supported Nim versions.
+nim = use_extension("@rules_nim//nim:extensions.bzl", "nim")
+nim.toolchain(nim_version = "2.2.0")
+use_repo(nim, "nim_toolchains")
+register_toolchains("@nim_toolchains//:all")
+
 ```
 
 ## Public api
