@@ -18,27 +18,19 @@
               --unset TMPDIR'';
           });
 
-        # possible fix for macos failure
-        # --noSSLCheck added
-        wrap_nimble = { nimble, makeWrapper }:
-          nimble.overrideAttrs (final: prev: {
-            nativeBuildInputs = [ makeWrapper ] ++ prev.nativeBuildInputs;
-            postFixup = ''wrapProgram $out/bin/nimble \
-              --add-flags --noSSLCheck
-            '';
-          });
-
-        nimble_wrapped = (pkgs.callPackage wrap_nimble {});
-
         fhsDefaultAttrs = {
           name = "simple-bazelisk-env";
           targetPkgs = pkgs: (with pkgs; [
             bash
             (pkgs.callPackage wrap_bazelisk {})
-            nimble_wrapped
+            nimble
             libz.dev
             gcc
             nim
+            (python3.withPackages (ppkgs: with ppkgs; [
+              urllib3
+              black
+            ]))
           ]);
         };
 
@@ -47,8 +39,8 @@
           ci = pkgs.mkShell {
             packages = with pkgs; [
               bazelisk
-              nimble_wrapped
-            ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin (with pkgs;[ darwin.xcode ]);
+              nimble
+            ];
           };
         };
       in
