@@ -26,6 +26,7 @@ bzl_library(
 
 bzl_library(
     name = "nim_cc_test",
+    srcs = ["nim_cc_test.bzl"],  # keep
     visibility = ["//nim:__subpackages__"],
     deps = [
         "@rules_nim//nim/private:attrs",
@@ -78,6 +79,18 @@ bzl_library(
     srcs = ["nimrtl_file.bzl"],
     visibility = ["//nim:__subpackages__"],
     deps = ["@rules_nim//nim/private:executable_impl"],
+)
+
+bzl_library(
+    name = "nimble_install",
+    srcs = ["nimble_install.bzl"],
+    visibility = ["//nim:__subpackages__"],
+)
+
+bzl_library(
+    name = "nimble_lock",
+    srcs = ["nimble_lock.bzl"],
+    visibility = ["//nim:__subpackages__"],
 )
 
 bzl_library(

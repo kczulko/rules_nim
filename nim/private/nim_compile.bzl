@@ -62,20 +62,37 @@ def nim_compile(nim_toolchain, main_file, actions, deps = [], proj_cfg = None):
         "--nimcache:{}".format(nimcache.path),
         "--usenimcache",
     ])
-    args.add_all([dep[NimModule].path for dep in deps if NimModule in dep], before_each = "--path:")
+
+    direct_paths = [dep[NimModule].path for dep in deps if NimModule in dep]
+    transitive_paths = [
+        tran[NimModule].path
+        for dep in deps if NimModule in dep
+        for tran in dep[NimModule].dependencies.to_list() if NimModule in tran
+    ]
+
+    args.add_all(
+        direct_paths + transitive_paths,
+        before_each = "--path:"
+    )
     args.add(main_copy.path)
 
-    deps_inputs = [
+    direct_deps_inputs = [
         src
         for dep in deps if NimModule in dep
         for src in dep[NimModule].srcs
+    ]
+    transitive_deps_inputs = [
+        src
+        for dep in deps if NimModule in dep
+        for tran in dep[NimModule].dependencies.to_list() if NimModule in tran
+        for src in tran[NimModule].srcs
     ]
 
     actions.run(
         executable = nim_toolchain.niminfo.tool_files[0],
         arguments = [args],
         mnemonic = "NimBin",
-        inputs = [ main_copy ] + proj_cfgs + deps_inputs,
+        inputs = [ main_copy ] + proj_cfgs + direct_deps_inputs + transitive_deps_inputs,
         outputs = [ nimcache ],
     )
 

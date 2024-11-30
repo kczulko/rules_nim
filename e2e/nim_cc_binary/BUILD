@@ -20,7 +20,7 @@ write_file(
     content = [
         "Hello World",
         "",
-    ]
+    ],
 )
 
 genrule(

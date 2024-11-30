@@ -34,7 +34,8 @@ register_toolchains("@nim_toolchains//:all")
 
 ### Repository rules
 
-- [nimble_install][nimble_install] - Obtains dependencies through running `nimble` executable.
+- [nimble_lock][nimble_install] - Obtains dependencies from `nimble.lock` (native Bazel repository cache support).
+- [nimble_install][nimble_install] - Obtains dependencies through running `nimble` executable (no caching).
 
 ## Usage examples
 
@@ -48,6 +49,7 @@ Check the [e2e examples](./e2e) directory:
 
 [nim_module]: https://github.com/kczulko/rules_nim/blob/master/docs/rules.md#nim_module
 [nimble_install]: https://github.com/kczulko/rules_nim/blob/master/docs/repo_rules.md#nimble_install
+[nimble_lock]: https://github.com/kczulko/rules_nim/blob/master/docs/repo_rules.md#nimble_lock
 [nim_cc_test]: https://github.com/kczulko/rules_nim/blob/master/docs/rules.md#nim_cc_test
 [nim_cc_library]: https://github.com/kczulko/rules_nim/blob/master/docs/rules.md#nim_cc_library
 [nim_cc_binary]: https://github.com/kczulko/rules_nim/blob/master/docs/rules.md#nim_cc_binary

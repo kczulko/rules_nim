@@ -9,11 +9,6 @@ load("@rules_nim//nim:defs.bzl", "nim_cc_test")
             "@measuremancer",
             "@nimble//:arraymancer",
             "@nimble//:cdt",
-            "@nimble//:nimblas",
-            "@nimble//:nimlapack",
-            "@nimble//:stb_image",
-            "@nimble//:untar",
-            "@nimble//:zip",
             "@openblas",
         ],
     )

@@ -30,7 +30,7 @@ write_file(
         "add5(5) = 10",
         "Nothing to do here since we don't have any global memory",
         "",
-    ]
+    ],
 )
 
 genrule(

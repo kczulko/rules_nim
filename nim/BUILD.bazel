@@ -64,6 +64,16 @@ bzl_library(
     name = "nimble",
     srcs = ["nimble.bzl"],
     visibility = ["//visibility:public"],
+    deps = [
+        "@rules_nim//nim/private:nimble_install",
+        "@rules_nim//nim/private:nimble_lock",
+    ],
+)
+
+bzl_library(
+    name = "nimble_lock",
+    srcs = ["nimble_lock.bzl"],
+    visibility = ["//visibility:public"],
 )
 
 bzl_library(

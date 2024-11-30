@@ -1,7 +1,6 @@
-load("@rules_nim//nim:nimble.bzl", "nimble_install")
+load("@rules_nim//nim:nimble_lock.bzl", "nimble_lock")
 
-nimble_install(
+nimble_lock(
     name = "nimble",
-    nimble_file = "//:numericalnim.nimble",
+    lock_file = "//:nimble.lock"
 )
-

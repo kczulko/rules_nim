@@ -14,9 +14,4 @@ stardoc_with_diff_test(
 
 update_docs(
     name = "update",
-    # in_file = ":rules",
-    # out_file = "rules.md",
-    # files = {
-    #     "rules.md": ":rules",
-    # },
 )
