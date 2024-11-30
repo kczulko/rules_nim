@@ -34,8 +34,8 @@ register_toolchains("@nim_toolchains//:all")
 
 ### Repository rules
 
-- [nimble_lock][nimble_install] - Obtains dependencies from `nimble.lock` (native Bazel repository cache support).
-- [nimble_install][nimble_install] - Obtains dependencies through running `nimble` executable (no caching).
+- [nimble_lock][nimble_install] - Gets dependencies from `nimble.lock` (native Bazel repository cache support).
+- [nimble_install][nimble_install] - Gets dependencies through running `nimble` executable (no caching).
 
 ## Usage examples
 
