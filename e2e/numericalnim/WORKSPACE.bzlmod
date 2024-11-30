@@ -1,4 +1,4 @@
-load("@rules_nim//nim:nimble_lock.bzl", "nimble_lock")
+load("@rules_nim//nim:nimble.bzl", "nimble_lock")
 
 nimble_lock(
     name = "nimble",
