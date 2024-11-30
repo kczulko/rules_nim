@@ -7,7 +7,7 @@
 
 `rules_nim` has not been yet published to BCR. Please add following `git_override` to your `MODULE.bazel`:
 
-```
+```python
 git_override(
     module_name = "rules_nim",
     remote = "https://github.com/kczulko/rules_nim",
