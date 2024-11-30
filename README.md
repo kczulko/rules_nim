@@ -23,7 +23,7 @@ register_toolchains("@nim_toolchains//:all")
 
 ```
 
-## Public api
+## Public API
 
 ### Rules
 
