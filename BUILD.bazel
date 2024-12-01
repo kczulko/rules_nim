@@ -4,13 +4,12 @@ filegroup(
     name = "local_repository_files",
     # Include every package that is required by the child workspaces.
     srcs = [
-        # ".bazelignore",
-        # ".bazelrc",
         "BUILD.bazel",
         "WORKSPACE.bazel",
         "MODULE.bazel",
         "//nim:all_files",
         "//nim/private:all_files",
+        "//nim/private/nimble:all_files",
         "//nimrtl:all_files",
     ],
     visibility = ["//visibility:public"],
