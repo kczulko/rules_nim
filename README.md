@@ -31,6 +31,7 @@ register_toolchains("@nim_toolchains//:all")
 - [nim_cc_binary][nim_cc_binary] - Creates executable binary from a Nim code.
 - [nim_cc_library][nim_cc_library] - Creates a `cc_library` target from a Nim code.
 - [nim_cc_test][nim_cc_test] - Creates test executable from a Nim code.
+- [nimble_update_lock][nimble_update_lock] - Updates `nimble.lock` file with an `integrity` value.
 
 ### Repository rules
 

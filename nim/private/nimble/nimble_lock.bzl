@@ -1,31 +1,29 @@
 
-def _download_from_github(rctx, pkg_name, url, vcs_revision):
-    url = "{base_url}/archive/{vcs_revision}.tar.gz".format(base_url = url, vcs_revision = vcs_revision)
-    rctx.report_progress("[nimble_lock] Downloading {}".format(pkg_name))
+def _download(rctx, pkg_name, url, integrity):
+    rctx.report_progress("[nimble_lock] Downloading '{}'".format(pkg_name))
     result = rctx.download_and_extract(
         url = url,
-        canonical_id = vcs_revision,
+        integrity = integrity,
         output = pkg_name,
     )
     if result.success == False:
-        fail("Error while downloading {} package from {}. Result: {}".format(pkg_name, url, result))
+        fail("Error while downloading {} package from {}.".format(pkg_name, url))
 
     return result
 
-def _download_from_gitlab(rctx, pkg_name, url, vcs_revision):
+def _download_from_github(rctx, pkg_name, url, vcs_revision, integrity):
+    url = "{base_url}/archive/{vcs_revision}.tar.gz".format(
+        base_url = url,
+        vcs_revision = vcs_revision
+    )
+    return _download(rctx, pkg_name, url, integrity)
+
+def _download_from_gitlab(rctx, pkg_name, url, vcs_revision, integrity):
     url = "{base_url}/-/archive/{vcs_revision}/{vcs_revision}.tar.gz".format(
         base_url = _strip_git_suffix(url),
         vcs_revision = vcs_revision
     )
-    rctx.report_progress("[Downloading] {}".format(url))
-    result = rctx.download_and_extract(
-        url = url,
-        canonical_id = vcs_revision,
-        output = pkg_name,
-    )
-    if result.success == False:
-        fail("Error while downloading {} package from {}. Result: {}".format(pkg_name, url, result))
-    return result
+    return _download(rctx, pkg_name, url, integrity)
 
 _handlers = {
     "https://github.com": _download_from_github,
@@ -148,33 +146,52 @@ sed -n 's/skipDirs: "\\(.*\\)"$/\\1/p' "$1" | tr -d "\\n"
         executable = True,
     )
 
+    rctx.file(
+        "shaBase64.sh",
+        content = """#!/usr/bin/env bash
+echo -n $1 | xxd -r -p | base64
+# echo $1 |  base64
+""",
+        executable = True,
+    )
+    
+
 def _nimble_install_lock_impl(rctx):
     lock_file = json.decode(rctx.read(rctx.attr.lock_file))
     pkgs = lock_file["packages"]
     gen_tools(rctx)
 
-    build_file_content = """load("@rules_nim//nim:defs.bzl", "nim_module")"""
+    build_file_content = """load("@rules_nim//nim:defs.bzl", "nim_module")
+exports_files(["nimble.bazel.lock"])"""
     for pkg_name in pkgs:
         pkg = pkgs[pkg_name]
         url = pkg["url"]
+        integrity = pkg["checksums"].get("integrity", default = "")
         deps = pkg["dependencies"]
         vcs_revision = pkg["vcsRevision"]
 
-        if not [
-            _handlers[handler](rctx, pkg_name, url, vcs_revision)
+        result = [
+            _handlers[handler](rctx, pkg_name, url, vcs_revision, integrity)
             for handler in _handlers if url.startswith(handler)
-        ]:
+        ]
+        if not result:
             fail("NotImplemented: don't know how to download {} from URI {}.".format(pkg_name, url))
 
+        lock_file["packages"][pkg_name]["checksums"].update({"integrity": result[0].integrity})
         _gen_nimble_dumb(rctx, pkg_name)
         build_file_content += _mk_nim_module(rctx, pkg_name, deps)
 
+    rctx.file(
+        "nimble.bazel.lock",
+        content = json.encode_indent(lock_file),
+        executable = False,
+    )
     rctx.file(
         "BUILD.bazel",
         build_file_content,
         executable = False
     )
-
+    
 nimble_lock = repository_rule(
     implementation = _nimble_install_lock_impl,
     attrs = {
@@ -190,3 +207,4 @@ nimble_lock = repository_rule(
     Supports only download from the following URIs: {}
     """.format(_handlers.keys()),
 )
+
