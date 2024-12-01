@@ -178,14 +178,14 @@ nimble_lock = repository_rule(
     doc = """
     Downloads dependencies from the `nimble.lock` file.
 
-    In order to speed up dependency download process, user can utilize Bazel repository cache usage.
-    This repo rule creates a file nimble.bazel.lock which content is essentially equal to the passed
-    nimble.lock one, with the except that it puts Bazel's `integrity` hash into the `checksums` scopes
-    of `nimble.lock`. `nimble` supports only sha1 but this rule downloads repositories through direct links
-    of supported ({}) git hosting services.
+    To speed up dependency download process, user can utilize Bazel repository cache.
+    This repo rule creates a file `nimble.bazel.lock` which content is essentially equal to the passed
+    `nimble.lock` one, with the except that it puts Bazel's `integrity` hash into the `checksums` scopes
+    of `nimble.lock` file. `nimble` supports only sha1 but this rule downloads repositories through direct links
+    of supported ({}) git hosting services, through Bazel's `rctx.download_and_extract` API.
 
     User can utilize `nimble_lock_update` rule which updates `nimble.lock` file with the expected `integrity`
-    values under `checksums` scopes:
+    values under `checksums` scopes. See `numericalnim` e2e example.
     ```
     load("@rules_nim//nim:defs.bzl", "nimble_lock_update")
 
