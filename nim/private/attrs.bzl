@@ -50,38 +50,6 @@ _NIM_MODULE_ATTRS = {
     "strip_import_prefix": attr.string(
         doc = """The prefix to strip from the paths of the nim imports of this rule.""",
     )
-    # "public_hdrs": attr.label_list(
-    #     allow_files = [
-    #         ".h",
-    #         ".hh",
-    #         ".hpp",
-    #         ".hxx",
-    #         ".inc",
-    #         ".inl",
-    #         ".H",
-    #     ],
-    #     doc = """
-    #     List of headers that may be included by dependent rules transitively.
-    #     Notice: the cutoff happens during compilation.
-    #     """,
-    #     default = [],
-    # ),
-    # "private_hdrs": attr.label_list(
-    #     allow_files = [
-    #         ".h",
-    #         ".hh",
-    #         ".hpp",
-    #         ".hxx",
-    #         ".inc",
-    #         ".inl",
-    #         ".H",
-    #     ],
-    #     doc = """
-    #     List of headers that CANNOT be included by dependent rules.
-    #     Notice: the cutoff happens during compilation.
-    #     """,
-    #     default = [],
-    # ),
 }
 
 _NIM_CC_RULE_ATTRS = {
