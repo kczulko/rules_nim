@@ -51,8 +51,9 @@ nimble_install = repository_rule(
     implementation = _nimble_install_impl,
     doc = """
     Runs `nimble install` on `nimble_file` attribute which brings dependencies into the scope.
-    CAUTION: This "action" is not cached in repository cache by Bazel therefore it is suggested
-    to generate `nimble.lock` file and then use `nimble_lock` rule which is also faster than `nimble_install`.
+    CAUTION: Such a simple wrapper around `nimble` invocation comes with a cost of omitting Bazel's
+    repository cache. Therefore it is suggested to generate `nimble.lock` file and then use `nimble_lock`
+    repository rule (with the appropriate `nimble_lock_update` target). See `numericalnim` e2e example.
     """
 )
 
