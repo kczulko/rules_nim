@@ -30,39 +30,29 @@ _handlers = {
     "https://gitlab.com": _download_from_gitlab
 }
 
-def _get_skipDirs(rctx, pkg_name):
+def _get_from_nimble_dumb(rctx, pkg_name, dumb_attr):
     dir = rctx.path(pkg_name).readdir()[0].basename
     result = rctx.execute(
         [
-            rctx.path("./skipDirs.sh"),
+            rctx.path("./{}.sh".format(dumb_attr)),
             "{pkg_name}/nimble.dumb".format(pkg_name = pkg_name, dir = dir),
         ],
     )
     if result.return_code != 0:
         fail(
-            "Failure when extracting 'skipDirs' for a nimble package {}. Error: {}".format(
+            "Failure when extracting '{}' for a nimble package {}. Error: {}".format(
+                dumb_attr,
                 pkg_name,
                 result.stderr
             )
         )
     return result.stdout
 
+def _get_skipDirs(rctx, pkg_name):
+    return _get_from_nimble_dumb(rctx, pkg_name, "skipDirs")
+
 def _get_srcDir(rctx, pkg_name):
-    dir = rctx.path(pkg_name).readdir()[0].basename
-    result = rctx.execute(
-        [
-            rctx.path("./srcDir.sh"),
-            "{pkg_name}/nimble.dumb".format(pkg_name = pkg_name, dir = dir),
-        ],
-    )
-    if result.return_code != 0:
-        fail(
-            "Failure when extracting 'srcDir' for a nimble package {}. Error: {}".format(
-                pkg_name,
-                result.stderr
-            )
-        )
-    return result.stdout
+    return _get_from_nimble_dumb(rctx, pkg_name, "srcDir")
 
 def _gen_nimble_dumb(rctx, pkg_name):
     dir = rctx.path(pkg_name).readdir()[0].basename
@@ -127,34 +117,18 @@ nim_module(
        nim_module_deps = nim_module_deps,
        exclude = exclude,
     )
-    pass
 
 def gen_tools(rctx):
-    rctx.file(
-        "srcDir.sh",
-        content = """#!/usr/bin/env bash
-sed -n 's/srcDir: "\\(.*\\)"$/\\1/p' "$1" | tr -d "\\n"
-""",
-        executable = True,
-    )
-
-    rctx.file(
-        "skipDirs.sh",
-        content = """#!/usr/bin/env bash
-sed -n 's/skipDirs: "\\(.*\\)"$/\\1/p' "$1" | tr -d "\\n"
-""",
-        executable = True,
-    )
-
-    rctx.file(
-        "shaBase64.sh",
-        content = """#!/usr/bin/env bash
-echo -n $1 | xxd -r -p | base64
-# echo $1 |  base64
-""",
-        executable = True,
-    )
-    
+    [
+        rctx.file(
+            "{}.sh".format(attr),
+            content = """#!/usr/bin/env bash
+sed -n 's/{}: "\\(.*\\)"$/\\1/p' "$1" | tr -d "\\n"
+""".format(attr),
+            executable = True,
+        )
+        for attr in ["srcDir", "skipDirs"]
+    ]
 
 def _nimble_install_lock_impl(rctx):
     lock_file = json.decode(rctx.read(rctx.attr.lock_file))
