@@ -129,3 +129,25 @@ nim_module(<a href="#nim_module-name">name</a>, <a href="#nim_module-deps">deps<
 | <a id="nim_module-strip_import_prefix"></a>strip_import_prefix |  The prefix to strip from the paths of the nim imports of this rule.   | String | optional |  `""`  |
 
 
+<a id="nimble_lock_update"></a>
+
+## nimble_lock_update
+
+<pre>
+load("@rules_nim//nim:defs.bzl", "nimble_lock_update")
+
+nimble_lock_update(<a href="#nimble_lock_update-name">name</a>, <a href="#nimble_lock_update-nimble_repo">nimble_repo</a>, <a href="#nimble_lock_update-nimble_lock_file">nimble_lock_file</a>)
+</pre>
+
+
+
+**PARAMETERS**
+
+
+| Name  | Description | Default Value |
+| :------------- | :------------- | :------------- |
+| <a id="nimble_lock_update-name"></a>name |  <p align="center"> - </p>   |  none |
+| <a id="nimble_lock_update-nimble_repo"></a>nimble_repo |  <p align="center"> - </p>   |  none |
+| <a id="nimble_lock_update-nimble_lock_file"></a>nimble_lock_file |  <p align="center"> - </p>   |  none |
+
+

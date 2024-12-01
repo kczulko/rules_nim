@@ -57,6 +57,7 @@ bzl_library(
         "@rules_nim//nim/private:nim_cc_library",
         "@rules_nim//nim/private:nim_cc_test",
         "@rules_nim//nim/private:nim_module",
+        "@rules_nim//nim/private/nimble:nimble_lock_update",
     ],
 )
 
@@ -65,15 +66,9 @@ bzl_library(
     srcs = ["nimble.bzl"],
     visibility = ["//visibility:public"],
     deps = [
-        "@rules_nim//nim/private:nimble_install",
-        "@rules_nim//nim/private:nimble_lock",
+        "@rules_nim//nim/private/nimble:nimble_install",
+        "@rules_nim//nim/private/nimble:nimble_lock",
     ],
-)
-
-bzl_library(
-    name = "nimble_lock",
-    srcs = ["nimble_lock.bzl"],
-    visibility = ["//visibility:public"],
 )
 
 bzl_library(

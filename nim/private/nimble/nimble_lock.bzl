@@ -202,9 +202,24 @@ nimble_lock = repository_rule(
         ),
     },
     doc = """
-    Downloads dependencies from the `nimble.lock` file. Downloaded blobs are cached by Bazel in the
-    repository cache which means this repository rule is preffered over the `nimble_install`.
-    Supports only download from the following URIs: {}
+    Downloads dependencies from the `nimble.lock` file.
+
+    In order to speed up dependency download process, user can utilize Bazel repository cache usage.
+    This repo rule creates a file nimble.bazel.lock which content is essentially equal to the passed
+    nimble.lock one, with the except that it puts Bazel's `integrity` hash into the `checksums` scopes
+    of `nimble.lock`.
+
+    User can utilize `nimble_lock_update` rule which updates `nimble.lock` file with the expected `integrity`
+    values:
+    ```
+    load("@rules_nim//nim:defs.bzl", "nimble_lock_update")
+
+    nimble_lock_update(
+        name = "update",
+        nimble_lock_file = "nimble.lock",
+        nimble_repo = "@nimble",
+    )
+    ```
     """.format(_handlers.keys()),
 )
 

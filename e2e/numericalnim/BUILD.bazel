@@ -9,6 +9,6 @@ nim_module(
 
 nimble_lock_update(
     name = "update",
-    nimble_repo = "@nimble",
     nimble_lock_file = "nimble.lock",
+    nimble_repo = "@nimble",
 )
