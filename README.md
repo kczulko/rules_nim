@@ -31,7 +31,7 @@ register_toolchains("@nim_toolchains//:all")
 - [nim_cc_binary][nim_cc_binary] - Creates executable binary from a Nim code.
 - [nim_cc_library][nim_cc_library] - Creates a `cc_library` target from a Nim code.
 - [nim_cc_test][nim_cc_test] - Creates test executable from a Nim code.
-- [nimble_update_lock][nimble_update_lock] - Updates `nimble.lock` file with an `integrity` value.
+- [nimble_lock_update][nimble_lock_update] - Updates `nimble.lock` file with an `integrity` values.
 
 ### Repository rules
 
@@ -51,6 +51,7 @@ Check the [e2e examples](./e2e) directory:
 [nim_module]: https://github.com/kczulko/rules_nim/blob/master/docs/rules.md#nim_module
 [nimble_install]: https://github.com/kczulko/rules_nim/blob/master/docs/repo_rules.md#nimble_install
 [nimble_lock]: https://github.com/kczulko/rules_nim/blob/master/docs/repo_rules.md#nimble_lock
+[nimble_lock_update]: https://github.com/kczulko/rules_nim/blob/master/docs/rules.md#nimble_lock_update
 [nim_cc_test]: https://github.com/kczulko/rules_nim/blob/master/docs/rules.md#nim_cc_test
 [nim_cc_library]: https://github.com/kczulko/rules_nim/blob/master/docs/rules.md#nim_cc_library
 [nim_cc_binary]: https://github.com/kczulko/rules_nim/blob/master/docs/rules.md#nim_cc_binary
