@@ -125,7 +125,7 @@ nim_module(<a href="#nim_module-name">name</a>, <a href="#nim_module-deps">deps<
 | :------------- | :------------- | :------------- | :------------- | :------------- |
 | <a id="nim_module-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
 | <a id="nim_module-deps"></a>deps |  Other nim dependencies for this module.   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional |  `[]`  |
-| <a id="nim_module-srcs"></a>srcs |  Nim sources that creates a module.   | <a href="https://bazel.build/concepts/labels">List of labels</a> | required |  |
+| <a id="nim_module-srcs"></a>srcs |  Nim sources that form a module.   | <a href="https://bazel.build/concepts/labels">List of labels</a> | required |  |
 | <a id="nim_module-strip_import_prefix"></a>strip_import_prefix |  The prefix to strip from the paths of the nim imports of this rule.   | String | optional |  `""`  |
 
 

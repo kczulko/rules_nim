@@ -41,7 +41,7 @@ _NIM_MODULE_ATTRS = {
     "srcs": attr.label_list(
         allow_files = True,
         mandatory = True,
-        doc = """Nim sources that creates a module.""",
+        doc = """Nim sources that form a module.""",
     ),
     "deps": attr.label_list(
         providers = [ NimModule ],
