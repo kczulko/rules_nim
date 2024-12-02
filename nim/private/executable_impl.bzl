@@ -1,9 +1,9 @@
-load("@rules_nim//nim/private:nim_compile.bzl", "nim_compile")
+load("@rules_nim//nim/private:nim_compile.bzl", "nim_compile", _NIM_TOOLCHAIN = "NIM_TOOLCHAIN")
 load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain")
 load("@rules_nim//nim/private:providers.bzl", "NimModule")
 
-NIM_TOOLCHAIN = "@rules_nim//nim:toolchain_type"
 CC_TOOLCHAIN = "@bazel_tools//tools/cpp:toolchain_type"
+NIM_TOOLCHAIN = _NIM_TOOLCHAIN
 
 def executable_impl(ctx):
     cc_toolchain = find_cpp_toolchain(ctx)
@@ -92,5 +92,6 @@ def executable_impl(ctx):
         DefaultInfo(
             files = depset(output_files),
             executable = executable,
+            # runfiles = ctx.runfiles([executable]),
         )
     ]

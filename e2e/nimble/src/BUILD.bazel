@@ -1,0 +1,41 @@
+load("@rules_nim//nim:defs.bzl", "nim_cc_binary", "nim_module")
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
+
+write_file(
+    name = "nimble_cfg",
+    out = "nimble_cfg.cfg",
+    content = [
+        "-d:ssl",
+        "-d:nimcore",
+        "-d:release",
+        "-d:nimDebugDlOpen",
+    ],
+)
+
+nim_module(
+    name = "nimblepkg",
+    srcs = glob(["nimblepkg/**/*"])
+)
+
+nim_cc_binary(
+    name = "nimble",
+    main = "nimble.nim",
+    proj_cfg = ":nimble_cfg",
+    deps = [
+        "@sat",
+        "@checksums",
+        "@zippy",
+        "@openssl",
+        ":nimblepkg",
+    ],
+    copts = [
+        "-Wno-unused-but-set-variable",
+        "-Wno-discarded-qualifiers",
+        "-Wno-unused-label",
+        "-Wno-parentheses",
+        "-mssse3",
+        "-mpclmul",
+        "-msse2",
+    ],
+    visibility = ["//visibility:public"],
+)

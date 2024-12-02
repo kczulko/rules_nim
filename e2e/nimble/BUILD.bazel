@@ -1,0 +1,19 @@
+load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
+load("@bazel_skylib//rules:run_binary.bzl", "run_binary")
+
+genrule(
+    name = "current",
+    srcs = [],
+    outs = ["current_git_hash"],
+    tools = ["//src:nimble"],
+    cmd = """$(location //src:nimble) > $@""",
+)
+
+run_binary(
+    name = "curr",
+    tool = "//src:nimble",
+    args = [ "--version" ],
+    outs = [
+        "result.out"
+    ],
+)

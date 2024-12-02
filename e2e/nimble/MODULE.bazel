@@ -1,0 +1,95 @@
+bazel_dep(name = "rules_nim", version = "0.0.0", dev_dependency = True)
+bazel_dep(name = "bazel_skylib", version = "1.7.1", dev_dependency = True)
+bazel_dep(name = "rules_nixpkgs_core", version = "0.12.0", dev_dependency = True)
+bazel_dep(name = "aspect_bazel_lib", version = "2.9.4", dev_dependency = True)
+
+local_path_override(
+    module_name = "rules_nim",
+    path = "../..",
+)
+
+nim = use_extension("@rules_nim//nim:extensions.bzl", "nim")
+nim.toolchain(nim_version = "2.2.0")
+use_repo(nim, "nim_toolchains")
+register_toolchains("@nim_toolchains//:all")
+
+http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+http_archive(
+    name = "sat",
+    url = "https://github.com/nim-lang/sat/archive/faf1617f44d7632ee9601ebc13887644925dcc01.tar.gz",
+    integrity = "sha256-37kKp/pim7e9OVrgQUEDYkOUkmANBpeNKbpybBbvQHc=",
+    strip_prefix = "sat-faf1617f44d7632ee9601ebc13887644925dcc01",
+    build_file_content =
+"""load("@rules_nim//nim:defs.bzl", "nim_module")
+nim_module(
+    name = "sat",
+    srcs = glob(["**/*.nim"]),
+    strip_import_prefix = "src",
+    visibility = ["//visibility:public"],
+)""",
+)
+
+http_archive(
+    name = "checksums",
+    url = "https://github.com/nim-lang/checksums/archive/refs/tags/v0.2.1.tar.gz",
+    integrity = "sha256-sMOpid1989MxRKwcAtd2DK57RWLpy2+wrVxp7wy2Isw=",
+    strip_prefix = "checksums-0.2.1",
+    build_file_content =
+"""load("@rules_nim//nim:defs.bzl", "nim_module")
+nim_module(
+    name = "checksums",
+    srcs = glob(["**/*.nim"]),
+    strip_import_prefix = "src",
+    visibility = ["//visibility:public"],
+)""",
+)
+
+http_archive(
+    name = "zippy",
+    url = "https://github.com/guzba/zippy/archive/refs/tags/0.10.16.tar.gz",
+    integrity = "sha256-Y89KkTzpupyki16EfG2SO5vjJGNhcBlaN9hf1xSFpv8=",
+    strip_prefix = "zippy-0.10.16",
+    build_file_content =
+"""load("@rules_nim//nim:defs.bzl", "nim_module")
+nim_module(
+    name = "zippy",
+    srcs = glob(["**/*.nim"]),
+    strip_import_prefix = "src",
+    visibility = ["//visibility:public"],
+)""",
+)
+
+nix_repo = use_extension("@rules_nixpkgs_core//extensions:repository.bzl", "nix_repo")
+nix_pkg = use_extension("@rules_nixpkgs_core//extensions:package.bzl", "nix_pkg")
+
+nix_repo.file(
+    name = "nixpkgs",
+    file = "//:nixpkgs.nix",
+    file_deps = ["//:flake.lock"],
+)
+use_repo(nix_repo, "nixpkgs")
+
+nix_pkg.attr(
+    name = "openssl",
+    repo = "@nixpkgs",
+    attr = "openssl.out",
+    build_file_content = """
+cc_library(
+    name = "openssl",
+    srcs = glob(["lib/*.so*"]),
+    visibility = ["//visibility:public"],
+)
+cc_library(
+    name = "libcrypto",
+    srcs = glob(["lib/libcrypto.so*"]),
+    visibility = ["//visibility:public"],
+)
+cc_library(
+    name = "libssl",
+    srcs = glob(["lib/libssl.so*"]),
+    visibility = ["//visibility:public"],
+)    
+""",
+)
+
+use_repo(nix_pkg, "openssl")

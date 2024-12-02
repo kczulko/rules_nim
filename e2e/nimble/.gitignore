@@ -1,0 +1,71 @@
+# ignore files wo extension (posix binaries)
+*
+!*.*
+!*/
+
+
+# Any path
+*.swp
+*~
+nimcache/
+.venv
+
+# Absolute paths
+/src/babel
+/src/nimble
+
+# executables from test and build
+/nimble
+src/nimblepkg/checksums
+src/nimblepkg/cli
+src/nimblepkg/common
+src/nimblepkg/config
+src/nimblepkg/developfile
+src/nimblepkg/download
+src/nimblepkg/init
+src/nimblepkg/jsonhelpers
+src/nimblepkg/lockfile
+src/nimblepkg/nimbledatafile
+src/nimblepkg/nimblelinkfile
+src/nimblepkg/nimscriptapi
+src/nimblepkg/nimscriptexecutor
+src/nimblepkg/nimscriptwrapper
+src/nimblepkg/options
+src/nimblepkg/packageinfo
+src/nimblepkg/packageinfotypes
+src/nimblepkg/packageinstaller
+src/nimblepkg/packagemetadatafile
+src/nimblepkg/packageparser
+src/nimblepkg/paths
+src/nimblepkg/publish
+src/nimblepkg/reversedeps
+src/nimblepkg/sha1hashes
+src/nimblepkg/syncfile
+src/nimblepkg/tools
+src/nimblepkg/topologicalsort
+src/nimblepkg/vcstools
+src/nimblepkg/version
+
+# Windows executables
+*.exe
+*.dll
+
+# VCC compiler and linker artifacts
+*.ilk
+*.pdb
+
+# Editors and IDEs project files and folders
+.vscode
+
+# VCS artifacts
+*.orig
+
+# Test procedure artifacts
+*.nims
+/buildTests
+/tests/nimdep/nimble.lock
+/tests/nimdep/localnimbledeps/
+
+# Nimble Guide files
+nimble-guide/site/
+!nimble-guide/config.nims

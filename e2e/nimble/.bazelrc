@@ -1,0 +1,7 @@
+# common --copt=-Wno-unused-but-yset-variable
+# common --copt=-Wno-discarded-qualifiers
+# common --copt=-Wno-unused-label
+# common --copt=-Wno-parentheses
+# common --copt=-mssse3
+# common --copt=-mpclmul
+# common --copt=-msse2

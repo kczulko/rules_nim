@@ -1,5 +1,7 @@
 load("@rules_nim//nim/private:providers.bzl", "NimModule")
 
+NIM_TOOLCHAIN = "@rules_nim//nim:toolchain_type"
+
 _COPY_TREE_SH = """
 OUT=$1; shift && mkdir -p "$OUT" && if [[ "$*" ]]; then cp $* "$OUT"; fi
 """
@@ -59,6 +61,7 @@ def nim_compile(nim_toolchain, main_file, actions, deps = [], proj_cfg = None):
         # extract type of generated files to the toolchain definition
         "compileToC",
         "--compileOnly",
+        "--noNimblePath",
         "--nimcache:{}".format(nimcache.path),
         "--usenimcache",
     ])
@@ -94,6 +97,8 @@ def nim_compile(nim_toolchain, main_file, actions, deps = [], proj_cfg = None):
         mnemonic = "NimBin",
         inputs = [ main_copy ] + proj_cfgs + direct_deps_inputs + transitive_deps_inputs,
         outputs = [ nimcache ],
+        use_default_shell_env = True,
+        toolchain = NIM_TOOLCHAIN,
     )
 
     hdr_outputs = actions.declare_directory("rules_nim_{}_gen_hdr_files_only".format(bin_name))

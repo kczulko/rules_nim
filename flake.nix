@@ -27,6 +27,7 @@
             libz.dev
             gcc
             nim
+            git
             (python3.withPackages (ppkgs: with ppkgs; [
               urllib3
               black
