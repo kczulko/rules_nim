@@ -5,11 +5,11 @@ NimModule = provider(
         "dependencies": "Module direct dependencies",
         "srcs": "Module sources.",
         "strip_import_prefix": "Path prefix to remove when importing module files.",
-        "path": "Execution context relative path to the module."
+        "include_path": "Execution context relative path to the module."
     },
 )
 
-def create_nim_module_provider(deps, srcs, strip_import_prefix, path):
+def create_nim_module_provider(deps, srcs, strip_import_prefix, include_path):
     return NimModule(
         dependencies = depset(
             deps,
@@ -20,5 +20,5 @@ def create_nim_module_provider(deps, srcs, strip_import_prefix, path):
         ),
         srcs = srcs,
         strip_import_prefix = strip_import_prefix,
-        path = path,
+        include_path = include_path,
     )

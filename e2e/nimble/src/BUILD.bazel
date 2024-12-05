@@ -14,7 +14,8 @@ write_file(
 
 nim_module(
     name = "nimblepkg",
-    srcs = glob(["nimblepkg/**/*"])
+    srcs = glob(["nimblepkg/**/*"]),
+    strip_import_prefix = "src"
 )
 
 nim_cc_binary(
@@ -33,9 +34,10 @@ nim_cc_binary(
         "-Wno-discarded-qualifiers",
         "-Wno-unused-label",
         "-Wno-parentheses",
-        "-mssse3",
+        "-Wno-strict-aliasing",
+        "-Wno-maybe-uninitialized",
+        "-msse4.1",
         "-mpclmul",
-        "-msse2",
     ],
     visibility = ["//visibility:public"],
 )

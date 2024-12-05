@@ -1,19 +1,37 @@
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
 load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
-load("@bazel_skylib//rules:run_binary.bzl", "run_binary")
+load("@aspect_bazel_lib//lib:expand_template.bzl", "expand_template")
+
+write_file(
+    name = "template",
+    out = "expected.git.hash.tmpl",
+    content = [
+        "git hash: STABLE_GIT_HEAD",
+        ""
+    ],
+)
+
+expand_template(
+    name = "expected",
+    out = "expected.git.hash",
+    template = ":template",
+    stamp_substitutions = {
+        "STABLE_GIT_HEAD": "{{STABLE_GIT_HEAD}}"
+    },
+    stamp = 1,
+)
 
 genrule(
     name = "current",
     srcs = [],
-    outs = ["current_git_hash"],
+    outs = ["current.git.hash"],
     tools = ["//src:nimble"],
-    cmd = """$(location //src:nimble) > $@""",
+    local = True,
+    cmd = """./$(execpath //src:nimble) --version | grep 'git hash'> $@""",
 )
 
-run_binary(
-    name = "curr",
-    tool = "//src:nimble",
-    args = [ "--version" ],
-    outs = [
-        "result.out"
-    ],
+diff_test(
+    name = "spec",
+    file1 = ":expected",
+    file2 = ":current",
 )

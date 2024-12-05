@@ -66,9 +66,9 @@ def nim_compile(nim_toolchain, main_file, actions, deps = [], proj_cfg = None):
         "--usenimcache",
     ])
 
-    direct_paths = [dep[NimModule].path for dep in deps if NimModule in dep]
+    direct_paths = [dep[NimModule].include_path for dep in deps if NimModule in dep]
     transitive_paths = [
-        tran[NimModule].path
+        tran[NimModule].include_path
         for dep in deps if NimModule in dep
         for tran in dep[NimModule].dependencies.to_list() if NimModule in tran
     ]
@@ -97,7 +97,6 @@ def nim_compile(nim_toolchain, main_file, actions, deps = [], proj_cfg = None):
         mnemonic = "NimBin",
         inputs = [ main_copy ] + proj_cfgs + direct_deps_inputs + transitive_deps_inputs,
         outputs = [ nimcache ],
-        use_default_shell_env = True,
         toolchain = NIM_TOOLCHAIN,
     )
 
