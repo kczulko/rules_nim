@@ -27,7 +27,7 @@ genrule(
     outs = ["current.git.hash"],
     tools = ["//src:nimble"],
     local = True,
-    cmd = """./$(execpath //src:nimble) --version | grep 'git hash'> $@""",
+    cmd = """./$(execpath //src:nimble) --version | grep hash > $@""",
 )
 
 diff_test(
