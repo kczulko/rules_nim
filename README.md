@@ -47,6 +47,7 @@ Check the [e2e examples](./e2e) directory:
 - [numericalnim](./e2e/numericalnim) - Shows the usage of `rules_nim` for a [numericalnim][numericalnim] project.
 - [c_invocation](./e2e/c_invocation) - Shows the [backend C invocation in Nim][backend_c_invocation_example].
 - [nim_invocation_from_c](./e2e/nim_invocation_from_c) - Shows the [Nim invocation from C][nim_invocation_from_c].
+- [nimble](./e2e/nimble) - Shows the usage of `rules_nim` for a [nimble][nimble] project.
 
 [nim_module]: https://github.com/kczulko/rules_nim/blob/master/docs/rules.md#nim_module
 [nimble_install]: https://github.com/kczulko/rules_nim/blob/master/docs/repo_rules.md#nimble_install
@@ -58,3 +59,4 @@ Check the [e2e examples](./e2e) directory:
 [numericalnim]: https://github.com/SciNim/numericalnim
 [backend_c_invocation_example]: https://nim-lang.org/docs/backends.html#nim-code-calling-the-backend-c-invocation-example
 [nim_invocation_from_c]: https://nim-lang.org/docs/backends.html#backend-code-calling-nim-nim-invocation-example-from-c
+[nimble]: https://github.com/nim-lang/nimble
