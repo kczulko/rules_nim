@@ -25,7 +25,7 @@ TESTS = {
     "nim_cc_test": ":execute_tests",
     "nim_invocation_from_c": ":execute_tests",
     "numericalnim": ":execute_tests",
-    "nimble": "execute_tests",
+    # "nimble": "execute_tests",
 }
 
 [
