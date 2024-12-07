@@ -69,6 +69,7 @@ bzl_library(
     visibility = ["//nim:__subpackages__"],
     deps = [
         "@bazel_skylib//lib:paths",
+        "@aspect_bazel_lib//lib:paths",
         "@rules_nim//nim/private:attrs",
         "@rules_nim//nim/private:providers",
     ],

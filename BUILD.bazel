@@ -5,8 +5,8 @@ filegroup(
     # Include every package that is required by the child workspaces.
     srcs = [
         "BUILD.bazel",
-        "WORKSPACE.bazel",
         "MODULE.bazel",
+        "WORKSPACE.bazel",
         "//nim:all_files",
         "//nim/private:all_files",
         "//nim/private/nimble:all_files",

@@ -7,6 +7,13 @@ filegroup(
 )
 
 bzl_library(
+    name = "nimble_lock_update",
+    srcs = ["nimble_lock_update.bzl"],
+    visibility = ["//nim:__subpackages__"],
+    deps = ["@aspect_bazel_lib//lib:write_source_files"],
+)
+
+bzl_library(
     name = "nimble_install",
     srcs = ["nimble_install.bzl"],
     visibility = ["//nim:__subpackages__"],
@@ -16,11 +23,4 @@ bzl_library(
     name = "nimble_lock",
     srcs = ["nimble_lock.bzl"],
     visibility = ["//nim:__subpackages__"],
-)
-
-bzl_library(
-    name = "nimble_lock_update",
-    srcs = ["nimble_lock_update.bzl"],
-    visibility = ["//nim:__subpackages__"],
-    deps = ["@aspect_bazel_lib//lib:write_source_files"],
 )
