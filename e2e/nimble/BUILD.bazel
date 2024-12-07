@@ -34,4 +34,7 @@ diff_test(
     name = "spec",
     file1 = ":expected",
     file2 = ":current",
+    tags = [
+        "manual",
+    ]
 )

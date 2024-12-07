@@ -5,5 +5,3 @@ common --copt="-Wno-discarded-qualifiers"
 common --copt="-Wno-parentheses"
 common --copt="-Wno-discarded-array-qualifiers"
 common --copt="-Wno-unknown-pragmas"
-
-
