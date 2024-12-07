@@ -46,7 +46,7 @@ suite "nimble refresh":
         [PackageList]
         name = "local"
         path = "$1"
-      """.unindent % (getCurrentDir() / "issue368" / "packages.json").replace(
+      """.unindent % (rfilesPath("issue368" / "packages.json")).replace(
         "\\", "\\\\"))
       let (output, exitCode) = execNimble(["refresh", "--verbose"])
       let lines = output.strip.processOutput()

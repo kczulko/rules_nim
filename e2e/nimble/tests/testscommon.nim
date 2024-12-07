@@ -21,8 +21,8 @@ const
 
 let
   rootDir = getCurrentDir().parentDir
-  nimblePath* = rootDir / "src" / addFileExt("nimble", ExeExt)
-  nimbleCompilePath = rootDir / "src" / "nimble.nim"
+  nimblePath* = getCurrentDir() / "src" / addFileExt("nimble", ExeExt)
+  nimbleCompilePath = "nimble.nim"
   installDir* = rootDir / "tests" / "nimbleDir"
   buildTests* = rootDir / "buildTests"
   pkgsDir* = installDir / nimblePackagesDirName
@@ -74,6 +74,9 @@ proc processOutput*(output: string): seq[string] =
       "Using env var NIM_LIB_PREFIX" notin x
     )
   )
+
+proc rfilesPath*(path: string): string =
+  getCurrentDir() / "tests" / path
 
 macro defineInLinesProc(procName, extraLine: untyped): untyped  =
   var LinesType = quote do: seq[string]
@@ -206,7 +209,7 @@ proc writeDevelopFile*(path: string, includes: seq[string],
 putEnv("NIMBLE_TEST_BINARY_PATH", nimblePath)
 
 # Always recompile.
-block:
+#block:
   # Verbose name is used for exit code so assert is clearer
-  let (output, nimbleCompileExitCode) = execCmdEx("nim c " & nimbleCompilePath)
-  doAssert nimbleCompileExitCode == QuitSuccess, output
+  #let (output, nimbleCompileExitCode) = execCmdEx("nim c " & nimbleCompilePath)
+  #doAssert nimbleCompileExitCode == QuitSuccess, output

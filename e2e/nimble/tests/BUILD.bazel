@@ -1,0 +1,61 @@
+load("@rules_nim//nim:defs.bzl", "nim_cc_test", "nim_module")
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
+
+write_file(
+    name = "ssl_conf",
+    out = "ssl_conf.cfg",
+    content = [
+        "-d:ssl",
+        "-d:nimcore",
+        "-d:nimDebugDlOpen",
+    ],
+    is_executable = False,
+)
+
+nim_module(
+    name = "common",
+    srcs = [
+        "testscommon.nim",
+    ],
+    strip_import_prefix = "tests",
+)
+
+filegroup(
+    name = "static",
+    srcs = glob([
+        "issue368/packages.json",
+        "packageStructure/**/*",
+        "binaryPackage/**/*",
+        "tasks/**/*",
+        "issue*/**/*",
+        "testParams/**/*",
+    ]),
+)
+
+[
+    nim_cc_test(
+        name = test,
+        data = [
+            ":static",
+            "//src:nimble",
+        ],
+        local = True,
+        main = "{}.nim".format(test),
+        proj_cfg = ":ssl_conf",
+        tags = [
+            "requires-network",
+        ],
+        deps = [
+            ":common",
+            "//src:nimblepkg",
+            "@checksums",
+            "@openssl",
+        ],
+    )
+    for test in [
+        "tcheckcommand",
+        "tnimblerefresh",
+        "tforgeparser",
+        "tinitcommand",
+    ]
+]
