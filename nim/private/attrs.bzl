@@ -6,7 +6,7 @@ def _mk_linkstatic(default):
             default = default,
             doc = """"Link the artifact in static mode.
 
-            For cc_binary and cc_test: link the binary in static mode. For cc_library.link_static: see below.
+            For nim_cc_binary and nim_cc_test: link the binary in static mode. For nim_cc_library.link_static: see below.
 
             By default this option is on for cc_binary and off for the rest.
 
@@ -74,6 +74,15 @@ _NIM_CC_RULE_ATTRS = {
         default = [],
         doc = "The list of nim or cc dependencies of the current target.",
         providers = [[NimModule], [CcInfo]],
+    ),
+    "data": attr.label_list(
+        doc = """
+        The list of files needed by this target at runtime. See general comments about data at 'Typical attributes' defined by most build rules.
+
+If a data is the name of a generated file, then this target automatically depends on the generating target.
+
+If a data is a rule name, then this target automatically depends on that rule, and that rule's outs are automatically added to this target's data files.
+        """
     ),
     "additional_compiler_inputs": attr.label_list(
         default = [],

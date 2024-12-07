@@ -5,6 +5,14 @@ load("@rules_nim//nim/private:providers.bzl", "NimModule")
 CC_TOOLCHAIN = "@bazel_tools//tools/cpp:toolchain_type"
 NIM_TOOLCHAIN = _NIM_TOOLCHAIN
 
+def _mk_runfiles(ctx):
+    runfiles = ctx.runfiles(files = ctx.files.data)
+    transitive_runfiles = []
+    for runfiles_attr in (ctx.attr.deps, ctx.attr.data):
+        for target in runfiles_attr:
+            transitive_runfiles.append(target[DefaultInfo].default_runfiles)
+    return runfiles.merge_all(transitive_runfiles)
+
 def executable_impl(ctx):
     cc_toolchain = find_cpp_toolchain(ctx)
     nim_toolchain = ctx.toolchains[NIM_TOOLCHAIN]
@@ -92,6 +100,6 @@ def executable_impl(ctx):
         DefaultInfo(
             files = depset(output_files),
             executable = executable,
-            # runfiles = ctx.runfiles([executable]),
+            runfiles = _mk_runfiles(ctx),
         )
     ]
