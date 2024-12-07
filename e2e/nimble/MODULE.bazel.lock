@@ -642,7 +642,7 @@
     "@@rules_nixpkgs_core~//extensions:package.bzl%nix_pkg": {
       "general": {
         "bzlTransitiveDigest": "uAGqafYVHfrpValToJbVqUKuhSWG/ISg8w7II/Z+5ao=",
-        "usagesDigest": "yKITOewc8mn4QYD6FZ6EjiovFAo+Isu5xfNv9Z/kzo0=",
+        "usagesDigest": "5Xzuy9hUuSrSgTq0JZt40RnymbHm2/BNYNzJoVW7Li4=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -657,7 +657,7 @@
               "nix_file_content": "",
               "repository": "@@rules_nixpkgs_core~~nix_repo~nixpkgs//:nixpkgs",
               "repositories": {},
-              "build_file_content": "\ncc_library(\n    name = \"openssl\",\n    srcs = glob([\"lib/*.so*\"]),\n    visibility = [\"//visibility:public\"],\n)\ncc_library(\n    name = \"libcrypto\",\n    srcs = glob([\"lib/libcrypto.so*\"]),\n    visibility = [\"//visibility:public\"],\n)\ncc_library(\n    name = \"libssl\",\n    srcs = glob([\"lib/libssl.so*\"]),\n    visibility = [\"//visibility:public\"],\n)    \n",
+              "build_file_content": "\ncc_library(\n    name = \"openssl\",\n    srcs = glob([\"lib/*.so*\"]),\n    visibility = [\"//visibility:public\"],\n)\n",
               "nixopts": [],
               "quiet": false,
               "fail_not_supported": true

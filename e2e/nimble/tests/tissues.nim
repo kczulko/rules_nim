@@ -11,15 +11,15 @@ from nimblepkg/displaymessages import cannotUninstallPkgMsg
 
 suite "issues":
   test "test params":
-    cd "testParams":
+    cd (rfilesPath("testParams")):
       let (output, exitCode) = execNimbleYes("test", "Passing test")
 
       check exitCode == QuitSuccess
-      check output.contains("Passing test")
+      check output.contains("All tests passed")
 
   test "issue 801":
-    cd "issue801":
-      let (output, exitCode) = execNimbleYes("test")
+    cd rfilesPath("issue801"):
+      let (output, exitCode) = execNimbleYes("test", "--debug")
       check exitCode == QuitSuccess
 
       # Verify hooks work

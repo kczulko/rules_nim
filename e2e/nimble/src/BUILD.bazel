@@ -15,20 +15,12 @@ write_file(
 nim_module(
     name = "nimblepkg",
     srcs = glob(["nimblepkg/**/*"]),
-    strip_import_prefix = "src"
+    strip_import_prefix = "src",
+    visibility = ["//visibility:public"],
 )
 
 nim_cc_binary(
     name = "nimble",
-    main = "nimble.nim",
-    proj_cfg = ":nimble_cfg",
-    deps = [
-        "@sat",
-        "@checksums",
-        "@zippy",
-        "@openssl",
-        ":nimblepkg",
-    ],
     copts = [
         "-Wno-unused-but-set-variable",
         "-Wno-discarded-qualifiers",
@@ -39,5 +31,14 @@ nim_cc_binary(
         "-msse4.1",
         "-mpclmul",
     ],
+    main = "nimble.nim",
+    proj_cfg = ":nimble_cfg",
     visibility = ["//visibility:public"],
+    deps = [
+        ":nimblepkg",
+        "@checksums",
+        "@openssl",
+        "@sat",
+        "@zippy",
+    ],
 )

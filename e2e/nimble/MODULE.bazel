@@ -79,16 +79,6 @@ cc_library(
     srcs = glob(["lib/*.so*"]),
     visibility = ["//visibility:public"],
 )
-cc_library(
-    name = "libcrypto",
-    srcs = glob(["lib/libcrypto.so*"]),
-    visibility = ["//visibility:public"],
-)
-cc_library(
-    name = "libssl",
-    srcs = glob(["lib/libssl.so*"]),
-    visibility = ["//visibility:public"],
-)    
 """,
 )
 

@@ -7,27 +7,27 @@ write_file(
     out = "expected.git.hash.tmpl",
     content = [
         "git hash: STABLE_GIT_HEAD",
-        ""
+        "",
     ],
 )
 
 expand_template(
     name = "expected",
     out = "expected.git.hash",
-    template = ":template",
-    stamp_substitutions = {
-        "STABLE_GIT_HEAD": "{{STABLE_GIT_HEAD}}"
-    },
     stamp = 1,
+    stamp_substitutions = {
+        "STABLE_GIT_HEAD": "{{STABLE_GIT_HEAD}}",
+    },
+    template = ":template",
 )
 
 genrule(
     name = "current",
     srcs = [],
     outs = ["current.git.hash"],
+    cmd = """./$(execpath //src:nimble) --version | grep hash > $@""",
     tools = ["//src:nimble"],
     local = True,
-    cmd = """./$(execpath //src:nimble) --version | grep hash > $@""",
 )
 
 diff_test(
