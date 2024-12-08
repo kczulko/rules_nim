@@ -602,7 +602,7 @@ requires "nim >= 1.5.1"
 
   test "can generate lock file for nim as dep":
     cleanUp()
-    cd "nimdep":
+    cd rfilesPath("nimdep"):
       removeFile "nimble.develop"
       removeFile "nimble.lock"
       removeDir "Nim"
@@ -632,7 +632,7 @@ requires "nim >= 1.5.1"
 
   test "can install task level deps when dep has subdeb":
     cleanUp()
-    cd "lockfile-subdep":
+    cd rfilesPath("lockfile-subdep"):
       check execNimbleYes("test").exitCode == QuitSuccess
 
   test "can upgrade a dependency.":

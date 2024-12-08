@@ -28,7 +28,8 @@ jobs:
           save-always: true
           path: |
             ~/.bazel-disk-cache
+            ~/.bazel-repo-cache
           key: ${{ matrix.os }}-bazel-ci-cache-${{ env.cache-id }}
       - name: Integration tests
         run: |
-          nix develop .#ci --command bazelisk test //e2e:all_integration_tests --config=ci
+          nix develop .#ci --command bazel test //e2e:all_integration_tests --config=ci
