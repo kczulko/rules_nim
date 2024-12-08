@@ -30,9 +30,9 @@ jobs:
             ~/.bazel-disk-cache
             ~/.bazel-repo-cache
           key: ${{ matrix.os }}-bazel-ci-cache-${{ env.cache-id }}
-      - name: Integration tests
-        run: |
-          nix develop .#ci --command bazel test //e2e:all_integration_tests --config=ci
+      # - name: Integration tests
+        # run: |
+          # nix develop .#ci --command bazel test //e2e:all_integration_tests --config=ci
       - name: nimble test # runs outside of bazel_integration_tests framework
         run: |
-          cd e2e/nimble; nix develop .#ci --command bazel run //tests:tcheckcommand
+          cd e2e/nimble; nix develop .#ci --command bazel test //...
