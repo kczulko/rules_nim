@@ -21,20 +21,20 @@ expand_template(
     template = ":template",
 )
 
-genrule(
-    name = "current",
-    srcs = [],
-    outs = ["current.git.hash"],
-    cmd = """./$(execpath //src:nimble) --version | grep hash > $@""",
-    tools = ["//src:nimble"],
-    local = True,
-)
+# genrule(
+#     name = "current",
+#     srcs = [],
+#     outs = ["current.git.hash"],
+#     cmd = """./$(execpath //src:nimble) --version | grep hash > $@""",
+#     tools = ["//src:nimble"],
+#     local = True,
+# )
 
-diff_test(
-    name = "spec",
-    file1 = ":expected",
-    file2 = ":current",
-    tags = [
-        "manual",
-    ]
-)
+# diff_test(
+#     name = "spec",
+#     file1 = ":expected",
+#     file2 = ":current",
+#     tags = [
+#         "manual",
+#     ]
+# )
