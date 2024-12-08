@@ -21,7 +21,7 @@ nim_module(
 )
 
 filegroup(
-    name = "static",
+    name = "test_data",
     srcs = glob([
         "issue368/packages.json",
         "packageStructure/**/*",
@@ -36,7 +36,7 @@ filegroup(
     nim_cc_test(
         name = test,
         data = [
-            ":static",
+            ":test_data",
             "//src:nimble",
         ],
         local = True,
