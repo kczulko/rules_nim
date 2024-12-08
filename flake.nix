@@ -10,7 +10,6 @@
       let
         pkgs = import nixpkgs { inherit system; config = { allowUnfree = true; }; };
 
-        # wrap_bazelisk = { bazelisk, makeWrapper, writeShellApplication }:
         bazelisk-bazel = { bazelisk, makeWrapper, writeShellApplication }:
           let
             bazelisk' = bazelisk.overrideAttrs (final: prev: {
@@ -26,34 +25,28 @@
               text = "bazelisk \"$@\"";
             };
 
-        bazel = pkgs.callPackage bazelisk-bazel {};
+        buildPkgs = pkgs: (with pkgs; [
+          bash
+          nimble
+          libz.dev
+          gcc
+          nim
+          git
+          (pkgs.callPackage bazelisk-bazel {})
+          (python3.withPackages (ppkgs: with ppkgs; [
+            urllib3
+            black
+          ]))
+        ]);
 
         fhsDefaultAttrs = {
           name = "simple-bazelisk-env";
-          targetPkgs = pkgs: (with pkgs; [
-            bash
-            nimble
-            libz.dev
-            gcc
-            nim
-            git
-            bazel
-            (python3.withPackages (ppkgs: with ppkgs; [
-              urllib3
-              black
-            ]))
-          ]);
+          targetPkgs = buildPkgs;
         };
 
         shells = {
           default = (pkgs.buildFHSEnv fhsDefaultAttrs).env;
-          ci = pkgs.mkShell {
-            packages = with pkgs; [
-              bazel
-              nimble
-              gnugrep
-            ];
-          };
+          ci = pkgs.mkShell { packages = buildPkgs pkgs; };
         };
       in
       {
