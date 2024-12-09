@@ -39,12 +39,12 @@ suite "uninstall":
 
   proc setupIssue27Packages() =
     # Install b
-    cd "issue27/b":
+    cd rfilesPath("issue27/b"):
       check execNimbleYes("install").exitCode == QuitSuccess
     # Install a
-    cd "issue27/a":
+    cd rfilesPath("issue27/a"):
       check execNimbleYes("install").exitCode == QuitSuccess
-    cd "issue27":
+    cd rfilesPath("issue27"):
       check execNimbleYes("install").exitCode == QuitSuccess
 
   test "issue #27":

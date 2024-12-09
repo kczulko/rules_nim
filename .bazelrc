@@ -1,7 +1,7 @@
 # To update these lines, execute
 # `bazel run @rules_bazel_integration_test//tools:update_deleted_packages`
-build --deleted_packages=e2e/c_invocation,e2e/nimble,e2e/nimble/src,e2e/nim_cc_binary,e2e/nim_cc_library,e2e/nim_cc_library/lib,e2e/nim_cc_test,e2e/nim_invocation_from_c,e2e/numericalnim,e2e/numericalnim/tests
-query --deleted_packages=e2e/c_invocation,e2e/nimble,e2e/nimble/src,e2e/nim_cc_binary,e2e/nim_cc_library,e2e/nim_cc_library/lib,e2e/nim_cc_test,e2e/nim_invocation_from_c,e2e/numericalnim,e2e/numericalnim/tests
+build --deleted_packages=e2e/c_invocation,e2e/nimble,e2e/nimble/src,e2e/nimble/tests,e2e/nim_cc_binary,e2e/nim_cc_library,e2e/nim_cc_library/lib,e2e/nim_cc_test,e2e/nim_invocation_from_c,e2e/numericalnim,e2e/numericalnim/tests
+query --deleted_packages=e2e/c_invocation,e2e/nimble,e2e/nimble/src,e2e/nimble/tests,e2e/nim_cc_binary,e2e/nim_cc_library,e2e/nim_cc_library/lib,e2e/nim_cc_test,e2e/nim_invocation_from_c,e2e/numericalnim,e2e/numericalnim/tests
 
 common:ci --test_output=all --disk_cache=~/.bazel-disk-cache
 
