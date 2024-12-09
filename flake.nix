@@ -46,7 +46,10 @@
 
         shells = {
           default = (pkgs.buildFHSEnv fhsDefaultAttrs).env;
-          ci = pkgs.mkShell { packages = buildPkgs pkgs; };
+          ci = (pkgs.buildFHSEnv (fhsDefaultAttrs // {
+            runScript = "bazel test //...";
+          })).env;
+            # pkgs.mkShell { packages = buildPkgs pkgs; };
         };
       in
       {
