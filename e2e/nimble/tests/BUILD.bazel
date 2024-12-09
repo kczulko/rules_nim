@@ -41,11 +41,10 @@ filegroup(
             ":test_data",
             "//src:nimble",
         ],
-        local = True,
         main = "{}.nim".format(test),
         proj_cfg = ":ssl_conf",
         tags = [
-            "requires-network",
+            "no-sandbox",
         ],
         deps = [
             ":common",
