@@ -41,13 +41,20 @@ register_toolchains("@nim_toolchains//:all")
 ## Usage examples
 
 Check the [e2e examples](./e2e) directory:
+- [nimble](./e2e/nimble) - Shows the usage of `rules_nim` for a [nimble][nimble] project.
+- [numericalnim](./e2e/numericalnim) - Shows the usage of `rules_nim` for a [numericalnim][numericalnim] project.
 - [nim_cc_binary](./e2e/nim_cc_binary) - Simple example of [nim_cc_binary][nim_cc_binary] usage.
 - [nim_cc_library](./e2e/nim_cc_library) - Simple example of [nim_cc_library][nim_cc_library] usage.
 - [nim_cc_test](./e2e/nim_cc_test) - Simple example of [nim_cc_test][nim_cc_test] usage.
-- [numericalnim](./e2e/numericalnim) - Shows the usage of `rules_nim` for a [numericalnim][numericalnim] project.
 - [c_invocation](./e2e/c_invocation) - Shows the [backend C invocation in Nim][backend_c_invocation_example].
 - [nim_invocation_from_c](./e2e/nim_invocation_from_c) - Shows the [Nim invocation from C][nim_invocation_from_c].
-- [nimble](./e2e/nimble) - Shows the usage of `rules_nim` for a [nimble][nimble] project.
+
+## Hermecity
+
+`nim` compiler tends to fully resolve symbolic links which may lead to [non-hermetic issues](nonhermetic-toolchain)
+for a Bazel build definitions. To prevent such situations, it is highly recommended to enable
+`--experimental_use_hermetic_linux_sandbox` flag for a local build definitions. For the example
+see [nimble](nimble) e2e `.bazelrc` and other project files.
 
 [nim_module]: https://github.com/kczulko/rules_nim/blob/master/docs/rules.md#nim_module
 [nimble_install]: https://github.com/kczulko/rules_nim/blob/master/docs/repo_rules.md#nimble_install
@@ -60,3 +67,4 @@ Check the [e2e examples](./e2e) directory:
 [backend_c_invocation_example]: https://nim-lang.org/docs/backends.html#nim-code-calling-the-backend-c-invocation-example
 [nim_invocation_from_c]: https://nim-lang.org/docs/backends.html#backend-code-calling-nim-nim-invocation-example-from-c
 [nimble]: https://github.com/nim-lang/nimble
+[nonhermetic-toolchain]: https://github.com/kczulko/rules_nim/issues/7
