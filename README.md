@@ -51,10 +51,10 @@ Check the [e2e examples](./e2e) directory:
 
 ## Hermecity
 
-`nim` compiler tends to fully resolve symbolic links which may lead to [non-hermetic issues][nonhermetic-toolchain]
+`nim` compiler tends to fully resolve symbolic links which may lead to a [non-hermetic issues][nonhermetic-toolchain]
 for a Bazel build definitions. To prevent such situations, it is highly recommended to enable
-`--experimental_use_hermetic_linux_sandbox` flag for a local build definitions. For the example
-see [nimble](./e2e/nimble) e2e `.bazelrc` and other project files.
+`--experimental_use_hermetic_linux_sandbox` flag for a local build executions. See [nimble](./e2e/nimble) 
+e2e and its `.bazelrc` as the example.
 
 [nim_module]: https://github.com/kczulko/rules_nim/blob/master/docs/rules.md#nim_module
 [nimble_install]: https://github.com/kczulko/rules_nim/blob/master/docs/repo_rules.md#nimble_install
