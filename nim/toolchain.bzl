@@ -10,11 +10,9 @@ NimInfo = provider(
 May be empty if the target_tool_path points to a locally installed tool binary.""",
         "nimbase": "Location of nimbase.h file.",
         "nimrtl": "Location of nimrtl.nim file.",
-        "libsrcs": "lib sources",
+        "libsrcs": "lib|dist|compiler|config and other sources required during compiletime",
     },
 )
-
-_CC_TOOLCHAIN = "@bazel_tools//tools/cpp:toolchain_type"
 
 # Avoid using non-normalized paths (workspace/../other_workspace/path)
 def _to_manifest_path(ctx, file):
@@ -94,9 +92,6 @@ nim_toolchain = rule(
             allow_files = True,
         )
     },
-    toolchains = [
-        _CC_TOOLCHAIN
-    ],
     doc = """Defines a nim compiler/runtime toolchain.
 
 For usage see https://docs.bazel.build/versions/main/toolchains.html#defining-toolchains.
