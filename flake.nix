@@ -19,11 +19,11 @@
                 --unset TMPDIR'';
             });
           in
-            writeShellApplication {
-              name = "bazel";
-              runtimeInputs = [ bazelisk' ];
-              text = "bazelisk \"$@\"";
-            };
+          writeShellApplication {
+            name = "bazel";
+            runtimeInputs = [ bazelisk' ];
+            text = "bazelisk \"$@\"";
+          };
 
         buildPkgs = pkgs: (with pkgs; [
           bash
@@ -37,7 +37,7 @@
           pre-commit
           which
           zlib
-          (pkgs.callPackage bazelisk-bazel {})
+          (pkgs.callPackage bazelisk-bazel { })
           (python3.withPackages (ppkgs: with ppkgs; [
             urllib3
             black
