@@ -1,14 +1,12 @@
 # How to Contribute
 
-## Using devcontainers
+## Using `nix develop`
 
-If you are using [devcontainers](https://code.visualstudio.com/docs/devcontainers/containers)
-and/or [codespaces](https://github.com/features/codespaces) then you can start
-contributing immediately and skip the next step.
+Run `nix develop` to get development environment.
 
 ## Formatting
 
-Starlark files should be formatted by buildifier.
+Starlark files should be formatted by `buildifier`.
 We suggest using a pre-commit hook to automate this.
 First [install pre-commit](https://pre-commit.com/#installation),
 then run
