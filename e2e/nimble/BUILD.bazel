@@ -1,40 +1,32 @@
 load("@bazel_skylib//rules:write_file.bzl", "write_file")
 load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
-load("@aspect_bazel_lib//lib:expand_template.bzl", "expand_template")
 
-write_file(
-    name = "template",
-    out = "expected.git.hash.tmpl",
-    content = [
-        "git hash: STABLE_GIT_HEAD",
-        "",
-    ],
+exports_files(["nimble.nimble"])
+
+genrule(
+    name = "nimble_version_from_file",
+    srcs = [],
+    outs = ["nimble_file.version"],
+    cmd = """cat $(location //:nimble.nimble) | grep version | $(location @gawk//:bin/awk) '{print $$3}' | tr -d '"' > $@""",
+    tools = [
+        "//:nimble.nimble",
+        "@gawk//:bin/awk",
+    ]
 )
 
-expand_template(
-    name = "expected",
-    out = "expected.git.hash",
-    stamp = 1,
-    stamp_substitutions = {
-        "STABLE_GIT_HEAD": "{{STABLE_GIT_HEAD}}",
-    },
-    template = ":template",
+genrule(
+     name = "nimble_version_from_executable",
+     srcs = [],
+     outs = ["current_nimble.version"],
+     cmd = """./$(execpath //src:nimble) --version | grep 'compiled at' | $(location @gawk//:bin/awk) '{print $$2}' | tr -d 'v' > $@""",
+     tools = [
+         "//src:nimble",
+         "@gawk//:bin/awk",
+     ],
 )
 
-# genrule(
-#     name = "current",
-#     srcs = [],
-#     outs = ["current.git.hash"],
-#     cmd = """./$(execpath //src:nimble) --version | grep hash > $@""",
-#     tools = ["//src:nimble"],
-#     local = True,
-# )
-
-# diff_test(
-#     name = "spec",
-#     file1 = ":expected",
-#     file2 = ":current",
-#     tags = [
-#         "manual",
-#     ]
-# )
+diff_test(
+     name = "spec",
+     file1 = ":nimble_version_from_file",
+     file2 = ":nimble_version_from_executable",
+)

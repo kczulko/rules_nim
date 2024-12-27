@@ -95,7 +95,7 @@ def nim_compile(nim_toolchain, main_file, actions, deps = [], proj_cfg = None):
         executable = nim_toolchain.niminfo.tool_files[0],
         arguments = [args],
         mnemonic = "NimBin",
-        inputs = [ main_copy ] + proj_cfgs + direct_deps_inputs + transitive_deps_inputs,
+        inputs = [ main_copy ] + proj_cfgs + direct_deps_inputs + transitive_deps_inputs + nim_toolchain.niminfo.tool_files,
         outputs = [ nimcache ],
         toolchain = NIM_TOOLCHAIN,
     )

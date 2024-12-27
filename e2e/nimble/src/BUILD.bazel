@@ -9,12 +9,18 @@ write_file(
         "-d:nimcore",
         "-d:release",
         "-d:nimDebugDlOpen",
+        "hint:XDeclaredButNotUsed:off",
+        "hint:Conf:off",
+        "hint:SuccessX:off",
+        "warning:Deprecated:off",
+        "warning:UnreachableElse:off",
+        "warning:User:off",
     ],
 )
 
 nim_module(
     name = "nimblepkg",
-    srcs = glob(["nimblepkg/**/*"]),
+    srcs = ["//:nimble.nimble"] + glob(["nimblepkg/**/*"]),
     strip_import_prefix = "src",
     visibility = ["//visibility:public"],
 )

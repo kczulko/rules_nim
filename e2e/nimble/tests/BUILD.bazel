@@ -46,6 +46,7 @@ filegroup(
         proj_cfg = ":ssl_conf",
         tags = [
             "requires-network",
+            "manual",
         ],
         deps = [
             ":common",
