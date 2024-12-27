@@ -10,10 +10,9 @@ NimInfo = provider(
 May be empty if the target_tool_path points to a locally installed tool binary.""",
         "nimbase": "Location of nimbase.h file.",
         "nimrtl": "Location of nimrtl.nim file.",
+        "libsrcs": "lib|dist|compiler|config and other sources required during compiletime",
     },
 )
-
-_CC_TOOLCHAIN = "@bazel_tools//tools/cpp:toolchain_type"
 
 # Avoid using non-normalized paths (workspace/../other_workspace/path)
 def _to_manifest_path(ctx, file):
@@ -23,14 +22,12 @@ def _to_manifest_path(ctx, file):
         return ctx.workspace_name + "/" + file.short_path
 
 def _nim_toolchain_impl(ctx):
-    cc_files = ctx.toolchains[_CC_TOOLCHAIN].cc.all_files.to_list()
-
     if ctx.attr.target_tool and ctx.attr.target_tool_path:
         fail("Can only set one of target_tool or target_tool_path but both were set.")
     if not ctx.attr.target_tool and not ctx.attr.target_tool_path:
         fail("Must set one of target_tool or target_tool_path.")
 
-    tool_files = cc_files
+    tool_files = ctx.files.libsrcs
     target_tool_path = ctx.attr.target_tool_path
 
     if ctx.attr.target_tool:
@@ -43,6 +40,7 @@ def _nim_toolchain_impl(ctx):
         "NIM_BIN": target_tool_path,
     })
     tool_files += ctx.files.nimbase
+    tool_files += ctx.files.nimrtl
 
     default = DefaultInfo(
         files = depset(direct = tool_files),
@@ -90,10 +88,10 @@ nim_toolchain = rule(
             mandatory = True,
             allow_single_file = True,
         ),
+        "libsrcs": attr.label_list(
+            allow_files = True,
+        )
     },
-    toolchains = [
-        _CC_TOOLCHAIN
-    ],
     doc = """Defines a nim compiler/runtime toolchain.
 
 For usage see https://docs.bazel.build/versions/main/toolchains.html#defining-toolchains.

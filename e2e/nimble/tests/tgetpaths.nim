@@ -9,7 +9,7 @@ from nimblepkg/common import cd
 
 suite "nimble getPaths/getPathsClause":
   test "check getPaths result":
-    cd "tasks/getpaths":
+    cd (rfilesPath("tasks/getpaths")):
       let (output, exitCode) = execNimble("echoPaths")
       check output.contains("--path:")
       check output.contains("benchy")

@@ -1,1 +1,15 @@
-common --workspace_status_command=./bazel/workspace_status.sh
+build --experimental_use_hermetic_linux_sandbox
+build --sandbox_add_mount_pair=/bin:/bin
+build --sandbox_add_mount_pair=/usr/bin/:/usr/bin
+build --sandbox_add_mount_pair=/lib:/lib
+build --sandbox_add_mount_pair=/lib64:/lib64
+build --sandbox_add_mount_pair=/nix/store:/nix/store
+build --sandbox_add_mount_pair=/dev:/dev
+build --sandbox_add_mount_pair=/proc:/proc
+common --copt="-Wno-unused-label"
+common --copt="-Wno-unused-but-set-variable"
+common --copt="-Wno-discarded-qualifiers"
+common --copt="-Wno-parentheses"
+common --copt="-Wno-discarded-array-qualifiers"
+common --copt="-Wno-unknown-pragmas"
+common --incompatible_strict_action_env

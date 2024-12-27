@@ -9,31 +9,31 @@ from nimblepkg/common import cd
 
 suite "check command":
   test "can succeed package":
-    cd "binaryPackage/v1":
+    cd (rfilesPath("binaryPackage/v1")):
       let (outp, exitCode) = execNimble("check")
       check exitCode == QuitSuccess
       check outp.processOutput.inLines("success")
       check outp.processOutput.inLines("\"binaryPackage\" is valid")
 
-    cd "packageStructure/a":
+    cd (rfilesPath("packageStructure/a")):
       let (outp, exitCode) = execNimble("check")
       check exitCode == QuitSuccess
       check outp.processOutput.inLines("success")
       check outp.processOutput.inLines("\"a\" is valid")
 
-    cd "packageStructure/b":
+    cd (rfilesPath("packageStructure/b")):
       let (outp, exitCode) = execNimble("check")
       check exitCode == QuitSuccess
       check outp.processOutput.inLines("success")
       check outp.processOutput.inLines("\"b\" is valid")
 
-    cd "packageStructure/c":
+    cd (rfilesPath("packageStructure/c")):
       let (outp, exitCode) = execNimble("check")
       check exitCode == QuitSuccess
       check outp.processOutput.inLines("success")
       check outp.processOutput.inLines("\"c\" is valid")
 
-    cd "packageStructure/x":
+    cd (rfilesPath("packageStructure/x")):
       let (outp, exitCode) = execNimble("check")
       check exitCode == QuitSuccess
       check outp.processOutput.inLines("success")
