@@ -2,8 +2,8 @@
 Add a basic smoke-test target below.
 """
 
-load("@rules_nim//nim:defs.bzl", "nim_cc_test")
 load("@bazel_skylib//rules:write_file.bzl", "write_file")
+load("@rules_nim//nim:defs.bzl", "nim_cc_test")
 
 write_file(
     name = "release",
