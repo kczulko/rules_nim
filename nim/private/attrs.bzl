@@ -31,7 +31,7 @@ def _mk_linkstatic(default):
 
             There should be very little code built with linkstatic=False in production. If linkstatic=False, then the build tool will create symlinks to depended-upon shared libraries in the *.runfiles area. 
         """,
-        )
+        ),
     }
 
 _NIM_EXECUTABLE_LINKSTATIC = _mk_linkstatic(True)
@@ -44,12 +44,12 @@ _NIM_MODULE_ATTRS = {
         doc = """Nim sources that form a module.""",
     ),
     "deps": attr.label_list(
-        providers = [ NimModule ],
+        providers = [NimModule],
         doc = """Other nim dependencies for this module.""",
     ),
     "strip_import_prefix": attr.string(
         doc = """The prefix to strip from the paths of the nim imports of this rule.""",
-    )
+    ),
 }
 
 _NIM_CC_RULE_ATTRS = {
@@ -62,7 +62,7 @@ _NIM_CC_RULE_ATTRS = {
     ),
     "proj_cfg": attr.label(
         allow_single_file = [
-            ".cfg"
+            ".cfg",
         ],
         doc = """
         The project's configuration file.
@@ -82,7 +82,7 @@ _NIM_CC_RULE_ATTRS = {
 If a data is the name of a generated file, then this target automatically depends on the generating target.
 
 If a data is a rule name, then this target automatically depends on that rule, and that rule's outs are automatically added to this target's data files.
-        """
+        """,
     ),
     "additional_compiler_inputs": attr.label_list(
         default = [],
@@ -102,7 +102,7 @@ If a data is a rule name, then this target automatically depends on that rule, a
         default = [],
         doc = """
         Add these options to the C compilation command. Subject to "Make variable" substitution and Bourne shell tokenization. 
-        """
+        """,
     ),
     "copts": attr.string_list(
         default = [],
@@ -117,7 +117,7 @@ If a data is a rule name, then this target automatically depends on that rule, a
         default = [],
         doc = """
         Add these options to the C++ compilation command. Subject to "Make variable" substitution and Bourne shell tokenization.
-        """
+        """,
     ),
     "defines": attr.string_list(
         default = [],
@@ -164,7 +164,7 @@ _NIM_CC_LIBRARY_ATTRS = {
         doc = """
         If 1, any binary that depends (directly or indirectly) on this C++ library will link in all the object files for the files listed in srcs, even if some contain no symbols referenced by the binary. This is useful if your code isn't explicitly called by code in the binary, e.g., if your code registers to receive some callback provided by some service. 
         """,
-    )
+    ),
 }
 
 _CC_LIB_ATTRS = {
@@ -185,12 +185,14 @@ _CC_LIB_ATTRS = {
 
         Stamped binaries are not rebuilt unless their dependencies change.
         """,
-    )
+    ),
 }
 
 def nim_module_attrs():
     return _NIM_MODULE_ATTRS
+
 def nim_cc_rule_attrs():
     return _NIM_CC_RULE_ATTRS | _NIM_EXECUTABLE_LINKSTATIC
+
 def nim_cc_library_rule_attrs():
     return _NIM_CC_RULE_ATTRS | _NIM_CC_LIBRARY_ATTRS | _NIM_LIBRARY_LINKSTATIC

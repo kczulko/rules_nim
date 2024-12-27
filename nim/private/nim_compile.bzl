@@ -69,25 +69,30 @@ def nim_compile(nim_toolchain, main_file, actions, deps = [], proj_cfg = None):
     direct_paths = [dep[NimModule].include_path for dep in deps if NimModule in dep]
     transitive_paths = [
         tran[NimModule].include_path
-        for dep in deps if NimModule in dep
-        for tran in dep[NimModule].dependencies.to_list() if NimModule in tran
+        for dep in deps
+        if NimModule in dep
+        for tran in dep[NimModule].dependencies.to_list()
+        if NimModule in tran
     ]
 
     args.add_all(
         direct_paths + transitive_paths,
-        before_each = "--path:"
+        before_each = "--path:",
     )
     args.add(main_copy.path)
 
     direct_deps_inputs = [
         src
-        for dep in deps if NimModule in dep
+        for dep in deps
+        if NimModule in dep
         for src in dep[NimModule].srcs
     ]
     transitive_deps_inputs = [
         src
-        for dep in deps if NimModule in dep
-        for tran in dep[NimModule].dependencies.to_list() if NimModule in tran
+        for dep in deps
+        if NimModule in dep
+        for tran in dep[NimModule].dependencies.to_list()
+        if NimModule in tran
         for src in tran[NimModule].srcs
     ]
 
@@ -95,8 +100,8 @@ def nim_compile(nim_toolchain, main_file, actions, deps = [], proj_cfg = None):
         executable = nim_toolchain.niminfo.tool_files[0],
         arguments = [args],
         mnemonic = "NimBin",
-        inputs = [ main_copy ] + proj_cfgs + direct_deps_inputs + transitive_deps_inputs + nim_toolchain.niminfo.tool_files,
-        outputs = [ nimcache ],
+        inputs = [main_copy] + proj_cfgs + direct_deps_inputs + transitive_deps_inputs + nim_toolchain.niminfo.tool_files,
+        outputs = [nimcache],
         toolchain = NIM_TOOLCHAIN,
     )
 
@@ -117,4 +122,4 @@ def nim_compile(nim_toolchain, main_file, actions, deps = [], proj_cfg = None):
         progress_message = "[nim] Extracting C/Cpp source files",
     )
 
-    return (c_outputs, hdr_outputs)    
+    return (c_outputs, hdr_outputs)

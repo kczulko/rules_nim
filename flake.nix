@@ -34,6 +34,7 @@
           libz.dev
           nim
           nimble
+          pre-commit
           which
           zlib
           (pkgs.callPackage bazelisk-bazel {})

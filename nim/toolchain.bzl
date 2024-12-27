@@ -90,7 +90,7 @@ nim_toolchain = rule(
         ),
         "libsrcs": attr.label_list(
             allow_files = True,
-        )
+        ),
     },
     doc = """Defines a nim compiler/runtime toolchain.
 

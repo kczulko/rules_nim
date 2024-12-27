@@ -1,11 +1,10 @@
-
 NimModule = provider(
     doc = "Information nim modules.",
     fields = {
         "dependencies": "Module direct dependencies",
         "srcs": "Module sources.",
         "strip_import_prefix": "Path prefix to remove when importing module files.",
-        "include_path": "Execution context relative path to the module."
+        "include_path": "Execution context relative path to the module.",
     },
 )
 

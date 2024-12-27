@@ -1,5 +1,5 @@
-load("@rules_nim//nim/private:nim_compile.bzl", "nim_compile", _NIM_TOOLCHAIN = "NIM_TOOLCHAIN")
 load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain")
+load("@rules_nim//nim/private:nim_compile.bzl", "nim_compile", _NIM_TOOLCHAIN = "NIM_TOOLCHAIN")
 load("@rules_nim//nim/private:providers.bzl", "NimModule")
 
 CC_TOOLCHAIN = "@bazel_tools//tools/cpp:toolchain_type"
@@ -31,9 +31,9 @@ def executable_impl(ctx):
         proj_cfg = proj_cfg,
     )
 
-    srcs = [ cc_srcs ]
-    public_hdrs = [ hdr_srcs, nimbase ]
-    includes = [ nimbase.dirname, hdr_srcs.path ] + ctx.attr.includes
+    srcs = [cc_srcs]
+    public_hdrs = [hdr_srcs, nimbase]
+    includes = [nimbase.dirname, hdr_srcs.path] + ctx.attr.includes
     user_compile_flags = ctx.attr.copts
     user_link_flags = ctx.attr.linkopts
     defines = ctx.attr.defines
@@ -41,7 +41,7 @@ def executable_impl(ctx):
     cxx_flags = ctx.attr.cxxopts
     conly_flags = ctx.attr.conlyopts
     additional_linker_inputs = ctx.attr.additional_linker_inputs
-    additional_compiler_inputs = [ nimbase ] + ctx.attr.additional_compiler_inputs
+    additional_compiler_inputs = [nimbase] + ctx.attr.additional_compiler_inputs
     system_includes = []
     quote_includes = []
     link_deps_statically = ctx.attr.linkstatic
@@ -94,12 +94,12 @@ def executable_impl(ctx):
         fail("nim_cc_binary must produce executable!!!")
 
     executable = linking_output.executable
-    output_files = [ linking_output.executable ]
+    output_files = [linking_output.executable]
 
     return [
         DefaultInfo(
             files = depset(output_files),
             executable = executable,
             runfiles = _mk_runfiles(ctx),
-        )
+        ),
     ]

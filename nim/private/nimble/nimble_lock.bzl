@@ -1,4 +1,3 @@
-
 def _download(rctx, pkg_name, url, integrity):
     rctx.report_progress("[nimble_lock] Downloading '{}'".format(pkg_name))
     result = rctx.download_and_extract(
@@ -14,20 +13,20 @@ def _download(rctx, pkg_name, url, integrity):
 def _download_from_github(rctx, pkg_name, url, vcs_revision, integrity):
     url = "{base_url}/archive/{vcs_revision}.tar.gz".format(
         base_url = url,
-        vcs_revision = vcs_revision
+        vcs_revision = vcs_revision,
     )
     return _download(rctx, pkg_name, url, integrity)
 
 def _download_from_gitlab(rctx, pkg_name, url, vcs_revision, integrity):
     url = "{base_url}/-/archive/{vcs_revision}/{vcs_revision}.tar.gz".format(
         base_url = _strip_git_suffix(url),
-        vcs_revision = vcs_revision
+        vcs_revision = vcs_revision,
     )
     return _download(rctx, pkg_name, url, integrity)
 
 _handlers = {
     "https://github.com": _download_from_github,
-    "https://gitlab.com": _download_from_gitlab
+    "https://gitlab.com": _download_from_gitlab,
 }
 
 def _get_from_nimble_dumb(rctx, pkg_name, dumb_attr):
@@ -43,8 +42,8 @@ def _get_from_nimble_dumb(rctx, pkg_name, dumb_attr):
             "Failure when extracting '{}' for a nimble package {}. Error: {}".format(
                 dumb_attr,
                 pkg_name,
-                result.stderr
-            )
+                result.stderr,
+            ),
         )
     return result.stdout
 
@@ -72,7 +71,7 @@ def _gen_nimble_dumb(rctx, pkg_name):
 
     rctx.file(
         "{}/nimble.dumb".format(pkg_name),
-        result.stdout.rstrip("\n")
+        result.stdout.rstrip("\n"),
     )
     pass
 
@@ -85,7 +84,8 @@ def _strip_git_suffix(url):
 def _mk_nim_module(rctx, pkg_name, deps):
     dir = [d.basename for d in rctx.path(pkg_name).readdir() if d.is_dir][0]
     strip_import_prefix = "{}/{}".format(
-        pkg_name, dir
+        pkg_name,
+        dir,
     )
     src_dir = _get_srcDir(rctx, pkg_name)
     if src_dir:
@@ -93,11 +93,13 @@ def _mk_nim_module(rctx, pkg_name, deps):
     skip_dirs = _get_skipDirs(rctx, pkg_name)
     exclude = [
         "{}/{}/**/*".format(strip_import_prefix, skip_dir)
-        for skip_dir in skip_dirs.split(", ") if skip_dir != ""
+        for skip_dir in skip_dirs.split(", ")
+        if skip_dir != ""
     ]
 
     nim_module_deps = [
-        "@{}//:{}".format(rctx.name, dep) for dep in deps
+        "@{}//:{}".format(rctx.name, dep)
+        for dep in deps
     ]
 
     return """
@@ -112,10 +114,10 @@ nim_module(
     visibility = ["//visibility:public"],
 )
 """.format(
-       pkg_name = pkg_name,
-       strip_import_prefix = strip_import_prefix,
-       nim_module_deps = nim_module_deps,
-       exclude = exclude,
+        pkg_name = pkg_name,
+        strip_import_prefix = strip_import_prefix,
+        nim_module_deps = nim_module_deps,
+        exclude = exclude,
     )
 
 def gen_tools(rctx):
@@ -146,7 +148,8 @@ exports_files(["nimble.bazel.lock"])"""
 
         result = [
             _handlers[handler](rctx, pkg_name, url, vcs_revision, integrity)
-            for handler in _handlers if url.startswith(handler)
+            for handler in _handlers
+            if url.startswith(handler)
         ]
         if not result:
             fail("NotImplemented: don't know how to download {} from URI {}.".format(pkg_name, url))
@@ -163,15 +166,15 @@ exports_files(["nimble.bazel.lock"])"""
     rctx.file(
         "BUILD.bazel",
         build_file_content,
-        executable = False
+        executable = False,
     )
-    
+
 nimble_lock = repository_rule(
     implementation = _nimble_install_lock_impl,
     attrs = {
         "lock_file": attr.label(
             mandatory = True,
-            allow_single_file = [ ".lock", ],
+            allow_single_file = [".lock"],
             doc = "The nimble lock file.",
         ),
     },
@@ -197,4 +200,3 @@ nimble_lock = repository_rule(
     ```
     """.format(_handlers.keys()),
 )
-

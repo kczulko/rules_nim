@@ -1,7 +1,7 @@
-load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@aspect_bazel_lib//lib:paths.bzl", "to_repository_relative_path")
-load("@rules_nim//nim/private:providers.bzl", "NimModule", "create_nim_module_provider")
+load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@rules_nim//nim/private:attrs.bzl", "nim_module_attrs")
+load("@rules_nim//nim/private:providers.bzl", "NimModule", "create_nim_module_provider")
 
 def _nim_module_impl(ctx):
     module_dir_name = "nim_module_{}".format(ctx.attr.name)
@@ -30,11 +30,11 @@ def _nim_module_impl(ctx):
             ctx.attr.strip_import_prefix,
             include_path,
         ),
-        DefaultInfo(files = depset(files))
+        DefaultInfo(files = depset(files)),
     ]
 
 nim_module = rule(
     implementation = _nim_module_impl,
     attrs = nim_module_attrs(),
-    provides = [ NimModule ],
+    provides = [NimModule],
 )

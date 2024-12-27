@@ -29,7 +29,7 @@ PLATFORMS = {
     "macosx_x64": struct(
         compatible_with = [
             "@platforms//os:macos",
-            "@platforms//cpu:x86_64"
+            "@platforms//cpu:x86_64",
         ],
     ),
     "linux_arm64": struct(

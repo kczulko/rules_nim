@@ -24,14 +24,14 @@ def _nim_cc_library_impl(ctx):
         proj_cfg = proj_cfg,
     )
 
-    srcs = [ cc_srcs ]
-    quote_includes = [ nimbase.dirname ]
-    public_hdrs = [ hdr_srcs, nimbase ]
-    includes = [ hdr_srcs.path ]
+    srcs = [cc_srcs]
+    quote_includes = [nimbase.dirname]
+    public_hdrs = [hdr_srcs, nimbase]
+    includes = [hdr_srcs.path]
     user_compile_flags = ctx.attr.copts
     user_link_flags = ctx.attr.linkopts
     additional_linker_inputs = ctx.attr.additional_linker_inputs
-    additional_compiler_inputs = [ nimbase ] + ctx.attr.additional_compiler_inputs
+    additional_compiler_inputs = [nimbase] + ctx.attr.additional_compiler_inputs
     system_includes = []
     defines = ctx.attr.defines
     local_defines = ctx.attr.local_defines
@@ -72,7 +72,7 @@ def _nim_cc_library_impl(ctx):
         cxx_flags = cxx_flags,
         conly_flags = conly_flags,
     )
-    
+
     linking_context, linking_output = cc_common.create_linking_context_from_compilation_outputs(
         actions = actions,
         feature_configuration = feature_configuration,
@@ -101,9 +101,9 @@ def _nim_cc_library_impl(ctx):
         CcInfo(
             compilation_context = compilation_context,
             linking_context = linking_context,
-        )
+        ),
     ]
-    
+
 nim_cc_library = rule(
     implementation = _nim_cc_library_impl,
     attrs = nim_cc_library_rule_attrs(),
@@ -117,4 +117,3 @@ nim_cc_library = rule(
         Label(CC_TOOLCHAIN),
     ],
 )
-

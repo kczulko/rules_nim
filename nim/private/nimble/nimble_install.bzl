@@ -1,4 +1,3 @@
-
 def _nimble_install_impl(rctx):
     nimble_bin = rctx.which("nimble") or rctx.os.environ.get("NIMBLE_BIN")
     rctx.symlink(rctx.attr.nimble_file, "file.nimble")
@@ -9,7 +8,7 @@ def _nimble_install_impl(rctx):
             "-y",
             "--nimbleDir:.",
         ] + rctx.attr.nimble_attrs + [
-            "install"
+            "install",
         ],
         quiet = rctx.attr.quiet,
     )
@@ -33,10 +32,10 @@ nim_module(
     visibility = ["//visibility:public"],
 )
 """.format(
-       pkgs_dir_prefix = rctx.attr.pkgs_dir_prefix,
-       pkg_name = pkg_name,
-       pkg_fullname = pkg_fullname,
-    )
+            pkgs_dir_prefix = rctx.attr.pkgs_dir_prefix,
+            pkg_name = pkg_name,
+            pkg_fullname = pkg_fullname,
+        )
         build_bazel_content += lib_target
 
     rctx.file("BUILD.bazel", build_bazel_content, executable = False)
@@ -46,7 +45,7 @@ nimble_install = repository_rule(
         "nimble_file": attr.label(),
         "nimble_attrs": attr.string_list(default = ["--noLockFile"]),
         "quiet": attr.bool(default = False),
-        "pkgs_dir_prefix": attr.string(default = "pkgs2")
+        "pkgs_dir_prefix": attr.string(default = "pkgs2"),
     },
     implementation = _nimble_install_impl,
     doc = """
@@ -54,6 +53,5 @@ nimble_install = repository_rule(
     CAUTION: Such a simple wrapper around `nimble` invocation comes with a cost of omitting Bazel's
     repository cache. Therefore it is suggested to generate `nimble.lock` file and then use `nimble_lock`
     repository rule (with the appropriate `nimble_lock_update` target). See `numericalnim` e2e example.
-    """
+    """,
 )
-
