@@ -7,7 +7,10 @@ genrule(
     name = "nimble_version_from_file",
     srcs = [],
     outs = ["nimble_file.version"],
-    cmd = """cat $(location //:nimble.nimble) | grep version | $(location @gawk//:bin/awk) '{print $$3}' | tr -d '"' > $@""",
+    cmd = """cat $(location //:nimble.nimble) | \
+      grep version | \
+      $(location @gawk//:bin/awk) '{print $$3}' | \
+      tr -d '"' > $@""",
     tools = [
         "//:nimble.nimble",
         "@gawk//:bin/awk",
@@ -18,7 +21,10 @@ genrule(
      name = "nimble_version_from_executable",
      srcs = [],
      outs = ["current_nimble.version"],
-     cmd = """./$(execpath //src:nimble) --version | grep 'compiled at' | $(location @gawk//:bin/awk) '{print $$2}' | tr -d 'v' > $@""",
+     cmd = """./$(execpath //src:nimble) --version | \
+       grep 'compiled at' | \
+       $(location @gawk//:bin/awk) '{print $$2}' | \
+       tr -d 'v' > $@""",
      tools = [
          "//src:nimble",
          "@gawk//:bin/awk",
