@@ -1,5 +1,5 @@
-load("@rules_nim//nim:defs.bzl", "nim_cc_test", "nim_module")
 load("@bazel_skylib//rules:write_file.bzl", "write_file")
+load("@rules_nim//nim:defs.bzl", "nim_cc_test", "nim_module")
 
 write_file(
     name = "ssl_conf",
@@ -45,8 +45,8 @@ filegroup(
         main = "{}.nim".format(test),
         proj_cfg = ":ssl_conf",
         tags = [
-            "requires-network",
             "manual",
+            "requires-network",
         ],
         deps = [
             ":common",

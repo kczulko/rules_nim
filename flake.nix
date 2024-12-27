@@ -27,14 +27,15 @@
 
         buildPkgs = pkgs: (with pkgs; [
           bash
-          nimble
-          libz.dev
-          gcc
-          zlib
-          which
+          bazel-buildtools
           gawk
-          nim
+          gcc
           git
+          libz.dev
+          nim
+          nimble
+          which
+          zlib
           (pkgs.callPackage bazelisk-bazel {})
           (python3.withPackages (ppkgs: with ppkgs; [
             urllib3

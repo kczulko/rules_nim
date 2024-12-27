@@ -1,5 +1,5 @@
-load("@rules_nim//nim:defs.bzl", "nim_cc_binary", "nim_module")
 load("@bazel_skylib//rules:write_file.bzl", "write_file")
+load("@rules_nim//nim:defs.bzl", "nim_cc_binary", "nim_module")
 
 write_file(
     name = "nimble_cfg",
