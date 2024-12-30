@@ -2,7 +2,10 @@
 
 ![CI](https://github.com/kczulko/rules_nim/actions/workflows/workflow.yaml/badge.svg)
 ![linux_amd64](https://img.shields.io/badge/platform-linux__amd64-orange)
+![linux_arm64](https://img.shields.io/badge/platform-linux__arm64-orange)
+![linux_armv7l](https://img.shields.io/badge/platform-linux__armv7l-orange)
 ![osx_amd64](https://img.shields.io/badge/platform-osx__amd64-orange)
+
 
 ## Installation
 
