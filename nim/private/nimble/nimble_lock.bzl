@@ -98,8 +98,7 @@ def _mk_nim_module(rctx, pkg_name, deps):
     ]
 
     nim_module_deps = [
-        "@{}//:{}".format(rctx.name, dep)
-        for dep in deps
+        ":{}".format(dep) for dep in deps
     ]
 
     return """

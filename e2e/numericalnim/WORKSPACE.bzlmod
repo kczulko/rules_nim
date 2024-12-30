@@ -1,6 +1,0 @@
-load("@rules_nim//nim:nimble.bzl", "nimble_lock")
-
-nimble_lock(
-    name = "nimble",
-    lock_file = "//:nimble.lock"
-)
