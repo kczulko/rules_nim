@@ -18,7 +18,7 @@ register_toolchains("@nim_toolchains//:all")
 nimble = use_extension("@rules_nim//nim:extensions.bzl", "nimble")
 nimble.lock(
     name = "nimble",
-    lock_file = "//:nimble.lock"
+    lock_file = "//:nimble.lock",
 )
 use_repo(nimble, "nimble")
 

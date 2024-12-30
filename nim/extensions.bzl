@@ -11,8 +11,8 @@ effectively overriding the default named toolchain due to toolchain resolution p
 """
 
 load("@bazel_skylib//lib:modules.bzl", "modules")
+load(":nimble.bzl", "nimble_install", "nimble_lock")
 load(":repositories.bzl", "nim_register_toolchains")
-load(":nimble.bzl", "nimble_lock", "nimble_install")
 
 _DEFAULT_NAME = "nim"
 
@@ -35,7 +35,7 @@ nimble_lock_tag_def = tag_class(
             doc = """""",
             mandatory = True,
         ),
-    }
+    },
 )
 
 nimble_install_tag_def = tag_class(
@@ -51,17 +51,17 @@ nimble_install_tag_def = tag_class(
         ),
         "nimble_attrs": attr.string_list(
             doc = """""",
-            default = ["--noLockFile"]
+            default = ["--noLockFile"],
         ),
         "quiet": attr.bool(
             doc = """""",
-            default = False
+            default = False,
         ),
         "pkgs_dir_prefix": attr.string(
             doc = """""",
-            default = "pkgs2"
-        )
-    }
+            default = "pkgs2",
+        ),
+    },
 )
 
 def _toolchain_extension(module_ctx):
@@ -121,5 +121,5 @@ nimble = module_extension(
     tag_classes = {
         "lock": nimble_lock_tag_def,
         "install": nimble_install_tag_def,
-    }
+    },
 )
