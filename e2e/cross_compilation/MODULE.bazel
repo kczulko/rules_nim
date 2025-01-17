@@ -1,0 +1,55 @@
+RULES_NIX_PKGS_VERSION = "928f28a41218fb81a3043facd7f8b7ce3294997c"
+
+bazel_dep(name = "rules_nim", version = "0.0.0", dev_dependency = True)
+bazel_dep(name = "platforms", version = "0.0.10", dev_dependency = True)
+bazel_dep(name = "bazel_skylib", version = "1.7.1", dev_dependency = True)
+
+bazel_dep(name = "rules_cc", version = "0.0.10")
+bazel_dep(name = "rules_nixpkgs_cc")
+bazel_dep(name = "rules_nixpkgs_core", version = RULES_NIX_PKGS_VERSION)
+archive_override(
+    module_name = "rules_nixpkgs_core",
+    integrity = "sha256-R8WgrdWLsUyVwC/MjV2h86FKPjQ5bbAbOpiD7mQqn8U=",
+    strip_prefix = "rules_nixpkgs-{}/core".format(RULES_NIX_PKGS_VERSION),
+    urls = ["https://github.com/tweag/rules_nixpkgs/archive/{}.tar.gz".format(RULES_NIX_PKGS_VERSION)],
+)
+
+archive_override(
+    module_name = "rules_nixpkgs_cc",
+    integrity = "sha256-R8WgrdWLsUyVwC/MjV2h86FKPjQ5bbAbOpiD7mQqn8U=",
+    strip_prefix = "rules_nixpkgs-{}/toolchains/cc".format(RULES_NIX_PKGS_VERSION),
+    urls = [
+        "https://github.com/tweag/rules_nixpkgs/archive/{}.tar.gz".format(RULES_NIX_PKGS_VERSION),
+    ],
+)
+
+local_path_override(
+    module_name = "rules_nim",
+    path = "../..",
+)
+
+nim = use_extension("@rules_nim//nim:extensions.bzl", "nim")
+nim.toolchain(nim_version = "2.2.0")
+use_repo(nim, "nim_toolchains")
+
+register_toolchains("@nim_toolchains//:all")
+
+nix_repo = use_extension("@rules_nixpkgs_core//extensions:repository.bzl", "nix_repo")
+nix_repo.file(
+    name = "nixpkgs",
+    file = "//:nixpkgs.nix",
+    file_deps = ["//:flake.lock"],
+)
+use_repo(nix_repo, "nixpkgs")
+
+non_module_deps = use_extension("//toolchains:defs.bzl", "non_module_deps")
+use_repo(
+    non_module_deps,
+    "gcc_14_aarch64_linux",
+    "gcc_14_aarch64_linux_info",
+    "gcc_14_aarch64_linux_toolchains",
+)
+
+register_toolchains(
+    "@gcc_14_aarch64_linux_toolchains//:all",
+)
