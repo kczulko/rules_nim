@@ -11,6 +11,13 @@ default_test_runner(
 )
 
 default_test_runner(
+    name = "execute_tests_aarch64",
+    bazel_cmds = [
+        "test //... --config=aarch64",
+    ],
+)
+
+default_test_runner(
     name = "execute_binary",
     bazel_cmds = [
         "build //...",
@@ -26,7 +33,7 @@ TESTS = {
     "nim_invocation_from_c": ":execute_tests",
     "numericalnim": ":execute_tests",
     "nimble": ":execute_binary",
-    "cross_compilation": ":execute_tests",
+    "cross_compilation": ":execute_tests_aarch64",
 }
 
 [
