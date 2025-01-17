@@ -3,6 +3,11 @@
 
 exports_files(["nimble.nimble"])
 
+alias(
+    name = "bin",
+    actual = "//src:nimble",
+)
+
 # genrule(
 #     name = "nimble_version_from_file",
 #     srcs = [],
