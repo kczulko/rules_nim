@@ -1,9 +1,30 @@
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
 load("@rules_nim//nim:defs.bzl", "nim_cc_test")
+
+write_file(
+    name = "disabled_output",
+    out = "config.nim.cfg",
+    content = [
+        "verbosity:0",
+        "-d:nimDebugDlOpen",
+        "hint:XDeclaredButNotUsed:off",
+        "hint:User:off",
+        "hint:Conf:off",
+        "hint:SuccessX:off",
+        "hint:XCannotRaiseY:off",
+        "warning:Deprecated:off",
+        "warning:UnusedImport:off",
+        "warning:UnreachableElse:off",
+        "warning:User:off",
+    ],
+    is_executable = False,
+)
 
 [
     nim_cc_test(
         name = name,
         main = "{}.nim".format(name),
+        proj_cfg = ":disabled_output",
         deps = [
             "//:numericalnim",
             "@measuremancer",
