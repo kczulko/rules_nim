@@ -7,15 +7,14 @@ load("@rules_nixpkgs_cc//:cc.bzl", "nixpkgs_cc_configure")
 def cpp_toolchains(module_ctx):
     nixpkgs_cc_configure(
         name = "gcc_14_aarch64_linux",
-        nix_file_content = """
-let
-  pkgs = import <nixpkgs> {};
-  compiler = pkgs.pkgsCross.aarch64-multiplatform.stdenv.cc;
-in
-compiler.overrideAttrs (final: prev: {
-  postFixup = (prev.postFixup or "") + ''
-    ln -sf $$out/bin/aarch64-unknown-linux-gnu-ld.gold $$out/bin/ld.gold
-  '';
+        nix_file_content = """(import <nixpkgs> {})
+        .pkgsCross
+        .aarch64-multiplatform
+        .stdenv
+        .cc.overrideAttrs (final: prev: {
+          postFixup = (prev.postFixup or "") + ''
+            ln -sf $$out/bin/aarch64-unknown-linux-gnu-ld.gold $$out/bin/ld.gold
+          '';
 })""",
         repository = "@nixpkgs",
         exec_constraints = [
