@@ -51,6 +51,7 @@ Check the [e2e examples](./e2e) directory:
 - [nim_cc_test](./e2e/nim_cc_test) - Simple example of [nim_cc_test][nim_cc_test] usage.
 - [c_invocation](./e2e/c_invocation) - Shows the [backend C invocation in Nim][backend_c_invocation_example].
 - [nim_invocation_from_c](./e2e/nim_invocation_from_c) - Shows the [Nim invocation from C][nim_invocation_from_c].
+- [cross compilation](./e2e/cross_compilation)
 
 ## Hermecity
 
