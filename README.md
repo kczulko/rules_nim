@@ -59,7 +59,7 @@ Check the [e2e examples](./e2e) directory:
 
 `nim` compiler tends to fully resolve symbolic links which may lead to a [non-hermetic issues][nonhermetic-toolchain]
 for a Bazel build definitions. To prevent such situations, it is highly recommended to enable
-`--experimental_use_hermetic_linux_sandbox` flag for a local build executions. See [nimble](./e2e/nimble) 
+[`--experimental_use_hermetic_linux_sandbox`][hermetic-linux-sandbox] flag for a local build executions. See [nimble](./e2e/nimble) 
 e2e and its `.bazelrc` as the example.
 
 [nim_module]: https://github.com/kczulko/rules_nim/blob/master/docs/rules.md#nim_module
@@ -74,3 +74,4 @@ e2e and its `.bazelrc` as the example.
 [nim_invocation_from_c]: https://nim-lang.org/docs/backends.html#backend-code-calling-nim-nim-invocation-example-from-c
 [nimble]: https://github.com/nim-lang/nimble
 [nonhermetic-toolchain]: https://github.com/kczulko/rules_nim/issues/7
+[hermetic-linux-sandbox]: https://bazel.build/reference/command-line-reference#flag--experimental_use_hermetic_linux_sandbox
