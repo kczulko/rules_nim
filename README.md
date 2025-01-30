@@ -55,7 +55,7 @@ Check the [e2e examples](./e2e) directory:
 - [nim_invocation_from_c](./e2e/nim_invocation_from_c) - Shows the [Nim invocation from C][nim_invocation_from_c].
 - [cross compilation](./e2e/cross_compilation) - Shows [cross-compilation](https://nim-lang.github.io/Nim/nimc.html#crossminuscompilation) example for `aarch64` target platform.
 
-## Hermecity
+## Hermeticity
 
 `nim` compiler tends to fully resolve symbolic links which may lead to a [non-hermetic issues][nonhermetic-toolchain]
 for a Bazel build definitions. To prevent such situations, it is highly recommended to enable
