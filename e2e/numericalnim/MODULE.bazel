@@ -10,7 +10,7 @@ local_path_override(
 )
 
 nim = use_extension("@rules_nim//nim:extensions.bzl", "nim")
-nim.toolchain(nim_version = "2.2.0")
+nim.toolchain(nim_version = "2.2.2")
 use_repo(nim, "nim_toolchains")
 
 register_toolchains("@nim_toolchains//:all")
