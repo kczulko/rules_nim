@@ -10,7 +10,7 @@ NimInfo = provider(
 May be empty if the target_tool_path points to a locally installed tool binary.""",
         "nimbase": "Location of nimbase.h file.",
         "nimrtl": "Location of nimrtl.nim file.",
-        "libsrcs": "lib|dist|compiler|config and other sources required during compiletime",
+        "libsrcs": "lib|dist|compiler|config and other sources required during compile-time",
     },
 )
 
