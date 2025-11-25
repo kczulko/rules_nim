@@ -19,4 +19,3 @@ TOOL_VERSIONS = {
         },
     },
 }
-

@@ -111,7 +111,7 @@ def nim_register_toolchains(name, nim_version, register = True):
             nim_repositories(
                 name = name + "_" + platform,
                 platform = platform,
-                nim_version = nim_version
+                nim_version = nim_version,
             )
         if register and exists:
             native.register_toolchains("@%s_toolchains//:%s_toolchain" % (name, platform))
