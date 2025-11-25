@@ -18,6 +18,7 @@ jobs:
 
   integration-tests:
     name: Run integration tests
+    needs: buildifier
     strategy:
       fail-fast: true
       matrix:
