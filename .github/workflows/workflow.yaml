@@ -14,7 +14,7 @@ jobs:
       - uses: DeterminateSystems/nix-installer-action@main
       - name: Buildifier check
         run: |
-         nix develop .#ci --command buildifier -mode check -r .
+         nix shell nixpkgs#buildifier --command buildifier -mode check -r .
 
   integration-tests:
     name: Run integration tests
