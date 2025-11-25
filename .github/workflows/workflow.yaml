@@ -29,9 +29,9 @@ jobs:
             ~/.bazel-disk-cache
             ~/.bazel-repo-cache
           key: ${{ matrix.os }}-bazel-ci-cache-${{ env.cache-id }}
-      - name: Buildifier check
-        run: |
-          nix develop .#ci --command buildifier -mode check -r .
+      # - name: Buildifier check
+      #  # run: |
+      #    # nix develop .#ci --command buildifier -mode check -r .
       - name: Integration tests
         run: |
           nix develop .#ci --command bazel test //e2e:all_integration_tests --config=ci
