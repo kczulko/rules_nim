@@ -87,6 +87,6 @@ toolchains_repo = repository_rule(
      which can be registered or selected.""",
     attrs = {
         "user_repository_name": attr.string(doc = "what the user chose for the base name"),
-        "platforms": attr.string_list(doc = "existing platforms for specific nim version")
+        "platforms": attr.string_list(doc = "existing platforms for specific nim version"),
     },
 )
