@@ -6,14 +6,25 @@ on:
     tags: [v*]
 
 jobs:
+  buildifier:
+    name: Run buildifier check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: DeterminateSystems/nix-installer-action@main
+      - name: Buildifier check
+        run: |
+         nix shell nixpkgs#buildifier --command buildifier -mode check -r .
+
   integration-tests:
     name: Run integration tests
+    needs: buildifier
     strategy:
       fail-fast: true
       matrix:
         os:
-          - ubuntu-latest # x86_64-linux
-          # - macos-13      # x86_64-darwin
+          - ubuntu-latest
+          - ubuntu-24.04-arm
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6
@@ -28,9 +39,6 @@ jobs:
             ~/.bazel-disk-cache
             ~/.bazel-repo-cache
           key: ${{ matrix.os }}-bazel-ci-cache-${{ env.cache-id }}
-      - name: Buildifier check
-        run: |
-          nix develop .#ci --command buildifier -mode check -r .
       - name: Integration tests
         run: |
           nix develop .#ci --command bazel test //e2e:all_integration_tests --config=ci

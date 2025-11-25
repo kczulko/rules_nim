@@ -18,6 +18,14 @@ write_file(
     ],
 )
 
+PLATFORM_SPECIFIC_COPTS = select({
+    "@platforms//cpu:x86_64": [
+        "-msse4.1",
+        "-mpclmul",
+    ],
+    "//conditions:default": [],
+})
+
 nim_module(
     name = "nimblepkg",
     srcs = ["//:nimble.nimble"] + glob(["nimblepkg/**/*"]),
@@ -34,9 +42,7 @@ nim_cc_binary(
         "-Wno-parentheses",
         "-Wno-strict-aliasing",
         "-Wno-maybe-uninitialized",
-        "-msse4.1",
-        "-mpclmul",
-    ],
+    ] + PLATFORM_SPECIFIC_COPTS,
     main = "nimble.nim",
     proj_cfg = ":nimble_cfg",
     visibility = ["//visibility:public"],

@@ -3,20 +3,19 @@ TOOL_VERSIONS = {
         "download_url_template": "https://github.com/nim-lang/nightlies/releases/download/2025-10-31-version-2-2-ab00c56904e3126ad826bb520d243513a139436a/nim-{version}-{platform}.tar.xz",
         "platforms": {
             "linux_x64": "sha384-wxUkugEtwEurGLVjmmJNf49PFrCzuQkfHU+mtgGmzTrdpqEZttwBR/gNy9aLT35u",
-            "linux_arm64": "sha384-3S1okU/AUHzf4NmHCzPjl6SOv/2gnZLfgRaaMKmGShs4zvkoJMfhzAgRiCto5nz/",
             "linux_armv7l": "sha384-uBQ+RD0w1rfK/itOd3XH8CXjPTbhS7QLG707SGDKRNEpTLaMkZtcDtA0vUrtYceH",
             "macosx_x64": "sha384-8bmZTuYNL2AEv+JFM/UrjUpCTPdVsgOqYVz+vSWxs47NgyJUsVHy7171tvrdeiLw",
             "macosx_arm64": "sha384-hHN8tUwA5bhqu+9kkmgHwGZcYp1v6qphfUB8bH4cEKG9jdOjibDBhlD5XFnbSPbo",
         },
     },
     "2.0.16": {
-        "download_url_template": "https://github.com/nim-lang/nightlies/releases/download/2024-10-02-version-2-2-78983f1876726a49c69d65629ab433ea1310ece1/nim-{version}-{platform}.tar.xz",
+        "download_url_template": "https://github.com/nim-lang/nightlies/releases/download/2025-04-22-version-2-0-82f3a57612598d73e6fc559bd80b995c4b20edd5/nim-{version}-{platform}.tar.xz",
         "platforms": {
-            "linux_x64": "sha384-OQS+9I7SiIYgmSlq8WqNJSzbWEqW+aPraAwjy5CWJM2mfMR1Wve24N3GC93Jixqd",
-            "linux_arm64": "sha384-TkcWoPve+xqdBOOGv0woAYkRecuG6pio9FK6cKy94QVMteW8fddRiBf3k86aBEgY",
-            "linux_armv7l": "sha384-MCFfCI/kPvsfXpWBCFvuji/WTP9TRZAp/QN6UhH2O4BRFCFqBBKTrFShsGPMyKfR",
-            "macosx_x64": "sha384-xRz+9OxPan+4fe7mjTpft95oTPGlEKVRSE8IbSjS2kbAezvdRvDX4I390pAub5Mq",
-            "macosx_arm64": "sha384-5cviy970AkgqyP3q2yCTbsDvwW+Z46Xd99KjXk4A6QG0JU4VPFQHSmzvYD19LClL",
+            "linux_x64": "sha384-yEHv5JbvdmcHp2bugOwHeB9NVe5M73mVPv4NPGDKmgbZJ5bMSytpO65et9++kSpn",
+            "linux_arm64": "sha384-NRRohBlDfBo8vHjZSo6bXlt0r2Sg7ODFEmNnYHpLQL130RAJsA90gjRBqM22b94M",
+            "linux_armv7l": "sha384-fdYZGtEl9I9eq/J0gTklZNfwQr2CYK/d4ekqeEIGG1MX5rsmf86+6VHGG6rX/UXG",
+            "macosx_x64": "sha384-7cD+bhMcnmT6S5QFOKwNraZOwEovjyQTJNO2ZkSt+WFpcbwRQoFUwFoKiW2pPV55",
+            "macosx_arm64": "sha384-ImAgVvnghtL/7XaIyX0yU2y8uVpmrbukwEBCx98bRuPYDIQCgvfa9fSwnwL8lSas",
         },
     },
 }

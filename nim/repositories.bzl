@@ -46,7 +46,7 @@ def _nim_repo_impl(repository_ctx):
     integrity = TOOL_VERSIONS[nim_version]["platforms"][platform]
     url_template = TOOL_VERSIONS[nim_version]["download_url_template"]
 
-    url = TOOL_VERSIONS[nim_version]["download_url_template"].format(
+    url = url_template.format(
         version = nim_version,
         platform = platform,
     )
@@ -91,7 +91,7 @@ nim_repositories = repository_rule(
 )
 
 # Wrapper macro around everything above, this is the primary API
-def nim_register_toolchains(name, register = True, **kwargs):
+def nim_register_toolchains(name, nim_version, register = True):
     """Convenience macro for users which does typical setup.
 
     - create a repository for each built-in platform like "nim_linux_amd64"
@@ -105,16 +105,23 @@ def nim_register_toolchains(name, register = True, **kwargs):
             Should be True for WORKSPACE users, but false when used under bzlmod extension
         **kwargs: passed to each nim_repositories call
     """
+    existing_platforms = []
+
     for platform in PLATFORMS.keys():
-        nim_repositories(
-            name = name + "_" + platform,
-            platform = platform,
-            **kwargs
-        )
-        if register:
+        exists = (nim_version in TOOL_VERSIONS) and (platform in TOOL_VERSIONS[nim_version]["platforms"])
+        if exists:
+            nim_repositories(
+                name = name + "_" + platform,
+                platform = platform,
+                nim_version = nim_version,
+            )
+            existing_platforms.append(platform)
+
+        if register and exists:
             native.register_toolchains("@%s_toolchains//:%s_toolchain" % (name, platform))
 
     toolchains_repo(
         name = name + "_toolchains",
         user_repository_name = name,
+        platforms = existing_platforms,
     )
