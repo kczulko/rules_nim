@@ -61,7 +61,8 @@ def _toolchains_repo_impl(repository_ctx):
 
 """
 
-    for [platform, meta] in PLATFORMS.items():
+    for platform in repository_ctx.attr.platforms:
+        meta = PLATFORMS[platform]
         build_content += """
 # Declare a toolchain Bazel will select for running the tool in an action
 # on the execution platform.
@@ -86,5 +87,6 @@ toolchains_repo = repository_rule(
      which can be registered or selected.""",
     attrs = {
         "user_repository_name": attr.string(doc = "what the user chose for the base name"),
+        "platforms": attr.string_list(doc = "existing platforms for specific nim version")
     },
 )

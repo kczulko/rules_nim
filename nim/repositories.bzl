@@ -105,6 +105,8 @@ def nim_register_toolchains(name, nim_version, register = True):
             Should be True for WORKSPACE users, but false when used under bzlmod extension
         **kwargs: passed to each nim_repositories call
     """
+    existing_platforms = []
+
     for platform in PLATFORMS.keys():
         exists = (nim_version in TOOL_VERSIONS) and (platform in TOOL_VERSIONS[nim_version]["platforms"])
         if exists:
@@ -113,10 +115,13 @@ def nim_register_toolchains(name, nim_version, register = True):
                 platform = platform,
                 nim_version = nim_version,
             )
+            existing_platforms.append(platform)
+
         if register and exists:
             native.register_toolchains("@%s_toolchains//:%s_toolchain" % (name, platform))
 
     toolchains_repo(
         name = name + "_toolchains",
         user_repository_name = name,
+        platforms = existing_platforms,
     )
