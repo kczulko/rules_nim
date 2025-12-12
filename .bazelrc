@@ -3,5 +3,7 @@
 build --deleted_packages=e2e/c_invocation,e2e/cross_compilation,e2e/cross_compilation/toolchains,e2e/nimble,e2e/nimble/src,e2e/nimble/tests,e2e/nim_cc_binary,e2e/nim_cc_library,e2e/nim_cc_library/lib,e2e/nim_cc_test,e2e/nim_invocation_from_c,e2e/numericalnim,e2e/numericalnim/tests
 query --deleted_packages=e2e/c_invocation,e2e/cross_compilation,e2e/cross_compilation/toolchains,e2e/nimble,e2e/nimble/src,e2e/nimble/tests,e2e/nim_cc_binary,e2e/nim_cc_library,e2e/nim_cc_library/lib,e2e/nim_cc_test,e2e/nim_invocation_from_c,e2e/numericalnim,e2e/numericalnim/tests
 
+common --module_mirrors=https://bcr.cloudflaremirrors.com
+
 common:ci --test_output=all --disk_cache=~/.bazel-disk-cache
 

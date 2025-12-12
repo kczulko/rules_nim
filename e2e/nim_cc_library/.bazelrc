@@ -1,3 +1,5 @@
+common --module_mirrors=https://bcr.cloudflaremirrors.com
+
 common --copt="-Wno-unused-label"
 common --copt="-Wno-error"
 common --copt="-Wno-unused-but-set-variable"
