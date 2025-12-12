@@ -1,3 +1,5 @@
+common --module_mirrors=https://bcr.cloudflaremirrors.com
+
 build --experimental_use_hermetic_linux_sandbox
 build --sandbox_add_mount_pair=/bin:/bin
 build --sandbox_add_mount_pair=/usr/bin/:/usr/bin
