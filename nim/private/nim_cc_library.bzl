@@ -1,8 +1,8 @@
 load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain")
+load("@rules_cc//cc:defs.bzl", "CcInfo")
 load("@rules_nim//nim/private:attrs.bzl", "nim_cc_library_rule_attrs")
 load("@rules_nim//nim/private:nim_compile.bzl", "nim_compile")
 load("@rules_nim//nim/private:providers.bzl", "NimModule")
-load("@rules_cc//cc:defs.bzl", "CcInfo")
 
 NIM_TOOLCHAIN = "@rules_nim//nim:toolchain_type"
 CC_TOOLCHAIN = "@bazel_tools//tools/cpp:toolchain_type"
