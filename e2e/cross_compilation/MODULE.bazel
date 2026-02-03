@@ -3,10 +3,29 @@ RULES_NIX_PKGS_VERSION = "0.13.0"
 bazel_dep(name = "rules_nim", version = "0.0.0", dev_dependency = True)
 bazel_dep(name = "platforms", version = "1.0.0", dev_dependency = True)
 bazel_dep(name = "bazel_skylib", version = "1.9.0", dev_dependency = True)
+bazel_dep(name = "bazel_lib", version = "3.2.0")
 
 bazel_dep(name = "rules_cc", version = "0.2.16")
 bazel_dep(name = "rules_nixpkgs_cc")
 bazel_dep(name = "rules_nixpkgs_core", version = RULES_NIX_PKGS_VERSION)
+
+# local_path_override(
+#     module_name = "rules_nixpkgs_core",
+#     path = "../../../../rules_nixpkgs/core",
+# )
+
+# local_path_override(
+#     module_name = "rules_nixpkgs_cc",
+#     path = "../../../../rules_nixpkgs/toolchains/cc",
+# )
+
+single_version_override(
+    module_name = "rules_nixpkgs_core",
+    patch_strip = 1,
+    patches = [
+        "//:core.patch",
+    ],
+)
 
 archive_override(
     module_name = "rules_nixpkgs_cc",
@@ -14,6 +33,14 @@ archive_override(
     strip_prefix = "rules_nixpkgs-{}/toolchains/cc".format(RULES_NIX_PKGS_VERSION),
     urls = [
         "https://github.com/tweag/rules_nixpkgs/releases/download/v0.13.0/rules_nixpkgs-{}.tar.gz".format(RULES_NIX_PKGS_VERSION),
+    ],
+    patches = [
+        "//:cc.patch",
+        "//:rules_cc.patch",
+        "//:fastbuild.patch",
+    ],
+    patch_args = [
+        "-p1"
     ],
 )
 
@@ -41,6 +68,14 @@ nix_repo.file(
     file_deps = ["//:flake.lock"],
 )
 use_repo(nix_repo, "nixpkgs")
+
+nix_pkg = use_extension("@rules_nixpkgs_core//extensions:package.bzl", "nix_pkg")
+nix_pkg.attr(
+    name = "file",
+    attr = "file",
+    repo = "@nixpkgs",
+)
+use_repo(nix_pkg, "file")
 
 non_module_deps = use_extension("//toolchains:defs.bzl", "non_module_deps")
 use_repo(

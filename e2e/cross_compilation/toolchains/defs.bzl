@@ -1,6 +1,3 @@
-"""
-"""
-
 load("@bazel_skylib//lib:modules.bzl", "modules")
 load("@rules_nixpkgs_cc//:cc.bzl", "nixpkgs_cc_configure")
 
