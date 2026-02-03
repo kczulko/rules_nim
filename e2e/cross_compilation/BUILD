@@ -1,8 +1,8 @@
-load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
-load("@bazel_skylib//rules:write_file.bzl", "write_file")
-load("@bazel_skylib//rules:select_file.bzl", "select_file")
-load("@rules_nim//nim:defs.bzl", "nim_cc_binary")
 load("@bazel_lib//lib:transitions.bzl", "platform_transition_binary")
+load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
+load("@bazel_skylib//rules:select_file.bzl", "select_file")
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
+load("@rules_nim//nim:defs.bzl", "nim_cc_binary")
 
 write_file(
     name = "release",

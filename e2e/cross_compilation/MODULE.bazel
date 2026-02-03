@@ -3,8 +3,8 @@ RULES_NIX_PKGS_VERSION = "0.13.0"
 bazel_dep(name = "rules_nim", version = "0.0.0", dev_dependency = True)
 bazel_dep(name = "platforms", version = "1.0.0", dev_dependency = True)
 bazel_dep(name = "bazel_skylib", version = "1.9.0", dev_dependency = True)
-bazel_dep(name = "bazel_lib", version = "3.2.0")
 
+bazel_dep(name = "bazel_lib", version = "3.2.0")
 bazel_dep(name = "rules_cc", version = "0.2.16")
 bazel_dep(name = "rules_nixpkgs_cc")
 bazel_dep(name = "rules_nixpkgs_core", version = RULES_NIX_PKGS_VERSION)
@@ -30,17 +30,17 @@ single_version_override(
 archive_override(
     module_name = "rules_nixpkgs_cc",
     integrity = "sha256-MCcfe9OA5OIOTXEywySUbE/bwx6+C7tmOKD2GjfnQ5c=",
-    strip_prefix = "rules_nixpkgs-{}/toolchains/cc".format(RULES_NIX_PKGS_VERSION),
-    urls = [
-        "https://github.com/tweag/rules_nixpkgs/releases/download/v0.13.0/rules_nixpkgs-{}.tar.gz".format(RULES_NIX_PKGS_VERSION),
+    patch_args = [
+        "-p1",
     ],
     patches = [
         "//:cc.patch",
         "//:rules_cc.patch",
         "//:fastbuild.patch",
     ],
-    patch_args = [
-        "-p1"
+    strip_prefix = "rules_nixpkgs-{}/toolchains/cc".format(RULES_NIX_PKGS_VERSION),
+    urls = [
+        "https://github.com/tweag/rules_nixpkgs/releases/download/v0.13.0/rules_nixpkgs-{}.tar.gz".format(RULES_NIX_PKGS_VERSION),
     ],
 )
 
