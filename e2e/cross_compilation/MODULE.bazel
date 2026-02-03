@@ -12,7 +12,7 @@ single_version_override(
     module_name = "rules_nixpkgs_core",
     patch_strip = 1,
     patches = [
-        "//:core.patch",
+        "//:rules_nixpkgs_core.patch",
     ],
 )
 
@@ -23,9 +23,7 @@ archive_override(
         "-p1",
     ],
     patches = [
-        "//:cc.patch",
-        "//:rules_cc.patch",
-        "//:fastbuild.patch",
+        "//:rules_nixpkgs_cc.patch"
     ],
     strip_prefix = "rules_nixpkgs-{}/toolchains/cc".format(RULES_NIX_PKGS_VERSION),
     urls = [
