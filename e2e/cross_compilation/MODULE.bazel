@@ -9,16 +9,6 @@ bazel_dep(name = "rules_cc", version = "0.2.16")
 bazel_dep(name = "rules_nixpkgs_cc")
 bazel_dep(name = "rules_nixpkgs_core", version = RULES_NIX_PKGS_VERSION)
 
-# local_path_override(
-#     module_name = "rules_nixpkgs_core",
-#     path = "../../../../rules_nixpkgs/core",
-# )
-
-# local_path_override(
-#     module_name = "rules_nixpkgs_cc",
-#     path = "../../../../rules_nixpkgs/toolchains/cc",
-# )
-
 single_version_override(
     module_name = "rules_nixpkgs_core",
     patch_strip = 1,
