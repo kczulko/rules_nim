@@ -17,4 +17,5 @@ def bazel_integration_spec(workspace_path, test_runner):
         tags = integration_test_utils.DEFAULT_INTEGRATION_TEST_TAGS + [
             "no-sandbox",
         ],
+        env_inherit = ["HOME", "PATH"],
     )

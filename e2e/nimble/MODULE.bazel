@@ -3,6 +3,7 @@ bazel_dep(name = "bazel_skylib", version = "1.9.0", dev_dependency = True)
 bazel_dep(name = "rules_nixpkgs_core", version = "0.13.0", dev_dependency = True)
 bazel_dep(name = "aspect_bazel_lib", version = "2.22.5", dev_dependency = True)
 bazel_dep(name = "platforms", version = "1.0.0", dev_dependency = True)
+bazel_dep(name = "rules_cc", version = "0.2.16", dev_dependency = True)
 
 local_path_override(
     module_name = "rules_nim",
@@ -82,7 +83,7 @@ use_repo(nix_repo, "nixpkgs")
 nix_pkg.attr(
     name = "openssl",
     attr = "openssl.out",
-    build_file_content = """
+    build_file_content = """load("@rules_cc//cc:defs.bzl", "cc_library")
 cc_library(
     name = "openssl",
     srcs = glob(["lib/*.so*"]),
@@ -97,3 +98,5 @@ nix_pkg.attr(
     repo = "@nixpkgs",
 )
 use_repo(nix_pkg, "gawk", "openssl")
+
+inject_repo(nix_pkg, "rules_cc")
