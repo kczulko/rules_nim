@@ -23,7 +23,7 @@ archive_override(
         "-p1",
     ],
     patches = [
-        "//:rules_nixpkgs_cc.patch"
+        "//:rules_nixpkgs_cc.patch",
     ],
     strip_prefix = "rules_nixpkgs-{}/toolchains/cc".format(RULES_NIX_PKGS_VERSION),
     urls = [

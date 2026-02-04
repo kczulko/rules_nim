@@ -30,7 +30,6 @@
           bazel-buildtools
           gawk
           gcc
-          nix
           git
           libz.dev
           nim
