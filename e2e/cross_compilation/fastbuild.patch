@@ -1,0 +1,13 @@
+diff --git a/cc.bzl b/cc.bzl
+index 5ca7ff0..cdf9056 100644
+--- a/cc.bzl
++++ b/cc.bzl
+@@ -228,6 +228,8 @@ def _nixpkgs_cc_toolchain_config_impl(repository_ctx):
+             "%{supports_start_end_lib}": repr(info.supports_start_end_lib),
+             "%{extra_flags_per_feature}": "{}",
+             "%{conly_flags}": get_starlark_list(info.conly_flags),
++            "%{fastbuild_compile_flags}": "",
++            "%{all_compile_flags}": "",
+         },
+     )
+ 

@@ -1,0 +1,39 @@
+diff --git a/bazel_integration_test/bzlmod/BUILD.bazel b/bazel_integration_test/bzlmod/BUILD.bazel
+index 5ae0f42..58c0e42 100644
+--- a/bazel_integration_test/bzlmod/BUILD.bazel
++++ b/bazel_integration_test/bzlmod/BUILD.bazel
+@@ -1,4 +1,4 @@
+-load("@bazel_binaries//:defs.bzl", "bazel_binaries")
++# load("@bazel_binaries//:defs.bzl", "bazel_binaries")
+ load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+ load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+ load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
+@@ -35,11 +35,11 @@ sh_binary(
+ )
+ 
+ # This test exists to be run as part of the BCR presubmit.
+-bazel_integration_test(
+-    name = "e2e_test",
+-    bazel_binaries = bazel_binaries,
+-    bazel_version = bazel_binaries.versions.current,
+-    # Override the default tags. Let this run with bazel test //...
+-    tags = [],
+-    test_runner = ":e2e_test_runner",
+-)
++# bazel_integration_test(
++#     name = "e2e_test",
++#     bazel_binaries = bazel_binaries,
++#     bazel_version = bazel_binaries.versions.current,
++#     # Override the default tags. Let this run with bazel test //...
++#     tags = [],
++#     test_runner = ":e2e_test_runner",
++# )
+diff --git a/bazel_integration_test/bzlmod/bazel_binaries.bzl b/bazel_integration_test/bzlmod/bazel_binaries.bzl
+index 99b3ac2..2a2fceb 100644
+--- a/bazel_integration_test/bzlmod/bazel_binaries.bzl
++++ b/bazel_integration_test/bzlmod/bazel_binaries.bzl
+@@ -261,3 +261,4 @@ Provides a means for clients to download Bazel binaries for their integration \
+ tests.\
+ """,
+ )
++

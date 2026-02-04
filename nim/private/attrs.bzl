@@ -1,3 +1,4 @@
+load("@rules_cc//cc:defs.bzl", "CcInfo")
 load("@rules_nim//nim/private:providers.bzl", "NimModule")
 
 def _mk_linkstatic(default):

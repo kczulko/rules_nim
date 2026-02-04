@@ -1,0 +1,33 @@
+diff --git a/cc.bzl b/cc.bzl
+index fdbd46c..5ca7ff0 100644
+--- a/cc.bzl
++++ b/cc.bzl
+@@ -238,22 +238,22 @@ _nixpkgs_cc_toolchain_config = repository_rule(
+         "fail_not_supported": attr.bool(),
+         "cross_cpu": attr.string(),
+         "_unix_cc_toolchain_config": attr.label(
+-            default = Label("@rules_nixpkgs_core//private/cc_toolchain:unix_cc_toolchain_config.bzl"),
++            default = Label("@rules_cc//cc/private/toolchain:unix_cc_toolchain_config.bzl"),
+         ),
+         "_armeabi_cc_toolchain_config": attr.label(
+-            default = Label("@rules_nixpkgs_core//private/cc_toolchain:armeabi_cc_toolchain_config.bzl"),
++            default = Label("@rules_cc//cc/private/toolchain:armeabi_cc_toolchain_config.bzl")
+         ),
+         "_generate_system_module_map": attr.label(
+-            default = Label("@rules_nixpkgs_core//private/cc_toolchain:generate_system_module_map.sh"),
++            default = Label("@rules_cc//cc/private/toolchain:generate_system_module_map.sh")
+         ),
+         "_osx_cc_wrapper": attr.label(
+-            default = Label("@rules_nixpkgs_core//private/cc_toolchain:osx_cc_wrapper.sh.tpl"),
++            default = Label("@rules_cc//cc/private/toolchain:osx_cc_wrapper.sh.tpl")
+         ),
+         "_linux_cc_wrapper": attr.label(
+-            default = Label("@rules_nixpkgs_core//private/cc_toolchain:linux_cc_wrapper.sh.tpl"),
++            default = Label("@rules_cc//cc/private/toolchain:linux_cc_wrapper.sh.tpl")
+         ),
+         "_build": attr.label(
+-            default = Label("@rules_nixpkgs_core//private/cc_toolchain:BUILD.tpl"),
++            default = Label("@rules_cc//cc/private/toolchain:BUILD.tpl")
+         ),
+     },
+ )

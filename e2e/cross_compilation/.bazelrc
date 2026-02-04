@@ -1,5 +1,4 @@
 common --module_mirrors=https://bcr.cloudflaremirrors.com
 
-build:aarch64 --crosstool_top=@gcc_14_aarch64_linux//:toolchain
-build:aarch64 --host_platform=@rules_nixpkgs_core//platforms:host
-build:aarch64 --platforms=//toolchains:aarch64_linux
+build --crosstool_top=@gcc_14_aarch64_linux//:toolchain
+build --host_platform=@rules_nixpkgs_core//platforms:host

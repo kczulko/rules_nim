@@ -10,7 +10,7 @@ bzl_library(
     name = "nimble_lock_update",
     srcs = ["nimble_lock_update.bzl"],
     visibility = ["//nim:__subpackages__"],
-    deps = ["@aspect_bazel_lib//lib:write_source_files"],
+    deps = ["@bazel_lib//lib:write_source_files"],
 )
 
 bzl_library(

@@ -1,4 +1,4 @@
-load("@aspect_bazel_lib//lib:paths.bzl", "to_repository_relative_path")
+load("@bazel_lib//lib:paths.bzl", "to_repository_relative_path")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@rules_nim//nim/private:attrs.bzl", "nim_module_attrs")
 load("@rules_nim//nim/private:providers.bzl", "NimModule", "create_nim_module_provider")
