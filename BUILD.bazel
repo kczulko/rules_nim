@@ -6,7 +6,6 @@ filegroup(
     srcs = [
         "BUILD.bazel",
         "MODULE.bazel",
-        "WORKSPACE.bazel",
         "//nim:all_files",
         "//nim/private:all_files",
         "//nim/private/nimble:all_files",
