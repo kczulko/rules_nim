@@ -11,7 +11,7 @@ bazel_dep(name = "platforms", version = "1.0.0")
 bazel_dep(name = "rules_cc", version = "0.2.16")
 
 # TODO: this can be a dev_dependency if custom copy to workspace rule is on place.
-bazel_dep(name = "bazel_lib", version = "3.2.0")
+bazel_dep(name = "bazel_lib", version = "3.2.1")
 
 bazel_dep(name = "gazelle", version = "0.47.0", dev_dependency = True, repo_name = "bazel_gazelle")
 bazel_dep(name = "bazel_skylib_gazelle_plugin", version = "1.9.0", dev_dependency = True)
