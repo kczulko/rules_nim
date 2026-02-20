@@ -8,7 +8,7 @@ module(
 
 bazel_dep(name = "bazel_skylib", version = "1.9.0")
 bazel_dep(name = "platforms", version = "1.0.0")
-bazel_dep(name = "rules_cc", version = "0.2.16")
+bazel_dep(name = "rules_cc", version = "0.2.17")
 
 # TODO: this can be a dev_dependency if custom copy to workspace rule is on place.
 bazel_dep(name = "bazel_lib", version = "3.2.1")
