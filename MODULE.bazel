@@ -3,7 +3,6 @@
 module(
     name = "rules_nim",
     version = "0.0.0",
-    compatibility_level = 1,
 )
 
 bazel_dep(name = "bazel_skylib", version = "1.9.0")
@@ -34,7 +33,7 @@ bazel_binaries.download(version_file = "//:.bazelversion")
 use_repo(bazel_binaries, "bazel_binaries", "bazel_binaries_bazelisk", "build_bazel_bazel_.bazelversion")
 
 nim = use_extension("@rules_nim//nim:extensions.bzl", "nim", dev_dependency = True)
-nim.toolchain(nim_version = "2.2.6")
+nim.toolchain(nim_version = "2.2.10")
 use_repo(nim, "nim_toolchains")
 
 register_toolchains(
