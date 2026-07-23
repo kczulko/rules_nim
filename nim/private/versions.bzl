@@ -1,11 +1,12 @@
 TOOL_VERSIONS = {
-    "2.2.6": {
-        "download_url_template": "https://github.com/nim-lang/nightlies/releases/download/2025-10-31-version-2-2-ab00c56904e3126ad826bb520d243513a139436a/nim-{version}-{platform}.tar.xz",
+    "2.2.10": {
+        "download_url_template": "https://github.com/nim-lang/nightlies/releases/download/2026-04-24-version-2-2-bfeb3146d1638b39f69007a4ae5a23e23ae4e5ef/nim-{version}-{platform}.tar.xz",
         "platforms": {
-            "linux_x64": "sha384-wxUkugEtwEurGLVjmmJNf49PFrCzuQkfHU+mtgGmzTrdpqEZttwBR/gNy9aLT35u",
-            "linux_armv7l": "sha384-uBQ+RD0w1rfK/itOd3XH8CXjPTbhS7QLG707SGDKRNEpTLaMkZtcDtA0vUrtYceH",
-            "macosx_x64": "sha384-8bmZTuYNL2AEv+JFM/UrjUpCTPdVsgOqYVz+vSWxs47NgyJUsVHy7171tvrdeiLw",
-            "macosx_arm64": "sha384-hHN8tUwA5bhqu+9kkmgHwGZcYp1v6qphfUB8bH4cEKG9jdOjibDBhlD5XFnbSPbo",
+            "linux_x64": "sha384-YUaRWwoxkwftH/2bwpr4erO0HkHKiSCLF5NJb4qDO1aEJkRYI3z3RmNUcl4rpi6E",
+            "linux_armv7l": "sha384-V0wJPSGN9YT2J//4WtSBQAUuE2J8hjdcnYhFGKOKUpGCDyPrX/O3vt53ed16atAv",
+            "linux_arm64": "sha384-YVB4Z2ayXCa1tVoMVy/p0qN8nR43BxqLRQ2KN1k3+5f9UVvbC3i/SN+LU6VRxA35",
+            "macosx_x64": "sha384-WwQQI/gXBeH6/Tkr65RImjIEFoTOySk7u0ATxNAPecOCu4Q6vhH8Fc2IrQzeEHzf",
+            "macosx_arm64": "sha384-WXJJbyMJ1XCVjZgNRz+NpkhfjTYIbxVaX8g7O8ohzcRh+CT0ivX16P46tZA0m15L",
         },
     },
     "2.0.16": {
